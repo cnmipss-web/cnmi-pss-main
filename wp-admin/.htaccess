@@ -1,0 +1,2 @@
+AuthName "Secure Area"
+AuthUserFile "/home/cnmips5/.htpasswds/public_html/wp-admin/passwd"

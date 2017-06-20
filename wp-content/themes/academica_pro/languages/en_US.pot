@@ -1,0 +1,1132 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Academica Pro v2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2015-04-01 09:43:51+0000\n"
+"Last-Translator: admin <dumitru@brinzan.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: 404.php:20
+#@ wpzoom
+msgid "Error 404 - Page Not Found"
+msgstr ""
+
+#: 404.php:21
+#@ wpzoom
+msgid "The page you are looking for could not be found."
+msgstr ""
+
+#: 404.php:28
+#: loop.php:62
+#@ wpzoom
+msgid "Browse Categories"
+msgstr ""
+
+#: 404.php:33
+#: loop.php:67
+#@ wpzoom
+msgid "Monthly Archives"
+msgstr ""
+
+#: archive.php:36
+#@ wpzoom
+msgid "Post Tagged with:"
+msgstr ""
+
+#: archive.php:37
+#: archive.php:38
+#: archive.php:39
+#@ wpzoom
+msgid "Archive for"
+msgstr ""
+
+#: author.php:37
+#@ wpzoom
+msgid "Posts by"
+msgstr ""
+
+#: comments.php:4
+#@ wpzoom
+msgid "This post is password protected. Enter the password to view any comments."
+msgstr ""
+
+#: comments.php:20
+#@ wpzoom
+msgid "No Comments"
+msgstr ""
+
+#: comments.php:20
+#@ wpzoom
+msgid "One Comment"
+msgstr ""
+
+#: comments.php:20
+#@ wpzoom
+msgid "% Comments"
+msgstr ""
+
+#: comments.php:24
+#: comments.php:42
+#@ wpzoom
+msgid "<span class=\"meta-nav\">&larr;</span> Older Comments"
+msgstr ""
+
+#: comments.php:24
+#: comments.php:42
+#@ wpzoom
+msgid "Newer Comments <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
+
+#: comments.php:54
+#@ wpzoom
+msgid "Comments are closed."
+msgstr ""
+
+#: comments.php:68
+#@ wpzoom
+msgid "Your Name"
+msgstr ""
+
+#: comments.php:74
+#@ wpzoom
+msgid "Your Email"
+msgstr ""
+
+#: comments.php:79
+#@ wpzoom
+msgid "Your Website"
+msgstr ""
+
+#: comments.php:83
+#@ wpzoom
+msgid "Comment"
+msgstr ""
+
+#: comments.php:86
+#, php-format
+#@ default
+msgid "Logged in as <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\">Log out?</a>"
+msgstr ""
+
+#: comments.php:87
+#@ wpzoom
+msgid "Leave a Reply"
+msgstr ""
+
+#: comments.php:88
+#@ wpzoom
+msgid "Cancel"
+msgstr ""
+
+#: comments.php:89
+#@ wpzoom
+msgid "Submit Comment"
+msgstr ""
+
+#: featured-posts.php:27
+#: functions/widgets/recentposts.php:61
+#, php-format
+#@ wpzoom
+msgid "Permalink to %s"
+msgstr ""
+
+#: footer.php:41
+#@ wpzoom
+msgid "WordPress Theme"
+msgstr ""
+
+#: footer.php:41
+#@ wpzoom
+msgid "by"
+msgstr ""
+
+#: footer.php:42
+#: functions/customizer/sections/footer.php:14
+#@ wpzoom
+msgid "Copyright"
+msgstr ""
+
+#: footer.php:42
+#@ wpzoom
+msgid "All Rights Reserved"
+msgstr ""
+
+#: functions/custom-post-types.php:10
+#@ default
+msgctxt "post type general name"
+msgid "Testimonials"
+msgstr ""
+
+#: functions/custom-post-types.php:11
+#@ default
+msgctxt "post type singular name"
+msgid "Testimonial"
+msgstr ""
+
+#: functions/custom-post-types.php:12
+#@ default
+msgctxt "slideshow item"
+msgid "Add a New Testimonial"
+msgstr ""
+
+#: functions/custom-post-types.php:13
+#@ default
+msgid "Add New Testimonial"
+msgstr ""
+
+#: functions/custom-post-types.php:14
+#@ default
+msgid "Edit Testimonial"
+msgstr ""
+
+#: functions/custom-post-types.php:15
+#@ default
+msgid "New Testimonial"
+msgstr ""
+
+#: functions/custom-post-types.php:16
+#@ default
+msgid "View Testimonial"
+msgstr ""
+
+#: functions/custom-post-types.php:17
+#@ default
+msgid "Search Testimonials"
+msgstr ""
+
+#: functions/custom-post-types.php:18
+#@ default
+msgid "Nothing found"
+msgstr ""
+
+#: functions/custom-post-types.php:19
+#@ default
+msgid "Nothing found in Trash"
+msgstr ""
+
+#: functions/customizer/customizer.php:184
+#: functions/customizer/sections/color-scheme.php:9
+#@ wpzoom
+msgid "General"
+msgstr ""
+
+#: functions/customizer/customizer.php:186
+#@ wpzoom
+msgid "Typography"
+msgstr ""
+
+#: functions/customizer/customizer.php:187
+#@ wpzoom
+msgid "Color Scheme"
+msgstr ""
+
+#: functions/customizer/customizer.php:188
+#: functions/customizer/sections/color-scheme.php:55
+#: functions/customizer/sections/typography.php:90
+#@ wpzoom
+msgid "Header"
+msgstr ""
+
+#: functions/customizer/customizer.php:189
+#: functions/customizer/sections/color-scheme.php:129
+#@ wpzoom
+msgid "Footer"
+msgstr ""
+
+#: functions/customizer/helpers-defaults.php:75
+#, php-format
+#@ wpzoom
+msgid "Copyright &copy; %1$s &mdash; %2$s. All Rights Reserved"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:393
+#@ make
+msgid "All"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:394
+#@ make
+msgid "Cyrillic"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:395
+#@ make
+msgid "Cyrillic Extended"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:396
+#@ make
+msgid "Devanagari"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:397
+#@ make
+msgid "Greek"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:398
+#@ make
+msgid "Greek Extended"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:399
+#@ make
+msgid "Khmer"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:400
+#@ make
+msgid "Latin"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:401
+#@ make
+msgid "Latin Extended"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:402
+#@ make
+msgid "Vietnamese"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:436
+#@ wpzoom
+msgid "Loading&hellip;"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:490
+#@ make
+msgid "Standard Fonts"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:492
+#@ make
+msgid "Google Fonts"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:518
+#@ make
+msgctxt "font style"
+msgid "Serif"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:522
+#@ make
+msgctxt "font style"
+msgid "Sans Serif"
+msgstr ""
+
+#: functions/customizer/helpers-fonts.php:526
+#@ make
+msgctxt "font style"
+msgid "Monospaced"
+msgstr ""
+
+#: functions/customizer/sections/background.php:14
+#@ make
+msgid "Site Background Color"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:17
+#: functions/customizer/sections/color-scheme.php:157
+#@ wpzoom
+msgid "Link"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:27
+#: functions/customizer/sections/color-scheme.php:167
+#@ wpzoom
+msgid "Link :hover"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:37
+#: functions/customizer/sections/color-scheme.php:177
+#@ wpzoom
+msgid "Text"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:47
+#: functions/customizer/sections/typography.php:121
+#@ wpzoom
+msgid "Widget Title"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:64
+#@ wpzoom
+msgid "Header Background"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:74
+#@ wpzoom
+msgid "Menu Background"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:84
+#@ wpzoom
+msgid "Menu Border Color"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:94
+#@ wpzoom
+msgid "Menu Link"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:104
+#@ wpzoom
+msgid "Menu Link :hover"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:112
+#@ wpzoom
+msgid "Background"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:121
+#@ wpzoom
+msgid "Content Background"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:137
+#@ wpzoom
+msgid "Footer Background"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:147
+#@ wpzoom
+msgid "Footer Border Color"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:187
+#@ wpzoom
+msgid "Footer Widget Title"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:197
+#@ wpzoom
+msgid "Copyrights Background"
+msgstr ""
+
+#: functions/customizer/sections/color-scheme.php:207
+#@ wpzoom
+msgid "Copyright Text"
+msgstr ""
+
+#: functions/customizer/sections/footer.php:21
+#@ wpzoom
+msgid "Footer Copyright Text"
+msgstr ""
+
+#: functions/customizer/sections/general.php:14
+#: functions/customizer/sections/general.php:22
+#@ wpzoom
+msgid "Logo"
+msgstr ""
+
+#: functions/customizer/sections/general.php:32
+#@ wpzoom
+msgid "Retina Ready?"
+msgstr ""
+
+#: functions/customizer/sections/general.php:41
+#@ wpzoom
+msgid "Favicon"
+msgstr ""
+
+#: functions/customizer/sections/general.php:42
+#@ wpzoom
+msgid "File must be <strong>.png</strong> or <strong>.ico</strong> format. Optimal dimensions: <strong>32px x 32px</strong>."
+msgstr ""
+
+#: functions/customizer/sections/site-title-tagline.php:29
+#@ wpzoom
+msgid "Hide Tagline"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:12
+#@ wpzoom
+msgid "Site Title &amp; Tagline"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:19
+#@ wpzoom
+msgid "Site Title Font Family"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:29
+#@ wpzoom
+msgid "Site Title Font Size (in px)"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:39
+#@ wpzoom
+msgid "Site Tagline Font Family"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:49
+#@ wpzoom
+msgid "Site Tagline Font Size (in px)"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:61
+#@ wpzoom
+msgid "Navigation"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:68
+#@ wpzoom
+msgid "Nav Font Family"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:78
+#@ wpzoom
+msgid "Nav Font Size (in px)"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:98
+#@ wpzoom
+msgid "Header Telephone Font Family"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:108
+#@ wpzoom
+msgid "Header Telephone Font Size (in px)"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:128
+#@ wpzoom
+msgid "Widgets Font Family"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:138
+#@ wpzoom
+msgid "Widgets Font Size (in px)"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:148
+#@ wpzoom
+msgid "Footer Widgets Font Size (in px)"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:161
+#@ wpzoom
+msgid "Post/Page"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:168
+#@ wpzoom
+msgid "Title Font Family"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:178
+#@ wpzoom
+msgid "Title Font Size (in px)"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:188
+#@ wpzoom
+msgid "Content Font Family"
+msgstr ""
+
+#: functions/customizer/sections/typography.php:198
+#@ wpzoom
+msgid "Content Font Size (in px)"
+msgstr ""
+
+#: functions/functions.php:58
+#@ default
+msgid "Home"
+msgstr ""
+
+#: functions/functions.php:121
+#@ wpzoom
+msgid "Search results for &#39;"
+msgstr ""
+
+#: functions/functions.php:124
+#@ wpzoom
+msgid "Posts tagged &#39;"
+msgstr ""
+
+#: functions/functions.php:131
+#@ wpzoom
+msgid "Articles posted by "
+msgstr ""
+
+#: functions/functions.php:134
+#@ wpzoom
+msgid "Error 404"
+msgstr ""
+
+#: functions/functions.php:139
+#@ default
+msgid "Page"
+msgstr ""
+
+#: functions/functions.php:159
+#, php-format
+#@ wpzoom
+msgid "%s <span class=\"says\">says:</span>"
+msgstr ""
+
+#: functions/functions.php:162
+#, php-format
+#@ wpzoom
+msgid "%s at %s"
+msgstr ""
+
+#: functions/functions.php:162
+#: functions/functions.php:189
+#@ wpzoom
+msgid "(Edit)"
+msgstr ""
+
+#: functions/functions.php:169
+#@ wpzoom
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: functions/functions.php:189
+#@ wpzoom
+msgid "Pingback:"
+msgstr ""
+
+#: functions/widgets/custommenu.php:15
+#@ default
+msgid "Use this widget to add one of your custom menus as a widget."
+msgstr ""
+
+#: functions/widgets/custommenu.php:17
+#@ default
+msgid "WPZOOM: Custom Menu"
+msgstr ""
+
+#: functions/widgets/custommenu.php:61
+#, php-format
+#@ default
+msgid "No menus have been created yet. <a href=\"%s\">Create some</a>."
+msgstr ""
+
+#: functions/widgets/custommenu.php:66
+#: functions/widgets/textwidget.php:55
+#@ default
+msgid "Title:"
+msgstr ""
+
+#: functions/widgets/custommenu.php:70
+#@ default
+msgid "Select Menu:"
+msgstr ""
+
+#: functions/widgets/featured-category.php:12
+#@ wpzoom
+msgid "Custom WPZOOM widget. Displays posts from a category in 2 columns. Insert only into Homepage: Content Widgets sidebar."
+msgstr ""
+
+#: functions/widgets/featured-category.php:18
+#@ wpzoom
+msgid "WPZOOM: Featured Category"
+msgstr ""
+
+#: functions/widgets/featured-category.php:45
+#@ wpzoom
+msgid "view more posts"
+msgstr ""
+
+#: functions/widgets/featured-category.php:68
+#: functions/widgets/recentposts.php:65
+#: loop.php:38
+#, php-format
+#@ wpzoom
+msgid "%s"
+msgstr ""
+
+#: functions/widgets/featured-category.php:141
+#: functions/widgets/gallery.php:177
+#@ wpzoom
+msgid "Category:"
+msgstr ""
+
+#: functions/widgets/gallery.php:12
+#@ wpzoom
+msgid "Custom WPZOOM widget. Displays the featured images of posts from a category in a slider. Insert only into Homepage: Content Widgets sidebar."
+msgstr ""
+
+#: functions/widgets/gallery.php:18
+#@ wpzoom
+msgid "WPZOOM: Gallery"
+msgstr ""
+
+#: functions/widgets/recentposts.php:66
+#@ wpzoom
+msgid "0 comments"
+msgstr ""
+
+#: functions/widgets/recentposts.php:66
+#@ wpzoom
+msgid "1 comment"
+msgstr ""
+
+#: functions/widgets/recentposts.php:66
+#@ wpzoom
+msgid "% comments"
+msgstr ""
+
+#: functions/widgets/recentposts.php:147
+#@ wpzoom
+msgid "Display date"
+msgstr ""
+
+#: functions/widgets/recentposts.php:150
+#@ wpzoom
+msgid "Display number of comments"
+msgstr ""
+
+#: functions/widgets/testimonials.php:12
+#@ wpzoom
+msgid "Custom WPZOOM widget. Displays testimonials according to chosen options."
+msgstr ""
+
+#: functions/widgets/testimonials.php:18
+#@ wpzoom
+msgid "WPZOOM: Testimonials"
+msgstr ""
+
+#: functions/widgets/testimonials.php:139
+#@ wpzoom
+msgid "Testimonials to display:"
+msgstr ""
+
+#: functions/widgets/testimonials.php:157
+#@ wpzoom
+msgid "Display random testimonials"
+msgstr ""
+
+#: functions/widgets/textwidget.php:15
+#@ default
+msgid "Display arbitrary text or HTML/JS code."
+msgstr ""
+
+#: functions/widgets/textwidget.php:17
+#@ default
+msgid "WPZOOM: Text Widget"
+msgstr ""
+
+#: functions/widgets/textwidget.php:71
+#@ default
+msgid "Automatically add paragraphs"
+msgstr ""
+
+#: functions/wpzoom/components/admin/admin.php:113
+#@ wpzoom
+msgid "WPZOOM SEO Settings are deprecated and will be removed in the next ZOOM Framework update. "
+msgstr ""
+
+#: functions/wpzoom/components/admin/admin.php:114
+#, php-format
+#@ wpzoom
+msgid "You can disable WPZOOM SEO from <a href=\"%s\">Theme Options</a>."
+msgstr ""
+
+#: functions/wpzoom/components/admin/admin.php:118
+#@ wpzoom
+msgid "In case you are using our themes on a multisite install don't forget to notify your users about this change."
+msgstr ""
+
+#: functions/wpzoom/components/admin/admin.php:121
+#@ wpzoom
+msgid "Recommended SEO Plugin is <a href=\"http://wordpress.org/plugins/wordpress-seo/\">WordPress SEO by Yoast</a>."
+msgstr ""
+
+#: functions/wpzoom/components/admin/settings-page.php:140
+#@ wpzoom
+msgid "For more information:"
+msgstr ""
+
+#: functions/wpzoom/components/admin/settings-page.php:141
+#@ wpzoom
+msgid "<a href=\"http://www.wpzoom.com/support/documentation\" target=\"_blank\">Documentation and Tutorials</a>"
+msgstr ""
+
+#: functions/wpzoom/components/admin/settings-page.php:142
+#@ wpzoom
+msgid "<a href=\"http://www.wpzoom.com/support/\" target=\"_blank\">Support Desk</a>"
+msgstr ""
+
+#: functions/wpzoom/components/medialib-uploader.php:15
+#@ wpzoom
+msgid "WPZOOM Exporter"
+msgstr ""
+
+#: functions/wpzoom/components/medialib-uploader.php:38
+#@ wpzoom
+msgid "Upload"
+msgstr ""
+
+#: functions/wpzoom/components/medialib-uploader.php:40
+#@ wpzoom
+msgid "Upgrade your version of WordPress for full media support."
+msgstr ""
+
+#: functions/wpzoom/components/medialib-uploader.php:60
+#@ wpzoom
+msgid "View File"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:69
+#: functions/wpzoom/components/portfolio/portfolio.php:81
+#@ wpzoom
+msgid "Portfolio Items"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:70
+#: functions/wpzoom/components/portfolio/portfolio.php:72
+#@ wpzoom
+msgid "Portfolio Item"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:71
+#: functions/wpzoom/components/portfolio/portfolio.php:84
+#: functions/wpzoom/components/portfolio/portfolio.php:121
+#: functions/wpzoom/components/portfolio/portfolio.php:123
+#@ wpzoom
+msgid "Portfolio"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:73
+#@ wpzoom
+msgid "Add New"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:74
+#@ wpzoom
+msgid "Add New Portfolio Item"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:75
+#@ wpzoom
+msgid "Edit Portfolio Item"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:76
+#@ wpzoom
+msgid "New Portfolio Item"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:77
+#@ wpzoom
+msgid "View Portfolio Item"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:78
+#@ wpzoom
+msgid "Search Portfolio"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:79
+#@ wpzoom
+msgid "No portfolio items found"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:80
+#@ wpzoom
+msgid "No portfolio items found in trash"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:120
+#: functions/wpzoom/components/portfolio/portfolio.php:122
+#@ wpzoom
+msgid "Portfolios"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:124
+#@ wpzoom
+msgid "Search Portfolios"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:125
+#@ wpzoom
+msgid "Popular Portfolios"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:126
+#@ wpzoom
+msgid "All Portfolios"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:127
+#@ wpzoom
+msgid "Edit Portfolio"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:128
+#@ wpzoom
+msgid "View Portfolio"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:129
+#@ wpzoom
+msgid "Update Portfolio"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:130
+#@ wpzoom
+msgid "Add New Portfolio"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:131
+#@ wpzoom
+msgid "New Portfolio Name"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:132
+#@ wpzoom
+msgid "Separate portfolios with commas"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:133
+#@ wpzoom
+msgid "Add or remove portfolios"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/portfolio.php:134
+#@ wpzoom
+msgid "Choose from the most used portfolios"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/walker-category-filter.php:13
+#, php-format
+#@ wpzoom
+msgid "View all posts filed under %s"
+msgstr ""
+
+#: functions/wpzoom/components/portfolio/walker-category-filter.php:29
+#, php-format
+#@ wpzoom
+msgid "Feed for all posts filed under %s"
+msgstr ""
+
+#: functions/wpzoom/components/shortcodes/dialog.php:31
+#@ wpzoom
+msgid "Customize the Shortcode"
+msgstr ""
+
+#: functions/wpzoom/components/shortcodes/dialog.php:40
+#@ wpzoom
+msgid "Preview"
+msgstr ""
+
+#: functions/wpzoom/components/shortcodes/dialog.php:54
+#@ wpzoom
+msgid "Your version of theme does not yet support shortcodes."
+msgstr ""
+
+#: functions/wpzoom/components/video-thumb.php:86
+#@ wpzoom
+msgid "<strong>NOTICE!&nbsp;&nbsp;Unable to fetch video thumbnail</strong><br/>Either an invalid embed code was provided, or there is no thumbnail available for the specified video&hellip;<br/><small id=\"wpz_autothumb_remind\"><strong>REMINDER:</strong> You can always manually upload a featured image via the WordPress Media Uploader.</small>"
+msgstr ""
+
+#: functions/wpzoom/wpzoom.php:155
+#@ wpzoom
+msgid "WPZOOM"
+msgstr ""
+
+#: functions/wpzoom/wpzoom.php:156
+#@ wpzoom
+msgid "Theme Options"
+msgstr ""
+
+#: functions/wpzoom/wpzoom.php:159
+#@ wpzoom
+msgid "Framework Update"
+msgstr ""
+
+#: loop.php:55
+#@ wpzoom
+msgid "404 Error (page not found)"
+msgstr ""
+
+#: loop.php:56
+#@ wpzoom
+msgid "Apologies, but the requested page cannot be found. Perhaps searching will help find a related post."
+msgstr ""
+
+#: loop.php:58
+#@ wpzoom
+msgid "Apologies, but no results were found for the requested archive. Perhaps searching will help find a related post."
+msgstr ""
+
+#: page.php:51
+#: template-blog.php:59
+#: template-fullwidth.php:23
+#: template-list.php:47
+#: template-noleft.php:30
+#: template-noright.php:40
+#: template-testimonials.php:46
+#@ wpzoom
+msgid "Edit page"
+msgstr ""
+
+#: page.php:60
+#: single-testimonial.php:64
+#: single.php:63
+#: template-fullwidth.php:32
+#: template-noleft.php:39
+#: template-noright.php:49
+#@ wpzoom
+msgid "Pages"
+msgstr ""
+
+#: page.php:68
+#: single-testimonial.php:73
+#: single.php:72
+#: template-fullwidth.php:40
+#: template-noleft.php:47
+#: template-noright.php:57
+#@ wpzoom
+msgid "Tweet this on Twitter"
+msgstr ""
+
+#: page.php:68
+#: single-testimonial.php:73
+#: single.php:72
+#: template-fullwidth.php:40
+#: template-noleft.php:47
+#: template-noright.php:57
+#@ wpzoom
+msgid "Share on Twitter"
+msgstr ""
+
+#: page.php:69
+#: single-testimonial.php:74
+#: single.php:73
+#: template-fullwidth.php:41
+#: template-noleft.php:48
+#: template-noright.php:58
+#@ wpzoom
+msgid "Share this on Facebook"
+msgstr ""
+
+#: page.php:69
+#: single-testimonial.php:74
+#: single.php:73
+#: template-fullwidth.php:41
+#: template-noleft.php:48
+#: template-noright.php:58
+#@ wpzoom
+msgid "Share on Facebook"
+msgstr ""
+
+#: page.php:70
+#: single-testimonial.php:75
+#: single.php:74
+#: template-fullwidth.php:42
+#: template-noleft.php:49
+#: template-noright.php:59
+#@ wpzoom
+msgid "Post this to Google+"
+msgstr ""
+
+#: page.php:70
+#: single-testimonial.php:75
+#: single.php:74
+#: template-fullwidth.php:42
+#: template-noleft.php:49
+#: template-noright.php:59
+#@ wpzoom
+msgid "Share on Google+"
+msgstr ""
+
+#: pagination.php:13
+#@ wpzoom
+msgid "&larr; Previous"
+msgstr ""
+
+#: pagination.php:14
+#@ wpzoom
+msgid "Next &rarr;"
+msgstr ""
+
+#: search.php:36
+#@ wpzoom
+msgid "Search Results for"
+msgstr ""
+
+#: searchform.php:3
+#: searchform.php:4
+#@ wpzoom
+msgid "Search"
+msgstr ""
+
+#: single-testimonial.php:55
+#@ wpzoom
+msgid "Edit testimonial"
+msgstr ""
+
+#: single-testimonial.php:65
+#: single.php:64
+#@ wpzoom
+msgid "Tags"
+msgstr ""
+
+#: single.php:51
+#@ wpzoom
+msgid "By"
+msgstr ""
+
+#: single.php:52
+#@ wpzoom
+msgid "In "
+msgstr ""
+
+#: single.php:54
+#@ wpzoom
+msgid "Edit post"
+msgstr ""
+
+#: tribe-events/list/single-event.php:42
+#: tribe-events/single-event.php:94
+#@ wpzoom
+msgid "Date"
+msgstr ""
+
+#: tribe-events/list/single-event.php:49
+#: tribe-events/single-event.php:101
+#@ wpzoom
+msgid "Location"
+msgstr ""
+
+#: tribe-events/list/single-event.php:86
+#@ tribe-events-calendar
+msgid "Event Details"
+msgstr ""
+
+#: tribe-events/single-event.php:57
+#@ tribe-events-calendar
+msgid "&laquo; All Events"
+msgstr ""
+
+#: tribe-events/single-event.php:77
+#: tribe-events/single-event.php:157
+#@ tribe-events-calendar
+msgid "Event Navigation"
+msgstr ""
+
+#: tribe-events/single-event.php:109
+#@ wpzoom
+msgid "Price"
+msgstr ""
+
