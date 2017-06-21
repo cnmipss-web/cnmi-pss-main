@@ -8,6 +8,7 @@
     <title><?php ui::title(); ?></title>
 
     <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+    <link rel="stylesheet" href="/wp-content/dist/css/main.css" />
     <script src="https://cdn.accesslint.com/accesslint-1.1.2.js"></script>
 
     <?php wp_head(); ?>
