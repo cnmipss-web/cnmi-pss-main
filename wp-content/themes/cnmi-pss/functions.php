@@ -141,3 +141,39 @@ require get_template_directory() . '/inc/customizer.php';
  * Load Jetpack compatibility file.
  */
 require get_template_directory() . '/inc/jetpack.php';
+
+
+
+/**
+ * header_dropdown - Generate Bootstrap dropdown for navbar, automatically including
+ * 									 posts of the correct nav taxonomy.
+ *
+ * @param  {string} $nav_category taxonomy value
+ */
+function header_dropdown($nav_category) {
+	$pages = new WP_Query(array(
+		'post_type' => 'page',
+		'nav' => $nav_category,
+	));
+	if ($pages->have_posts()) {
+		echo '<li role="menuitem" class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' . $nav_category . '<span class="caret"></span></a>
+		<ul role="menu" class="dropdown-menu">';
+		while($pages->have_posts()):
+			$pages->the_post();
+			echo '<li role="menuitem"><a href="' .  get_the_permalink() . '">' . get_the_title() . '</a></li>';
+		endwhile;
+		echo '</ul></li>';
+	}
+}
+
+
+function search_form ($location) {
+	echo '<form class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
+		<div class="form-group">
+			<label for="' . $location . '-search-bar" class="screen-reader-text">Search:</label>
+			<input class="form-control" type="text" placeholder="Search" id="' . $location . '-search-bar" name="search-bar"/>
+		</div>
+			<button class="btn btn-default form-control" type="submit" id="' . $location . '-search-submit">Submit</button>
+	</form>';
+}
