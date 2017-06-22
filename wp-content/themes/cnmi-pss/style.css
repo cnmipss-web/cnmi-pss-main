@@ -520,14 +520,14 @@ a:active {
 	color: midnightblue;
 }
 
-a:focus {
+/*a:focus {
 	outline: thin dotted;
 }
 
 a:hover,
 a:active {
 	outline: 0;
-}
+}*/
 
 /*--------------------------------------------------------------
 ## Menus
