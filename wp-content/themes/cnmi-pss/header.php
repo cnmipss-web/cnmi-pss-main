@@ -35,19 +35,16 @@
 							<?php
 							if (is_front_page() && is_home()) : ?>
 								<a href="<?php echo esc_url(home_url('/')); ?>"
-									rel="home"
-									title="<?php bloginfo('name'); ?>">
+									rel="home">
+									<p class="screen-reader-text"><?php bloginfo('name'); ?></p>
 									<img src=<?php header_image(); ?> alt="<?php bloginfo('description'); ?>" />
 								</a>
 						<?php else : ?>
-							<p class="site-title">
 								<a href="<?php echo esc_url(home_url('/')); ?>"
-									rel="home"
-									title="<?php bloginfo('name'); ?>">
-									<p class="screen-reader-text"><?php bloginfo('description'); ?></p>
+									rel="home">
+									<p class="screen-reader-text"><?php bloginfo('name'); ?></p>
 									<img src=<?php header_image(); ?> alt="<?php bloginfo('description'); ?>" />
 								</a>
-							</p>
 							<?php
 						endif;?>
 						</div>
