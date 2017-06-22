@@ -418,7 +418,7 @@ table {
 /*--------------------------------------------------------------
 # Forms
 --------------------------------------------------------------*/
-button,
+/*button,
 input[type="button"],
 input[type="reset"],
 input[type="submit"] {
@@ -498,7 +498,7 @@ textarea:focus {
 
 textarea {
 	width: 100%;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Navigation
@@ -532,7 +532,7 @@ a:active {
 /*--------------------------------------------------------------
 ## Menus
 --------------------------------------------------------------*/
-.main-navigation {
+/*.main-navigation {
 	clear: both;
 	display: block;
 	float: left;
@@ -604,10 +604,10 @@ a:active {
 .main-navigation .current-menu-item > a,
 .main-navigation .current_page_ancestor > a,
 .main-navigation .current-menu-ancestor > a {
-}
+}*/
 
-/* Small menu. */
-.menu-toggle,
+/* Small menu.*/
+/*.menu-toggle,
 .main-navigation.toggled ul {
 	display: block;
 }
@@ -641,7 +641,7 @@ a:active {
 	float: right;
 	text-align: right;
 	width: 50%;
-}
+}*/
 
 /*--------------------------------------------------------------
 # Accessibility
