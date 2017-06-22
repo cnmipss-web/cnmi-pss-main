@@ -3,7 +3,7 @@
  */
 @mixin for-phone-only {
   // Bootstrap Size: xs
-  @media (max-width: $phone-screen) { @content; }
+  @media (max-width: $phone-screen - 1) { @content; }
 }
 
 @mixin for-phone-up {
