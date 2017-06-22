@@ -121,7 +121,7 @@ gulp.task('reload', () => {
 });
 
 gulp.task('watch', [
-  'default',
+  'styles',
 ], () => {
   livereload.listen();
   gulp.watch(SCSS.in + '**/*.scss', ['styles'])
