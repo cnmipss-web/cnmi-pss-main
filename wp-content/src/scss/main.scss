@@ -6,41 +6,4 @@
 @import 'accessibility';
 @import 'header';
 @import 'footer';
-
-html, body, .site {
-  height: 100%;
-}
-
-.site {
-  display: flex;
-  flex-direction: column;
-}
-
-.site-content {
-  flex: 1 0 auto;
-}
-
-
-.col-xs-0 {
-  @include for-phone-only {
-    display: none;
-  }
-}
-
-.col-sm-0 {
-  @include for-phone-up {
-    display: none;
-  }
-}
-
-.col-md-0 {
-  @include for-tablet-portrait-up {
-    display: none;
-  }
-}
-
-.col-lg-0 {
-  @include for-desktop-up {
-    display: none;
-  }
-}
+@import 'site';

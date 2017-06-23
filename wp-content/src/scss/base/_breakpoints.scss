@@ -25,3 +25,27 @@
 @mixin for-big-desktop-up {
   @media (min-width: $big-desktop) { @content; }
 }
+
+.col-xs-0 {
+  @include for-phone-only {
+    display: none;
+  }
+}
+
+.col-sm-0 {
+  @include for-phone-up {
+    display: none;
+  }
+}
+
+.col-md-0 {
+  @include for-tablet-portrait-up {
+    display: none;
+  }
+}
+
+.col-lg-0 {
+  @include for-desktop-up {
+    display: none;
+  }
+}

@@ -83,7 +83,7 @@ gulp.task('styles', () => {
       "> 1%",
       "last 2 versions",
       "iOS 8.1"
-    ]
+    ],
   };
   return gulp
     .src(SCSS. in + 'main.scss')

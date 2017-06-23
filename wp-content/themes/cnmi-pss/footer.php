@@ -13,7 +13,7 @@
 
 	</div><!-- #content -->
 
-	<footer id="colophon" class="site-footer container-fluid" role="contentinfo">
+	<footer id="colophon" class="site-footer" role="contentinfo">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-6 col-sm-3">
@@ -33,21 +33,20 @@
 				</div>
 			</div>
 		</div>
-		<div class="site-info row">
+
+		<div class="site-info container-fluid">
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12">
-						<p>
-							<?php
+						<p><?php
 							$copyYear = 2017;
 							$curYear = date('Y');
-							printf( esc_html__( 'Copyright ©' . $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '') . ' CNMI PSS. All Rights Reserved', 'cnmi-pss' ));
-							?>
-						</p>
+							echo trim('Copyright ©' . $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '') . ' CNMI PSS.');
+							?></p>
 					</div>
 				</div>
 			</div>
-		</div><!-- .site-info -->
+		</div>
 	</footer><!-- #colophon -->
 </div><!-- #page -->
 
