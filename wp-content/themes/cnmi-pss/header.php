@@ -55,7 +55,7 @@
 							</p>
 						</div>
 						<div class="header-search col-xs-12 col-sm-6 col-md-4">
-							<?php search_form('header'); ?>
+							<?php cnmi_search_form('header'); ?>
 						</div><!-- end .search-form -->
 					</div>
 				</div><!-- .site-branding -->
@@ -63,6 +63,7 @@
 				<nav id="site-navigation" class="main-navigation navbar navbar-cnmi" role="navigation">
 					<div class="container-fluid">
 						<div class="navbar-header">
+							<?php cnmi_search_form('nav'); ?>
 
 				      <button type="button"
 								class="navbar-toggle collapsed"
@@ -73,17 +74,17 @@
 				        <span class="screen-reader-text">Toggle navigation</span>
 				        <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
 				      </button>
-							<?php search_form('nav'); ?>
+
 				    </div>
 						<div class="collapse navbar-collapse" id="menu-main">
 							<ul role="menu" class="nav navbar-nav">
-								<?php header_dropdown('Students'); ?>
-								<?php header_dropdown('Parents'); ?>
-								<?php header_dropdown('Staff'); ?>
-								<?php header_dropdown('Board of Education'); ?>
-								<?php header_dropdown('Commissioner of Education'); ?>
-								<?php header_dropdown('About'); ?>
-								<?php header_dropdown('Archives'); ?>
+								<?php cnmi_header_dropdown('Students'); ?>
+								<?php cnmi_header_dropdown('Parents'); ?>
+								<?php cnmi_header_dropdown('Staff'); ?>
+								<?php cnmi_header_dropdown('Board of Education'); ?>
+								<?php cnmi_header_dropdown('Commissioner of Education'); ?>
+								<?php cnmi_header_dropdown('About'); ?>
+								<?php cnmi_header_dropdown('Archives'); ?>
 							</ul>
 						</div><!-- /.navbar-collapse -->
 					</div>

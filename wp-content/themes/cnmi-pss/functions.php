@@ -150,7 +150,7 @@ require get_template_directory() . '/inc/jetpack.php';
  *
  * @param  {string} $nav_category taxonomy value
  */
-function header_dropdown($nav_category) {
+function cnmi_header_dropdown($nav_category) {
 	$pages = new WP_Query(array(
 		'post_type' => 'page',
 		'nav' => $nav_category,
@@ -168,7 +168,7 @@ function header_dropdown($nav_category) {
 }
 
 
-function search_form ($location) {
+function cnmi_search_form ($location) {
 	echo '<form class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
 		<div class="form-group">
 			<label for="' . $location . '-search-bar" class="screen-reader-text">Search:</label>
