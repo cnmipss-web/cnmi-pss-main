@@ -72,7 +72,7 @@
 								aria-controls="menu-main"
 								aria-expanded="false" >
 				        <span class="screen-reader-text">Toggle navigation</span>
-				        <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+				        <i class="fa fa-bars" aria-hidden="true"></i>
 				      </button>
 
 				    </div>
