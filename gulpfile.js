@@ -78,11 +78,18 @@ gulp.task('fonts', () => {
 
 // Styles
 gulp.task('styles', () => {
+  const prefixOpts = {
+    browsers: [
+      "> 1%",
+      "last 2 versions",
+      "iOS 8.1"
+    ]
+  };
   return gulp
     .src(SCSS. in + 'main.scss')
     .pipe(sourcemaps.init())
     .pipe(sass(SCSS.sassOpts))
-    .pipe(autoprefixer())
+    .pipe(autoprefixer(prefixOpts))
     .pipe(cleanCss())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(SCSS.out))
