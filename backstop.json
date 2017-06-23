@@ -30,7 +30,8 @@
       "removeSelectors": [],
       "selectorExpansion": true,
       "selectors": [
-        "#masthead" 
+        "#masthead",
+        "#colophon"
       ],
       "readyEvent": null,
       "delay": 500,

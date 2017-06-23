@@ -13,17 +13,40 @@
 
 	</div><!-- #content -->
 
-	<footer id="colophon" class="site-footer container" role="contentinfo">
-		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'cnmi-pss' ) ); ?>"><?php
-				/* translators: %s: CMS name, i.e. WordPress. */
-				printf( esc_html__( 'Proudly powered by %s', 'cnmi-pss' ), 'WordPress' );
-			?></a>
-			<span class="sep"> | </span>
-			<?php
-				/* translators: 1: Theme name, 2: Theme author. */
-				printf( esc_html__( 'Theme: %1$s by %2$s.', 'cnmi-pss' ), 'cnmi-pss', '<a href="https://automattic.com/">Underscores.me</a>' );
-			?>
+	<footer id="colophon" class="site-footer container-fluid" role="contentinfo">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-6 col-sm-3">
+					<h2>Contact</h2>
+				</div>
+				<div class="col-xs-0 col-sm-3">
+					<h2>State Board of Education</h2>
+					<?php cnmi_contact_info('state-board-of-education'); ?>
+				</div>
+				<div class="col-xs-0 col-sm-3">
+					<h2>Commissioner of Education</h2>
+					<?php cnmi_contact_info('commissioner-of-education'); ?>
+				</div>
+				<div class="col-xs-6 col-sm-3">
+					<h2>Issues With Website?</h2>
+					<?php cnmi_contact_info('webmaster'); ?>
+				</div>
+			</div>
+		</div>
+		<div class="site-info row">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+						<p>
+							<?php
+							$copyYear = 2017;
+							$curYear = date('Y');
+							printf( esc_html__( 'Copyright ©' . $copyYear . (($copyYear != $curYear) ? '-' . $curYear : '') . ' CNMI PSS. All Rights Reserved', 'cnmi-pss' ));
+							?>
+						</p>
+					</div>
+				</div>
+			</div>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->

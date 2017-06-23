@@ -7,7 +7,14 @@ nav.navbar-cnmi {
   border-top: solid 5px $light-gold;
   font-size: 1rem;
   padding: 5px;
-  height: 50px;
+  min-height: 50px; // Breaks bootstrap header dropdowns
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+
+  form {
+    height: 10px;
+    margin: 0px;
+  }
 
   ul.dropdown-menu {
     background-color: $header-bg-color;
@@ -119,8 +126,13 @@ ul.nav.navbar-nav.nav-menu {
      display: flex;
      flex-direction: row;
      justify-content: space-between;
+     align-items:stretch;
      margin: 0px auto;
      width: 100%;
+
+     i.fa {
+       color: $dark-blue;
+     }
    }
  }
 
@@ -142,7 +154,7 @@ ul.nav.navbar-nav.nav-menu {
 
    button.btn {
      background-color: $gold;
-     color: white;
+     color: $dark-blue;
      font-weight: bold;
      max-width: 75px;
      margin-left: 5px;

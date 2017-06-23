@@ -167,7 +167,11 @@ function cnmi_header_dropdown($nav_category) {
 	}
 }
 
-
+/**
+ * cnmi_search_form - Generate a small search form
+ *
+ * @param  {string} $location location of search bar. Must be either 'header' or 'nav'
+ */
 function cnmi_search_form ($location) {
 	echo '<form class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
 		<div class="form-group">
@@ -176,4 +180,20 @@ function cnmi_search_form ($location) {
 		</div>
 			<button class="btn btn-default form-control" type="submit" id="' . $location . '-search-submit">Submit</button>
 	</form>';
+}
+
+/**
+ * cnmi_contact_info - Simple function to fetch contact information posts by slug
+ *
+ * @param  {string} $slug slug to fetch
+ */
+function cnmi_contact_info($slug) {
+	$info = new WP_Query(array(
+		'post_type' => 'contact_info',
+		'name' => $slug,
+	));
+	if($info->have_posts()):
+		$info->the_post();
+		the_content();
+	endif;
 }
