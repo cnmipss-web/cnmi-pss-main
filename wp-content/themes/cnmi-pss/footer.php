@@ -16,10 +16,13 @@
 	<footer id="colophon" class="site-footer" role="contentinfo">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-6 col-sm-3">
-					<h2>Contact</h2>
+				<div class="col-xs-12">
+					<h2>Contact District Office</h2>
+					<div class="footer-center">
+						<?php cnmi_contact_info('district-office'); ?>
+					</div>
 				</div>
-				<div class="col-xs-0 col-sm-3">
+				<!-- <div class="col-xs-0 col-sm-3">
 					<h2>State Board of Education</h2>
 					<?php cnmi_contact_info('state-board-of-education'); ?>
 				</div>
@@ -30,7 +33,7 @@
 				<div class="col-xs-6 col-sm-3">
 					<h2>Issues With Website?</h2>
 					<?php cnmi_contact_info('webmaster'); ?>
-				</div>
+				</div> -->
 			</div>
 		</div>
 

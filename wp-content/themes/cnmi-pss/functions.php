@@ -194,6 +194,10 @@ function cnmi_contact_info($slug) {
 	));
 	if($info->have_posts()):
 		$info->the_post();
-		the_content();
+		$contact_info = apply_filters('the_content',get_the_content());
+
+		// $contact_info = preg_replace('/Tel:/', '<span class="screen-reader-text">Telephone Number:</span><span class="not-screen-reader">Tel:</span>', $contact_info);
+
+		echo $contact_info;
 	endif;
 }

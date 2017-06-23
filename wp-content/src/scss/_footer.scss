@@ -24,3 +24,9 @@
     color: $light-gold;
   }
 }
+
+.footer-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
