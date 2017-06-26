@@ -1,6 +1,6 @@
 <?php
 /*
-*  The goal for this template is to provide the simplest possible interface to view the long description. 
+*  The goal for this template is to provide the simplest possible interface to view the long description.
 *  If you replace the template, I recommend against including your peripheral design, such as navigation.
 *  The purpose of the long description is to get the description and return to your previous context.
 */
@@ -15,7 +15,7 @@
 </head>
 <body>
 <div id="longdesc" class="template-longdesc">
-	<div id="desc_">
+	<div class="desc_">
 		<div id="desc_wp-image-<?php the_ID(); ?>">
 			<?php the_content(); ?>
 		</div>

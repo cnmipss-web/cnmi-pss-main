@@ -17,7 +17,7 @@
 		$(this).parent('.wpa-ld').append('<div class="longdesc" aria-live="assertive"></div>');
 		$(this).parent('.wpa-ld').append('<button>' + text + '</button>');
 		$(this).parent('.wpa-ld').children('.longdesc').hide();
-		$(this).parent('.wpa-ld').children('.longdesc').load( longdesc + ' #desc_' + image_id );
+		$(this).parent('.wpa-ld').children('.longdesc').load( longdesc + ' .desc_' + image_id );
 		$(this).parent('.wpa-ld').children('button').toggle(function () {
 			$(this).parent('.wpa-ld').children('.longdesc').show(150);
 		}, function () {
@@ -25,4 +25,3 @@
 		});
     });
 }(jQuery));
-		
