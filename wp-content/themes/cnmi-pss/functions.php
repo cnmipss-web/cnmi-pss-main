@@ -194,10 +194,97 @@ function cnmi_contact_info($slug) {
 	));
 	if($info->have_posts()):
 		$info->the_post();
-		$contact_info = apply_filters('the_content',get_the_content());
+		$address = get_field('address');
+		if(strlen($address) > 0) {
+			$address = '<p>' . $address . '</p>';
+		}
+		$tel = get_field('telephone');
+		if(strlen($tel) > 0) {
+			$tel = 'Tel: ' . $tel . '<br />';
+		}
+		$fax = get_field('fax');
+		if(strlen($fax) > 0) {
+			$fax = 'Fax: ' . $fax . '<br />';
+		}
+		$email = get_field('email');
+		if(strlen($email) > 0) {
+			$email = 'Eamil: ' . $email;
+		}
 
-		// $contact_info = preg_replace('/Tel:/', '<span class="screen-reader-text">Telephone Number:</span><span class="not-screen-reader">Tel:</span>', $contact_info);
+		$contact_info = $address . '<p>' . $tel . $fax . $email . '</p>';
 
 		echo $contact_info;
 	endif;
+}
+
+if (! function_exists('sort_query_posts_by'))
+{
+    function sort_by($query, $order_by, $order = 'asc')
+    {
+        // global $wp_query;
+        $order_by = strtolower($order_by);
+        $order    = strtolower($order);
+
+        if ($order_by == 'rand') {
+            shuffle($query->posts);
+            return;
+        }
+
+        if ($order_by == 'none') {
+            $order_by = 'id';
+            $order = 'asc';
+        }
+
+        $props = array(
+            'author'        => 'return sqp_compare_by_number($o1->post_author, $o2->post_author, '.$order.');',
+            'comment_count' => 'return sqp_compare_by_number($o1->comment_count, $o2->comment_count, '.$order.');',
+            'date'          => 'return sqp_compare_by_number(strtotime($o1->post_date), strtotime($o2->post_date), '.$order.');',
+            'id'            => 'return sqp_compare_by_number($o1->ID, $o2->ID, '.$order.');',
+            'menu_order'    => 'return sqp_compare_by_number($o1->menu_order, $o2->menu_order, '.$order.');',
+            'modified'      => 'return sqp_compare_by_number(strtotime($o1->post_modified), strtotime($o2->post_modified), '.$order.');',
+            'parent'        => 'return sqp_compare_by_number($o1->post_parent, $o2->post_parent, '.$order.');',
+            'title'         => 'return sqp_compare_by_string($o1->post_title, $o2->post_title, '.$order.');'
+        );
+
+        usort($query->posts, create_function('$o1, $o2', $props[$order_by]));
+    }
+
+    function sqp_compare_by_number($n1, $n2, $order)
+    {
+        $n1 = (int) $n1;
+        $n2 = (int) $n2;
+        $v  = $n1 > $n2 ? 1 : ($n1 < $n2 ? -1 : 0);
+        return ($order == 'desc') ? $v * -1 : $v;
+    }
+
+    function sqp_compare_by_string($s1, $s2, $order)
+    {
+        $v = strnatcasecmp($s1, $s2);
+        return ($order == 'desc') ? $v * -1 : $v;
+    }
+}
+
+/**
+ * cnmi_create_school_btns - Helper function to generate markup for school link buttons
+ *
+ * @param  {string} $level Which level of school to create buttons for.  Options:
+ * 														-Elementary School
+ * 														-Middle School
+ * 														-Jr Sr High School
+ * 														-High School
+ *
+ */
+function cnmi_create_school_btns($level) {
+	$schools = new WP_Query(array(
+		'post_type' => 'school',
+		'level' => $level,
+	));
+	sort_by($schools, 'title');
+	while($schools->have_posts()):
+		$schools->the_post();
+
+		$elem = '<div class="col-xs-4 col-sm-3"><a href="' . get_field('website') . '" title="' . get_field('long_name') . '" class="btn btn-school">' . '<span class="screen-reader-text">' . get_field('long_name') . '</span><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
+		echo $elem;
+	endwhile;
+	wp_reset_postdata();
 }
