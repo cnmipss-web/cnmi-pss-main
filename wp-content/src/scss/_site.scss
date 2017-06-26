@@ -15,3 +15,27 @@
 .site-info .row {
   width: 100%; // Bugfix for weird bug;
 }
+
+.site-main {
+  background-color: #eeeeee;
+  padding-bottom: 25px;
+
+  .container {
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: inset 0px 0px 1px 2px #dddddd;
+
+    h2 {
+      text-align: center;
+    }
+
+    .row div {
+      padding: 10px;
+    }
+  }
+
+  .item img {
+    width: 100%;
+    @include container-width;
+  }
+}

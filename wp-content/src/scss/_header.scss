@@ -10,6 +10,7 @@ nav.navbar-cnmi {
   min-height: 50px; // Breaks bootstrap header dropdowns
   margin-bottom: 0px;
   padding-bottom: 0px;
+  z-index: 100;
 
   form {
     height: 10px;

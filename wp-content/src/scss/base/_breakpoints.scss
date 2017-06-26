@@ -5,11 +5,9 @@
   // Bootstrap Size: xs
   @media (max-width: $phone-screen - 1) { @content; }
 }
-
 @mixin for-phone-up {
   @media (min-width: $phone-screen) {@content; }
 }
-
 @mixin for-tablet-portrait-up {
   // Bootstrap Size: sm
   @media (min-width: $tblt-port) { @content; }
@@ -24,6 +22,19 @@
 }
 @mixin for-big-desktop-up {
   @media (min-width: $big-desktop) { @content; }
+}
+
+@mixin for-xs {
+  @content;
+}
+@mixin for-sm {
+  @media (min-width: $phone-screen) {@content;}
+}
+@mixin for-md {
+  @media (min-width: $tblt-port) {@content;}
+}
+@mixin for-lg {
+  @media (min-width: $desktop) {@content;}
 }
 
 .col-xs-0 {

@@ -7,6 +7,11 @@ $tblt-land: 1024px;
 $desktop: 1200px;
 $big-desktop: 1800px;
 
+$xs-width: 100%;
+$sm-width: 750px;
+$md-width: 970px;
+$lg-width: 1170px;
+
 /**
  * Colors by Name
  */
@@ -29,4 +34,4 @@ $nav-link-hover-color: $light-gold;
 /**
  * Accessibility Variables
  */
-$focus-outline: 2px auto $gold;
+$focus-outline: 3px auto $gold;

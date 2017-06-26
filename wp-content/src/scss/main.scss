@@ -4,6 +4,18 @@
 @import 'base/mixins';
 
 @import 'accessibility';
-@import 'header';
 @import 'footer';
+@import 'front-page';
+@import 'header';
 @import 'site';
+
+.section-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.section-text {
+  font-weight: lighter;
+  font-size: 14px;
+}
