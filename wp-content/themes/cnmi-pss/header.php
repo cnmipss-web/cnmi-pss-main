@@ -80,15 +80,14 @@
 							<ul role="menu" class="nav navbar-nav">
 								<?php cnmi_header_dropdown('Students'); ?>
 								<?php cnmi_header_dropdown('Parents'); ?>
-								<?php cnmi_header_dropdown('Staff'); ?>
-								<?php cnmi_header_dropdown('Board of Education'); ?>
-								<?php cnmi_header_dropdown('Commissioner of Education'); ?>
-								<?php cnmi_header_dropdown('About'); ?>
-								<?php cnmi_header_dropdown('Archives'); ?>
+								<?php cnmi_header_dropdown('Employees'); ?>
+								<?php cnmi_header_dropdown('Community'); ?>
+								<?php cnmi_header_dropdown('District Offices'); ?>
+								<?php cnmi_header_dropdown('Reports'); ?>
 							</ul>
 						</div><!-- /.navbar-collapse -->
 					</div>
 				</nav><!-- #site-navigation -->
 			</header><!-- #masthead -->
 
-			<div id="content" class="site-content container">
+			<div id="content" class="site-content">
