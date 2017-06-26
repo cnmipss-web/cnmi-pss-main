@@ -14,10 +14,7 @@
       <div class="jumbotron container">
         <div id="myCarousel" class="carousel slide">
           <!-- Indicators -->
-          <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
+          <ol id="carousel-indicators" class="carousel-indicators">
           </ol>
 
           <!-- Wrapper for slides -->
@@ -27,10 +24,14 @@
             $news = new WP_Query(array(
               'posts_per_page' => 5,
             ));
+            $showcases = new WP_Query(array(
+              'post_type' => 'showcase',
+              'posts_per_page' => 3,
+            ));
             while($news->have_posts()):
               $news->the_post();?>
               <div class="item">
-                <h2 class="carousel-img-title"><?php the_title(); ?></h2>
+                <h2 class="carousel-img-title">PSS News: <?php the_title(); ?></h2>
                 <a title="Link to <?php the_title()?> article" href=<?php the_permalink() ?>>
                   <?php the_post_thumbnail('full'); ?>
                 </a>
@@ -39,7 +40,17 @@
              ?>
           </div>
           <script>
-            document.getElementById("carousel-inner").children[0].className += ' active';
+            // Create Correct Number of carousel indicators based on number of posts
+            // show from $news and $showcases
+            let first = jQuery('#carousel-inner').children()[0];
+            jQuery(first).addClass('active');
+            jQuery('#carousel-inner').children().each((index) => {
+              let listItem = '<li data-target="#myCarousel" data-slide-to="'
+                + index + '" '
+                + (index === 0 ? 'class="active"' : '')
+                + '></li>';
+              jQuery('#carousel-indicators').append(listItem)
+            });
           </script>
 
           <!-- Left and right controls -->

@@ -1,23 +1,39 @@
 div.jumbotron {
+  background: inherit !important;
   border-radius: 0px !important;
   box-shadow: none !important;
-  background: inherit !important;
   padding: 0px;
   z-index: -100;
+  height: 100%;
 
   @include container-width;
 
   @include for-xs {
-    height: 100%;
     margin-top: -30px;
   }
   @include for-sm {
     margin-top: -36px;
-    height: 100%;
+  }
+  img {
+    @include for-sm {
+      height: $sm-width * 9/16;
+    }
+    @include for-md {
+      height: $md-width * 9/16;
+    }
+    @include for-lg {
+      height: $lg-width * 9/16;
+    }
+
+  }
+  #carousel-inner > div.item.active > a:focus {
+    outline: $alt-outline !important;
   }
 
   .carousel, .carousel-control.right, .carousel-control.left {
     background-image: none;
+    color: white;
+
     @include for-xs {
       height: 100%;
     }
@@ -37,25 +53,29 @@ div.jumbotron {
   }
 
   h2.carousel-img-title {
+    background-color: transparentize(black, 0.33);
+    color: white;
     position: relative;
+    text-align: left !important;
+    z-index: 100;
+
     @include for-xs {
-      top: 50px;
-      z-index: 100;
-      color: white;
-      text-align: left !important;
+      font-size: 16px;
       padding-left: 50px;
-      font-size: 20px;
-      background-color: transparentize(black, 0.33);
+      top: 50px;
+      white-space: pre-wrap;
     }
 
     @include for-sm {
-      top: 100px;
-      z-index: 100;
-      color: white;
-      text-align: left !important;
-      padding-left: 150px;
       font-size: 24px;
-      background-color: transparentize(black, 0.33);
+      padding-left: 100px;
+      top: 75px;
+    }
+
+    @include for-lg {
+      font-size: 24px;
+      padding-left: 150px;
+      top: 100px;
     }
   }
 }
@@ -63,28 +83,26 @@ div.jumbotron {
 .jumbo-img {
   @include for-xs{
     height: 240px;
-    width: auto;
-    min-width: 768px;
-    margin-top: 12vh;
     margin-left: 49vw;
+    margin-top: 12vh;
+    min-width: 768px;
     transform: translate(-50%, -50%);
+    width: auto;
   }
   @include for-sm {
-    width: 100vw;
     height: auto;
     margin: 0px 0px;
     transform: none;
+    width: 100vw;
   }
 }
 
 .btn.btn-school {
-  width: 100%;
-  // margin: 5px;
+  @include custom-transition(color 0.3s, ease, 0s);
   background-color: $dark-blue;
   color: $light-gold;
   font-weight: bold;
-
-  @include custom-transition(color 0.3s, ease, 0s);
+  width: 100%;
 
   &:hover {
     background-color: $dark-blue;
@@ -93,7 +111,7 @@ div.jumbotron {
   }
 
   &:focus {
-    outline: 500px auto red !important;
+    outline: $alt-outline !important;
   }
 
 }
