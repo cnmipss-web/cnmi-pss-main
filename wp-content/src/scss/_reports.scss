@@ -1,0 +1,10 @@
+.responsive-tabs li.responsive-tabs__list__item {
+  color: $dark-blue;
+  max-width: 200px;
+  height: 65px;
+  white-space: pre-wrap;
+  border-color: $gold;
+  &.active {
+    border-color: $dark-blue;
+  }
+}
