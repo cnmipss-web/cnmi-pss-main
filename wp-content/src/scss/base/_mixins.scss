@@ -1,7 +1,7 @@
 @mixin custom-transition($transition, $function, $delay) {
-  transition: $transition;
-  transition-timing-function: $function;
   transition-delay:$delay;
+  transition-timing-function: $function;
+  transition: $transition;
 }
 
 @mixin container-width {

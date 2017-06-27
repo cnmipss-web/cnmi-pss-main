@@ -6,12 +6,12 @@
   color: $dark-blue;
 
   @include for-xs {
-    margin-top: -15px;
     font-size: 24px;
+    margin-top: -15px;
   }
   @include for-sm {
-    margin: 10% 0px 15px 0px;
     font-size: 36px;
+    margin: 10% 0px 15px 0px;
   }
 }
 
@@ -39,10 +39,10 @@
 }
 
 .page-title {
+  color: $dark-blue;
   margin-top: 0px;
   padding-top: 15px;
   text-align: center;
-  color: $dark-blue;
 }
 
 .posts-navigation {
@@ -53,8 +53,8 @@
     border-radius: 0px;
     a {
       @include custom-transition(color 0.3s, ease, 0s);
-      font-weight: bold;
       color: white;
+      font-weight: bold;
       &:hover, &:focus {
         color: $light-gold;
       }

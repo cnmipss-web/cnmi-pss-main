@@ -15,18 +15,18 @@ $lg-width: 1170px;
 /**
  * Colors by Name
  */
-$light-blue: #105194;
 $blue: #1a4167;
 $dark-blue: #022c55;
 $gold: darken(#b9972f, 0);
+$light-blue: #105194;
 $light-gold: #dfc253;
 
 /**
  * Colors by Function
  */
-$header-bg-color: $blue;
 $footer-bg-color: $blue;
 $footer-txt-color: white;
+$header-bg-color: $blue;
 $nav-btn-bg-color: $gold;
 $nav-link-color: white;
 $nav-link-hover-color: $light-gold;
