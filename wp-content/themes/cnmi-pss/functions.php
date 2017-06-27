@@ -176,7 +176,7 @@ function cnmi_search_form ($location) {
 	echo '<form class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
 		<div class="form-group">
 			<label for="' . $location . '-search-bar" class="screen-reader-text">Search:</label>
-			<input class="form-control" type="text" placeholder="Search" id="' . $location . '-search-bar" name="search-bar"/>
+			<input class="form-control" type="text" placeholder="Search" id="' . $location . '-search-bar" name="s"/>
 		</div>
 			<button class="btn btn-default form-control" type="submit" id="' . $location . '-search-submit">Submit</button>
 	</form>';
@@ -187,7 +187,7 @@ function cnmi_search_form ($location) {
  *
  * @param  {string} $slug slug to fetch
  */
-function cnmi_contact_info($slug) {
+function cnmi_contact_info($slug, $type = 'full') {
 	$info = new WP_Query(array(
 		'post_type' => 'contact_info',
 		'name' => $slug,
@@ -208,13 +208,21 @@ function cnmi_contact_info($slug) {
 		}
 		$email = get_field('email');
 		if(strlen($email) > 0) {
-			$email = 'Eamil: ' . $email;
+			$email = 'Email: ' . $email;
 		}
-
-		$contact_info = $address . '<p>' . $tel . $fax . $email . '</p>';
+		$contact_info = '';
+		if($type == 'full' || in_array('add', $type))
+			$contact_info .= $address;
+		if($type == 'full' || in_array('tel', $type))
+			$contact_info .= $tel;
+		if($type == 'full' || in_array('fax', $type))
+			$contact_info .= $fax;
+		if($type == 'full' || in_array('ema', $type))
+			$contact_info .= $email;
 
 		echo $contact_info;
 	endif;
+	wp_reset_postdata();
 }
 
 if (! function_exists('sort_query_posts_by'))
