@@ -1,0 +1,13 @@
+.page-entry-header {
+  @extend .entry-header;
+  padding-left: 15px;
+  color: $dark-blue;
+}
+
+.page-entry-content {
+  @extend .entry-content;
+}
+
+.page-entry-footer {
+  @extend .entry-footer;
+}

@@ -10,23 +10,34 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+	<header class="page-entry-header">
+		<?php the_title( '<h1 class="page-entry-title">', '</h1>' ); ?>
 	</header><!-- .entry-header -->
 
-	<div class="entry-content">
+	<div class="page-entry-content col-xs-12 col-sm-10 col-sm-push-1">
 		<?php
 			the_content();
-
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'cnmi-pss' ),
 				'after'  => '</div>',
 			) );
 		?>
+
+		<?php
+		$contact = get_field('contact_name');
+		$include = get_field('include_info');
+		if(strlen($contact) > 0):
+			?>
+			<p>For more info contact <?php the_field('contact_name') ?>:</p>
+			<?php
+			$contact = strtolower($contact);
+			preg_replace('/\s/', '-', $contact);
+			cnmi_contact_info($contact, $include);
+		endif;?>
 	</div><!-- .entry-content -->
 
 	<?php if ( get_edit_post_link() ) : ?>
-		<footer class="entry-footer">
+		<footer class="page-entry-footer col-xs-12">
 			<?php
 				edit_post_link(
 					sprintf(

@@ -19,6 +19,16 @@
 .site-main {
   background-color: #eeeeee;
   padding-bottom: 25px;
+  min-height: 75vh;
+  @include for-sm {
+    min-height: calc(100vh - 373px);
+  }
+  @include for-md {
+    min-height: calc(100vh - 305px);
+  }
+  @include for-lg {
+    min-height: calc(100vh - 322px);
+  }
 
   .container {
     background-color: white;
