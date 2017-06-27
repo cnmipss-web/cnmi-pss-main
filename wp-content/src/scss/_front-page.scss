@@ -15,16 +15,9 @@ div.jumbotron {
     margin-top: -36px;
   }
   img {
-    @include for-sm {
-      height: $sm-width * 9/16;
-    }
-    @include for-md {
-      height: $md-width * 9/16;
-    }
-    @include for-lg {
-      height: $lg-width * 9/16;
-    }
-
+    @include for-sm {height: $sm-width * 9/16}
+    @include for-md {height: $md-width * 9/16}
+    @include for-lg {height: $lg-width * 9/16}
   }
   #carousel-inner > div.item.active > a:focus {
     outline: $alt-outline !important;
@@ -33,7 +26,7 @@ div.jumbotron {
   .carousel, .carousel-control.right, .carousel-control.left {
     background-image: none;
     color: white;
-
+      
     @include for-xs {
       height: 100%;
     }

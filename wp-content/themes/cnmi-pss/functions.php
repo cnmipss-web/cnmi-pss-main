@@ -288,3 +288,51 @@ function cnmi_create_school_btns($level) {
 	endwhile;
 	wp_reset_postdata();
 }
+
+
+/**
+ * Returns the navigation to next/previous set of posts, when applicable.
+ *
+ * @since 4.1.0
+ *
+ * @global WP_Query $wp_query WordPress Query object.
+ *
+ * @param array $args {
+ *     Optional. Default posts navigation arguments. Default empty array.
+ *
+ *     @type string $prev_text          Anchor text to display in the previous posts link.
+ *                                      Default 'Older posts'.
+ *     @type string $next_text          Anchor text to display in the next posts link.
+ *                                      Default 'Newer posts'.
+ *     @type string $screen_reader_text Screen reader text for nav element.
+ *                                      Default 'Posts navigation'.
+ * }
+ * @return string Markup for posts links.
+ */
+function cnmi_posts_navigation( $args = array() ) {
+	$navigation = '';
+
+	// Don't print empty markup if there's only one page.
+	if ( $GLOBALS['wp_query']->max_num_pages > 1 ) {
+		$args = wp_parse_args( $args, array(
+			'prev_text'          => __( 'Older News' ),
+			'next_text'          => __( 'More Recent News' ),
+			'screen_reader_text' => __( 'Posts navigation' ),
+		) );
+
+		$next_link = get_previous_posts_link( $args['next_text'] );
+		$prev_link = get_next_posts_link( $args['prev_text'] );
+
+		if ( $prev_link ) {
+			$navigation .= '<button class="btn nav-previous">' . $prev_link . '</button>';
+		}
+
+		if ( $next_link ) {
+			$navigation .= '<button class="btn nav-next">' . $next_link . '</button>';
+		}
+
+		$navigation = _navigation_markup( $navigation, 'posts-navigation', $args['screen_reader_text'] );
+	}
+
+	echo $navigation;
+}

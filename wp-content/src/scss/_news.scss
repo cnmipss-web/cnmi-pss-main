@@ -1,0 +1,63 @@
+.entry-header img {
+  margin-top: 25px;
+}
+
+.entry-title, .entry-title a, .entry-title a:visited {
+  color: $dark-blue;
+
+  @include for-xs {
+    margin-top: -15px;
+    font-size: 24px;
+  }
+  @include for-sm {
+    margin: 10% 0px 15px 0px;
+    font-size: 36px;
+  }
+}
+
+.entry-meta {
+  padding: 0px !important;
+    @include for-xs {font-size: 12px}
+    @include for-sm {font-size: 14px}
+}
+
+.entry-content.col-xs-12 {
+  margin-top: 0px !important;
+
+  @include for-xs {
+    font-size: 14px;
+    padding: 0px 15px !important;
+  }
+  @include for-sm {
+    font-size: 16px;
+  }
+}
+
+.entry-footer {
+  text-align: right;
+  padding: 0px 50px;
+}
+
+.page-title {
+  margin-top: 0px;
+  padding-top: 15px;
+  text-align: center;
+  color: $dark-blue;
+}
+
+.posts-navigation {
+  text-align: center;
+
+  .nav-previous, .nav-next {
+    background-color: $dark-blue;
+    border-radius: 0px;
+    a {
+      @include custom-transition(color 0.3s, ease, 0s);
+      font-weight: bold;
+      color: white;
+      &:hover, &:focus {
+        color: $light-gold;
+      }
+    }
+  }
+}
