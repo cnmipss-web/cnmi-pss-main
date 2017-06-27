@@ -14,14 +14,13 @@ get_header(); ?>
 
 		<?php
 		if ( have_posts() ) : ?>
-
-			<header class="page-header">
+			<header class="search-page-header">
 				<h1 class="page-title"><?php
 					/* translators: %s: search query. */
 					printf( esc_html__( 'Search Results for: %s', 'cnmi-pss' ), '<span>' . get_search_query() . '</span>' );
 				?></h1>
 			</header><!-- .page-header -->
-
+     <div class="container">
 			<?php
 			/* Start the Loop */
 			while ( have_posts() ) : the_post();
@@ -35,14 +34,17 @@ get_header(); ?>
 
 			endwhile;
 
-			the_posts_navigation();
+			cnmi_posts_navigation(array(
+				'prev_text' => 'Next Results',
+				'next_text' => 'Previous Results',
+			));
 
 		else :
 
 			get_template_part( 'template-parts/content', 'none' );
 
 		endif; ?>
-
+	</div>
 		</main><!-- #main -->
 	</section><!-- #primary -->
 

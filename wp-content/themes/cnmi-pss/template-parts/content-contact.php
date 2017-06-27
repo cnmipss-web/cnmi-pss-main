@@ -11,10 +11,17 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="page-entry-header">
-		<?php the_title( '<h1 class="page-entry-title">', '</h1>' ); ?>
+		<?php
+		$job_title = get_field('job_title');
+		if(strlen($job_title) > 0) {
+			$job_title = ' - ' . $job_title;
+		}
+		the_title( '<h1 class="page-entry-title">', $job_title . '</h1>' );
+		?>
 	</header><!-- .entry-header -->
 
 	<div class="page-entry-content col-xs-12 col-sm-10 col-sm-push-1">
+		<p><?php echo get_the_title() ?> may be contacted at:</p>
 		<?php
 			cnmi_contact_info(get_the_title(), 'full');
 			wp_link_pages( array(

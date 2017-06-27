@@ -196,7 +196,7 @@ function cnmi_contact_info($slug, $type = 'full') {
 		$info->the_post();
 		$address = get_field('address');
 		if(strlen($address) > 0) {
-			$address = '<p>' . $address . '</p>';
+			$address = '<p>' . $address . '</p><p>';
 		}
 		$tel = get_field('telephone');
 		if(strlen($tel) > 0) {
@@ -211,8 +211,11 @@ function cnmi_contact_info($slug, $type = 'full') {
 			$email = 'Email: ' . $email;
 		}
 		$contact_info = '';
-		if($type == 'full' || in_array('add', $type))
+		if($type == 'full' || in_array('add', $type)) {
 			$contact_info .= $address;
+		} else {
+			$contact_info = '<p>';
+		}
 		if($type == 'full' || in_array('tel', $type))
 			$contact_info .= $tel;
 		if($type == 'full' || in_array('fax', $type))
@@ -220,7 +223,7 @@ function cnmi_contact_info($slug, $type = 'full') {
 		if($type == 'full' || in_array('ema', $type))
 			$contact_info .= $email;
 
-		echo $contact_info;
+		echo $contact_info . '</p>';
 	endif;
 	wp_reset_postdata();
 }
@@ -331,16 +334,29 @@ function cnmi_posts_navigation( $args = array() ) {
 		$next_link = get_previous_posts_link( $args['next_text'] );
 		$prev_link = get_next_posts_link( $args['prev_text'] );
 
+		if ( $next_link ) {
+			$navigation .= '<button class="btn nav-next">' . $next_link . '</button>';
+		}
+		$navigation .= '&nbsp;';
 		if ( $prev_link ) {
 			$navigation .= '<button class="btn nav-previous">' . $prev_link . '</button>';
 		}
 
-		if ( $next_link ) {
-			$navigation .= '<button class="btn nav-next">' . $next_link . '</button>';
-		}
 
 		$navigation = _navigation_markup( $navigation, 'posts-navigation', $args['screen_reader_text'] );
 	}
 
 	echo $navigation;
+}
+
+function cnmi_get_report_tabs() {
+	$tabs = array();
+	for ($i = 1; $i <= 5; $i++) {
+		$tabs[] = array(
+			'title' => get_field('tab_title_' . $i),
+			'content' => get_field('tab_content_' . $i),
+			'id' => ('tab' . $i),
+		);
+	}
+	return $tabs;
 }
