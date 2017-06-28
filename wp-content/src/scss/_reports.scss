@@ -8,3 +8,44 @@
     border-color: $dark-blue;
   }
 }
+
+ul.nav.nav-tabs {
+  margin: 0;
+  border-bottom: $report-tabs-border;
+  @include for-xs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  @include for-sm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  li a {
+    height: 100%;
+    background-color: $manila;
+    color: $dark-blue;
+    border-top: $report-tabs-border;
+    border-left: $report-tabs-border;
+    border-right: $report-tabs-border;
+
+  }
+  li.active a {
+    background-color: white;
+    color: $dark-blue;
+    border-top: $report-tabs-border;
+    border-left: $report-tabs-border;
+    border-right: $report-tabs-border;
+
+  }
+
+}
+
+.tab-content {
+  border-left: $report-tabs-border;
+  border-right: $report-tabs-border;
+  border-bottom: $report-tabs-border;
+}

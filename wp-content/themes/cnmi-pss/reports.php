@@ -17,10 +17,16 @@
 get_header(); ?>
 
 	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+		<main id="main" class="site-main">
 			<br />
       <div class="container">
+
 				<div class="row">
+					<header>
+						<h1 class="page-title">
+							<?php the_title(); ?>
+						</h1>
+					</header>
 					<div>
 						<ul class="nav nav-tabs" role="tablist" id="tablist">
 							<?php

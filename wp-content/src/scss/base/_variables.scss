@@ -20,6 +20,7 @@ $dark-blue: #022c55;
 $gold: darken(#b9972f, 0);
 $light-blue: #105194;
 $light-gold: #dfc253;
+$manila: #f1d592;
 
 /**
  * Colors by Function
@@ -39,5 +40,6 @@ $alt-outline: 3px solid red;
 
 
 /**
- * Custom Transitions
+ * Borders
  */
+$report-tabs-border: 1px solid $manila;
