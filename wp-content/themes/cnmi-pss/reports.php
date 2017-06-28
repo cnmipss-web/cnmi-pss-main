@@ -20,14 +20,19 @@ get_header(); ?>
 		<main id="main" class="site-main">
 			<br />
       <div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+						<header>
+							<h1 class="page-title">
+								<?php the_title(); ?>
+							</h1>
+						</header>
+						<?php the_content(); ?>
+				 </div>
+				</div>
 
 				<div class="row">
-					<header>
-						<h1 class="page-title">
-							<?php the_title(); ?>
-						</h1>
-					</header>
-					<div>
+					<div class="col-xs-12">
 						<ul class="nav nav-tabs" role="tablist" id="tablist">
 							<?php
 							$tabs = cnmi_get_report_tabs();
@@ -50,13 +55,18 @@ get_header(); ?>
 							<?php
 							foreach ($tabs as $this_tab) {
 								?>
-								<div role="tabpanel" class="tab-pane active" id="<?php echo $this_tab['id']; ?>">
+								<div role="tabpanel" class="tab-pane fade" id="<?php echo $this_tab['id']; ?>">
 									<?php echo $this_tab['content']; ?>
 								</div>
 								<?php
 							}
 							?>
 						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-10 col-sm-push-1">
+						<?php get_template_part( 'template-parts/info', 'contact' ); ?>
 					</div>
 				</div>
 				<script>

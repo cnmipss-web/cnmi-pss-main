@@ -23,17 +23,7 @@
 			) );
 		?>
 
-		<?php
-		$contact = get_field('contact_name');
-		$include = get_field('include_info');
-		if(strlen($contact) > 0):
-			?>
-			<p>For more info contact <?php the_field('contact_name') ?>:</p>
-			<?php
-			$contact = strtolower($contact);
-			preg_replace('/\s/', '-', $contact);
-			cnmi_contact_info($contact, $include);
-		endif;?>
+		<?php get_template_part( 'template-parts/info', 'contact' ); ?>
 	</div><!-- .entry-content -->
 
 	<?php if ( get_edit_post_link() ) : ?>

@@ -97,25 +97,10 @@ gulp.task('styles', () => {
 });
 
 // Scripts
-gulp.task('webpack-dev', () => {
+gulp.task('dist-cljs', () => {
   return gulp
-    .src('./src/theme/dev-resources/public/theme.js')
-    .pipe(sourcemaps.init())
-    .pipe(webpackStream(WEBPACK_DEV, webpack))
-    .pipe(concat(JS_BUNDLE))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(DIST))
-    .pipe(livereload());
-});
-
-gulp.task('webpack-production', () => {
-  return gulp
-    .src(CLIENT + 'index')
-    .pipe(sourcemaps.init())
-    .pipe(webpackStream(WEBPACK_PROD, webpack))
-    .pipe(concat(JS_BUNDLE))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(DIST))
+    .src('./wp-content/src/cljs/cnmipss/resources/public/js/compiled/**/*')
+    .pipe(gulp.dest('js/compiled/'))
     .pipe(livereload());
 });
 
