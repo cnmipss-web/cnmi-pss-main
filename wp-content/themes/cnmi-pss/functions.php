@@ -228,6 +228,51 @@ function cnmi_contact_info($slug, $type = 'full') {
 	wp_reset_postdata();
 }
 
+function cnmi_school_info($slug, $type = 'full') {
+	$info = new WP_Query(array(
+		'post_type' => 'school',
+		'name' => $slug,
+	));
+
+	$first_column = '<div class="col-xs-12 col-sm-6">';
+	$second_column = '<div class="col-xs-12 col-sm-6">' . get_field('admin_staff') . '</div>';
+	if($info->have_posts()):
+		$info->the_post();
+		$address = get_field('address');
+		if(strlen($address) > 0) {
+			$address = '<p>' . $address . '</p><p>';
+		}
+		$tel = get_field('telephone');
+		if(strlen($tel) > 0) {
+			$tel = 'Tel: ' . $tel . '<br />';
+		}
+		$fax = get_field('fax');
+		if(strlen($fax) > 0) {
+			$fax = 'Fax: ' . $fax . '<br />';
+		}
+		$email = get_field('email');
+		if(strlen($email) > 0) {
+			$email = 'Email: ' . $email . '<br />';
+		}
+		$contact_info = '';
+		if($type == 'full' || in_array('add', $type)) {
+			$contact_info .= $address;
+		} else {
+			$contact_info = '<p>';
+		}
+		if($type == 'full' || in_array('tel', $type))
+			$contact_info .= $tel;
+		if($type == 'full' || in_array('fax', $type))
+			$contact_info .= $fax;
+		if($type == 'full' || in_array('ema', $type))
+			$contact_info .= $email;
+
+		$contact_info .= '<a href="' . get_field('website') .'">' . get_the_title() . ' Website</a>';
+		echo $first_column .  $contact_info . '</p></div>' . $second_column;
+	endif;
+	wp_reset_postdata();
+}
+
 if (! function_exists('sort_query_posts_by'))
 {
     function sort_by($query, $order_by, $order = 'asc')
@@ -295,7 +340,7 @@ function cnmi_create_school_btns($level) {
 	while($schools->have_posts()):
 		$schools->the_post();
 
-		$elem = '<div class="col-xs-4 col-sm-3"><a href="' . get_field('website') . '" title="' . get_field('long_name') . '" class="btn btn-school">' . '<span class="screen-reader-text">' . get_field('long_name') . '</span><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
+		$elem = '<div class="col-xs-4 col-sm-3"><a href="' . get_the_permalink() . '" title="' . get_field('long_name') . '" class="btn btn-school">' . '<span class="screen-reader-text">' . get_field('long_name') . '</span><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
 		echo $elem;
 	endwhile;
 	wp_reset_postdata();

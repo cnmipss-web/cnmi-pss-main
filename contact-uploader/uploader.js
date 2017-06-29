@@ -8,8 +8,11 @@ const client = wordpress.createClient({url: 'localhost.test', username: 'Tyler C
 const personnel = fs.readFileSync('personnel.csv');
 const schools = fs.readFileSync('schools.csv');
 
-uploadPersonnel(personnel, client);
-// uploadSchools(schools, client);
+// uploadPersonnel(personnel, client);
+uploadSchools(schools, client);
+
+// client.getTaxonomy('level', console.log);
+// client.getTerms('level', console.log);
 
 function uploadPersonnel(personnel, client) {
   csv.parse(personnel, (err, data) => {
@@ -51,7 +54,7 @@ function parseSchool(school) {
     staff: school.map(row => {
       return {
               name: row[2],
-              tel: [row[3], row[5]].join(' / '),
+              tel: [row[3], row[5]].filter(n => n.length > 0).join(' / '),
               email: row[6],
             };
     }),
@@ -60,6 +63,12 @@ function parseSchool(school) {
 
 function checkAndPostSchool({name, address, tel, fax, staff}){
   const level = selectLevel(name);
+  const admin = staff
+                  .filter(({name}) => name.length >0)
+                  .map(({name, tel, email}) => {
+                      return [name, 'Tel: ' + tel, 'Email: ' + email].join('\r\n');
+                  }).join('\r\n\r\n');
+                  
   const schoolPost = {
     title: name,
     type: 'school',
@@ -68,8 +77,8 @@ function checkAndPostSchool({name, address, tel, fax, staff}){
     excerpt: '',
     menuOrder: 0,
     format: 'standard',
-    termNames: {
-      level,
+    terms: {
+      'level': level,
     },
     customFields: [
       {key: 'address', value: address},
@@ -80,10 +89,9 @@ function checkAndPostSchool({name, address, tel, fax, staff}){
       {key: 'telephone', value: tel},
       {key: 'website', value: 'https://cnmipss.org'},
       {key: 'email', value: staff[0].email},
+      {key: 'admin_staff', value: admin}
     ],
   };
-
-  // console.log(level);
 
   const query = {
     title: name,
@@ -91,12 +99,13 @@ function checkAndPostSchool({name, address, tel, fax, staff}){
   }
   client.getPosts(query, (err, schools) => {
     if(err) return console.error(err);
+    const thisSchool = schools.filter(school => school.title === name);
     // console.log(schools[0]);
     // client.getTerms('level', console.log);
-    if (schools.length === 0) {
+    if (thisSchool.length === 0) {
       client.newPost(schoolPost, handleResponse);
-    } else if (schools.length === 1) {
-      client.editPost(schools[0].id, schoolPost, handleResponse);
+    } else if (thisSchool.length === 1) {
+      client.editPost(thisSchool[0].id, schoolPost, handleResponse);
     } else {
       // console.log('Match Too Many', query, schools[3]);
       // throw new Error(`Too many schools match ${name}: ${schools}`)
@@ -165,19 +174,22 @@ function handleResponse(err, id) {
 }
 
 function selectLevel(name) {
-  name = 'test';
   const elem = new RegExp('Elem', 'i');
   const mid = new RegExp('middle', 'i');
-  const jr = new RegExp('jr\.?/!(sr)', 'i');
+  const jr = new RegExp('jr', 'i');
   const high = new RegExp('high', 'i');
   if(elem.test(name)) {
-    return ['elementary-school'];
+    console.log('Elementary');
+    return [51];
   } else if (mid.test(name)) {
-    return ['middle-school'];
+    console.log('Middle');
+    return [50];
   } else if (jr.test(name)) {
-    return ['jr-sr-high-school'];
+    console.log('Jr Sr');
+    return [53];
   } else if (high.test(name)){
-    return ['high-school'];
+    console.log('High');
+    return [52];
   } else {
     return [];
   }
