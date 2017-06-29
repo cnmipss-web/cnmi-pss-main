@@ -7,12 +7,75 @@ const client = wordpress.createClient({url: 'localhost.test', username: 'Tyler C
 
 const personnel = fs.readFileSync('personnel.csv');
 const schools = fs.readFileSync('schools.csv');
+const offices = fs.readFileSync('offices.csv');
 
 // uploadPersonnel(personnel, client);
-uploadSchools(schools, client);
+// uploadSchools(schools, client);
+uploadOffices(offices, client);
 
 // client.getTaxonomy('level', console.log);
 // client.getTerms('level', console.log);
+
+function uploadOffices(offices, client) {
+  csv.parse(offices, (err, data) => {
+    data
+      .filter(line => {
+        return line[2].length > 1 && line[0].length > 0;
+      })
+      .map(parseOffices)
+      .map(checkAndPostOffices);
+  });
+}
+
+function parseOffices(office) {
+  const location = office[2] == 'Capitol Hill'
+                  ? 'Capitol Hill Bldg #' + office[0]
+                  : office[2];
+  return {
+    name: office[1],
+    location,
+    tel: office[3],
+    fax: office[4],
+  }
+}
+
+function checkAndPostOffices({name, location, tel, fax}) {
+  const contactInfo = {
+    title: name,
+    content: '',
+    type: 'contact_info',
+    status: 'publish',
+    customFields: [
+      {
+        key: 'address',
+        value: location,
+      },
+      {
+        key: 'telephone',
+        value: tel
+      },
+      {
+        key: 'fax',
+        value: fax
+      }
+    ]
+  };
+  client.getPosts({
+    title: name,
+    type: 'contact_info'
+  }, (err, posts) => {
+    if (err)
+      return console.error(err);
+
+    if (posts.filter(post => post.title === name).length === 0) {
+      client.newPost(contactInfo, handleResponse);
+    } else if (posts.length === 1) {
+      client.editPost(posts[0].id, contactInfo, handleResponse);
+    } else {
+      throw new Error(`Too many posts match ${name}: ${posts}`)
+    }
+  });
+}
 
 function uploadPersonnel(personnel, client) {
   csv.parse(personnel, (err, data) => {
@@ -68,7 +131,7 @@ function checkAndPostSchool({name, address, tel, fax, staff}){
                   .map(({name, tel, email}) => {
                       return [name, 'Tel: ' + tel, 'Email: ' + email].join('\r\n');
                   }).join('\r\n\r\n');
-                  
+
   const schoolPost = {
     title: name,
     type: 'school',
@@ -110,7 +173,7 @@ function checkAndPostSchool({name, address, tel, fax, staff}){
       // console.log('Match Too Many', query, schools[3]);
       // throw new Error(`Too many schools match ${name}: ${schools}`)
     }
-  })
+  });
 }
 
 function parsePersonnel(line) {
