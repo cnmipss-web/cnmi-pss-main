@@ -1,0 +1,43 @@
+#search-certified {
+    text-align: center;
+    background-color: #f3f3f3;
+    border: solid 1px #e9e9e9;
+    color: #888;
+    &:focus {
+      box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+}
+
+#certification-lookup div {
+  // height: 500px;
+  overflow-y: visible;
+  margin: 0px;
+  padding: 0px;
+
+  table.lookup-list {
+    border-bottom: none;
+    border: 1px solid #ddd;
+    margin-top: 5px;
+    tr.row:nth-of-type(even) {
+        background-color: lighten($light-gold, 35);
+    }
+    tr.lookup-row {
+      border-bottom: 1px solid #ddd;
+      padding: 5px;
+      p, h3 {
+        font-size: 14px;
+        margin: 0px;
+        padding: 0px;
+        text-align: center;
+      }
+      h3 {
+        font-weight: bold;
+      }
+    }
+    td,th {
+      border-right: 1px solid #ddd;
+      padding: 0px;
+    }
+  }
+}
