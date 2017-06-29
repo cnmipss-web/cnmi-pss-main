@@ -173,7 +173,7 @@ function cnmi_header_dropdown($nav_category) {
  * @param  {string} $location location of search bar. Must be either 'header' or 'nav'
  */
 function cnmi_search_form ($location) {
-	echo '<form class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
+	echo '<form role="search" class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
 		<div class="form-group">
 			<label for="' . $location . '-search-bar" class="screen-reader-text">Search:</label>
 			<input class="form-control" type="search" placeholder="Search" id="' . $location . '-search-bar" name="s"/>
