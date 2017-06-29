@@ -20,6 +20,9 @@ get_header(); ?>
 		<main id="main" class="site-main">
 			<br />
       <div class="container">
+				<?php
+				if(have_posts()):
+					the_post();?>
 				<div class="row">
 					<div class="col-xs-12">
 						<header>
@@ -77,6 +80,7 @@ get_header(); ?>
 					jQuery(firstPane).addClass('active').addClass('in');
 				</script>
 			</div>
+		<?php endif;?>
 		</main><!-- #main -->
 	</div><!-- #primary -->
 
