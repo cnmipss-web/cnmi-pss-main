@@ -176,9 +176,9 @@ function cnmi_search_form ($location) {
 	echo '<form class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
 		<div class="form-group">
 			<label for="' . $location . '-search-bar" class="screen-reader-text">Search:</label>
-			<input class="form-control" type="text" placeholder="Search" id="' . $location . '-search-bar" name="s"/>
+			<input class="form-control" type="search" placeholder="Search" id="' . $location . '-search-bar" name="s"/>
 		</div>
-			<button class="btn btn-default form-control" type="submit" id="' . $location . '-search-submit">Submit</button>
+			<button class="btn btn-default form-control" type="submit" id="' . $location . '-search-submit">Search</button>
 	</form>';
 }
 
@@ -234,8 +234,8 @@ function cnmi_school_info($slug, $type = 'full') {
 		'name' => $slug,
 	));
 
-	$first_column = '<div class="col-xs-12 col-sm-6">';
-	$second_column = '<div class="col-xs-12 col-sm-6">' . get_field('admin_staff') . '</div>';
+	$first_column = '<div class="col-xs-12 col-sm-6"><br />';
+	$second_column = '<div class="col-xs-12 col-sm-6"><h2 class="school-admin">Administrative Staff</h2>' . get_field('admin_staff') . '</div>';
 	if($info->have_posts()):
 		$info->the_post();
 		$address = get_field('address');

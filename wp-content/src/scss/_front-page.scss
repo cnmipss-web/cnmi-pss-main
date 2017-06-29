@@ -21,12 +21,13 @@ div.jumbotron {
   }
   #carousel-inner > div.item.active > a:focus {
     outline: $alt-outline !important;
+    outline-offset: 0px;
   }
 
   .carousel, .carousel-control.right, .carousel-control.left {
     background-image: none;
     color: white;
-      
+
     @include for-xs {
       height: 100%;
     }
