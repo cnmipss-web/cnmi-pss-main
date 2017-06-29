@@ -37,14 +37,12 @@ get_header(); ?>
 			cnmi_posts_navigation(array(
 				'prev_text' => 'Next Results',
 				'next_text' => 'Previous Results',
-			));
-
+			));?>
+			</div>
+		<?php
 		else :
-
 			get_template_part( 'template-parts/content', 'none' );
-
 		endif; ?>
-	</div>
 		</main><!-- #main -->
 	</section><!-- #primary -->
 
