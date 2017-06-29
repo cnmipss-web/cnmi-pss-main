@@ -30,10 +30,10 @@
       "removeSelectors": [],
       "selectorExpansion": true,
       "selectors": [
-        "document",
         "#masthead",
         "#colophon",
-        "#content"
+        "#content",
+        "document"
       ],
       "readyEvent": null,
       "delay": 250,
@@ -45,6 +45,22 @@
     {
       "label": "CNMI PSS News Page",
       "url": "http://localhost.test/news",
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "selectorExpansion": true,
+      "selectors": [
+        "document"
+      ],
+      "readyEvent": null,
+      "delay": 250,
+      "misMatchThreshold" : 0.1,
+      "requireSameDimensions" : true,
+      "onBeforeScript": "onBefore.js",
+      "onReadyScript": "onReady.js"
+    },
+    {
+      "label": "CNMI PSS Single Page",
+      "url": "http://localhost.test/a-third-test",
       "hideSelectors": [],
       "removeSelectors": [],
       "selectorExpansion": true,
