@@ -289,6 +289,7 @@ function cnmi_create_school_btns($level) {
 	$schools = new WP_Query(array(
 		'post_type' => 'school',
 		'level' => $level,
+		'posts_per_page' => -1
 	));
 	sort_by($schools, 'title');
 	while($schools->have_posts()):
