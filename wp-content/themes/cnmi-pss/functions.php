@@ -234,33 +234,38 @@ function cnmi_school_info($slug, $type = 'full') {
 		'name' => $slug,
 	));
 
-	$first_column = '<div class="col-xs-12 col-sm-6"><br />';
-	$second_column = '<div class="col-xs-12 col-sm-6"><h2 class="school-admin">Administrative Staff</h2>' . get_field('admin_staff') . '</div>';
+	$first_column = '<div class="col-xs-12 col-sm-6"><h2 class="school-admin">Administrative Staff</h2>' . get_field('admin_staff') . '</div>';
+	$second_column = '<div class="col-xs-12 col-sm-6"><br />';
 	if($info->have_posts()):
 		$info->the_post();
 		$address = get_field('address');
 		if(strlen($address) > 0) {
 			$address = '<p>' . $address . '</p><p>';
 		}
-		$tel = get_field('telephone');
+
+        $tel = get_field('telephone');
 		if(strlen($tel) > 0) {
 			$tel = 'Tel: ' . $tel . '<br />';
 		}
-		$fax = get_field('fax');
+
+        $fax = get_field('fax');
 		if(strlen($fax) > 0) {
 			$fax = 'Fax: ' . $fax . '<br />';
 		}
-		$email = get_field('email');
+
+        $email = get_field('email');
 		if(strlen($email) > 0) {
 			$email = 'Email: ' . $email . '<br />';
 		}
-		$contact_info = '';
+
+        $contact_info = '';
 		if($type == 'full' || in_array('add', $type)) {
 			$contact_info .= $address;
 		} else {
 			$contact_info = '<p>';
 		}
-		if($type == 'full' || in_array('tel', $type))
+
+        if($type == 'full' || in_array('tel', $type))
 			$contact_info .= $tel;
 		if($type == 'full' || in_array('fax', $type))
 			$contact_info .= $fax;
@@ -268,7 +273,9 @@ function cnmi_school_info($slug, $type = 'full') {
 			$contact_info .= $email;
 
 		$contact_info .= '<a href="' . get_field('website') .'">' . get_the_title() . ' Website</a>';
-		echo $first_column .  $contact_info . '</p></div>' . $second_column;
+        $second_column .= $contact_info . '</p></div>';
+
+        echo $first_column . $second_column;
 	endif;
 	wp_reset_postdata();
 }
