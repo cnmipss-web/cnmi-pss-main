@@ -12,20 +12,17 @@
                                 ["George" (js/Date) "Level 1"]
                                 ["Carol" (js/Date) "Level 3"]]}))
 
-(defonce jq js/jQuery)
-
 (defn set-search-text [event]
   (let [search (.-value (.getElementById js/document "search-certified"))]
     (reset! state {:search-text search
-                    :table (:table @state)})
-    (println "New state: " @state)))
+                    :table (:table @state)})))
 
 (defn search-bar []
   [:div
    [:form {:role "search"}
     [:div.form-group
      [:label.sr-only {:for "search-certified"} "Search Certified Personnel"]
-     [:input.form-control {:type "text"
+     [:input.form-control {:type "search"
                            :id "search-certified"
                            :placeholder "Search Certified Personnel"
                            :on-change set-search-text
@@ -33,24 +30,27 @@
 
 (defn table-row [row]
   [:tr.row.lookup-row
-   (for [col row]
+   ;; (for [col row]
+   ;;   ^{:key col} [:td.col-xs-4
+   ;;                [:p {:style {:textAlign "center"}} col]])
+
+   [:th.col-xs-4 {:scope "row"}
+    [:p {:style {:textAlign "center"}} (first row)]]
+   (for [col (next row)]
      ^{:key col} [:td.col-xs-4
                   [:p {:style {:textAlign "center"}} col]])])
 
 (defn table-list [table]
   [:table.lookup-list
    [:caption.sr-only "Certified Personnel Table"]
+   [:summary.sr-only "This table lists records of CNMI Board of Education certifications for teachers and administrators.  Entering text in the search box above will filter the table to display only those records matching the search terms."]
    [:thead [:tr.row.lookup-row
-            [:th.col-xs-4 {:scope "col"} [:h3 "Name"]]
-            [:th.col-xs-4 {:scope "col"} [:h3 "Date"]]
-            [:th.col-xs-4 {:scope "col"} [:h3 "Level"]]]]
+            [:th.col-xs-4 {:scope "col"}  "Name"]
+            [:th.col-xs-4 {:scope "col"}  "Date"]
+            [:th.col-xs-4 {:scope "col"}  "Level"]]]
    [:tbody
     (for [row table]
       ^{:key (first row)} [table-row row])]])
-
-(defn results [table]
-  [:div.lookup-results
-   (println (table-list table))])
 
 (defn lookup-table [state]
   (let [search-text (:search-text @state)
@@ -79,4 +79,5 @@
               (js/document.getElementById "certification-lookup"))))
 
 
-(init!)
+(js/setTimeout #(
+                 init!) 2000)

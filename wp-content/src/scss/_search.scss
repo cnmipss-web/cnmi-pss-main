@@ -1,13 +1,25 @@
 .search-page-header {
-  margin-top: 0px;
+    margin-top: 0px;
 }
 
-.search-entry-title, .search-entry-title a:visited {
-  color: $dark-blue;
-  margin: 15px;
-  text-align: left !important;
-  font-size: 24px;
-  a:hover {
-    cursor: pointer;
-  }
+.search-entry-title,
+.search-entry-title a:visited {
+    color: $dark-blue;
+    margin: 15px;
+    margin-bottom: 0px;
+    text-align: left !important;
+    font-size: 24px;
+    a:hover {
+        cursor: pointer;
+    }
+}
+
+.search-entry-meta {
+    @extends .entry-meta;
+    margin-left: 15px;
+}
+
+.search-entry-summary {
+    @extends .entry-summary;
+    margin-top: 0px;
 }
