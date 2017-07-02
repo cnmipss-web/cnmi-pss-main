@@ -24,9 +24,16 @@
     }
 
     table.lookup-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
         border-bottom: none;
         border: 1px solid #ddd;
         margin-top: 5px;
+        min-height: 300px;
+        max-height: 500px;
+        overflow-y: scroll;
+
         tr.row:nth-of-type(even) {
             background-color: lighten($light-gold, 35);
         }
