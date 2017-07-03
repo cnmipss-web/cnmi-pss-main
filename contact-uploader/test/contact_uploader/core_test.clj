@@ -2,6 +2,12 @@
   (:require [clojure.test :refer :all]
             [contact-uploader.core :refer :all]))
 
+(deftest test-parse-tel
+  (testing "should correctly parse telephone numbers and add area code as needed"
+    (is (= "(670) 555-5555" (parse-tel "(670) 555-5555")))
+    (is (= "(670) 555-5555" (parse-tel "555-5555")))
+    (is (= "(670) 237-3199/3024" (parse-tel "237-3199/3024")))
+    (is (= "(670) 664-3751/62" (parse-tel "664-3751/62"))))) 
 
 (deftest test-parse-data
   (testing "should correctly parse personnel contact data"

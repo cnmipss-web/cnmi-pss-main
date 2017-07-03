@@ -349,6 +349,6 @@ function parseTel(tel) {
     const matches = parser.exec(tel);
 
     if (matches) {
-        return matches[1] ? matches[1] : '(670)' + ' ' + matches[2] + '-' + matches[3];
+        return matches[1] ? matches[0] : '(670)' + ' ' + matches[2] + '-' + matches[3];
     }
 }
