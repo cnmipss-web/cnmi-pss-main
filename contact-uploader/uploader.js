@@ -17,9 +17,9 @@ const personnel = fs.readFileSync('personnel.csv');
 const schools = fs.readFileSync('schools.csv');
 const offices = fs.readFileSync('offices.csv');
 
-uploadPersonnel(personnel, client);
+// uploadPersonnel(personnel, client);
 uploadSchools(schools, client);
-uploadOffices(offices, client);
+// uploadOffices(offices, client);
 
 function uploadPersonnel(personnel) {
     csv.parse(personnel, (err, data) => {

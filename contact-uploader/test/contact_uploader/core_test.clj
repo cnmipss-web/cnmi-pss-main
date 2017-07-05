@@ -1,9 +1,11 @@
 (ns contact-uploader.core-test
   (:require [clojure.test :refer :all]
-            [contact-uploader.core :refer :all]))
+            [contact-uploader.core :refer :all]
+            [contact-uploader.validators :refer :all]))
 
 (deftest test-parse-tel
   (testing "should correctly parse telephone numbers and add area code as needed"
+    (is (= "" (parse-tel "NONE")))
     (is (= "(670) 555-5555" (parse-tel "(670) 555-5555")))
     (is (= "(670) 555-5555" (parse-tel "555-5555")))
     (is (= "(670) 237-3199/3024" (parse-tel "237-3199/3024")))
@@ -28,7 +30,7 @@
           {fax :fax} parsed
           {email :email} parsed]
       (is (= name "Jocelyn Jeter, Administrative Assistant"))
-      (is (= tel "(670) 237-3027 / (670) 287-3010 / (670) 664-3751/61"))
+      (is (= tel "(670) 237-3027, (670) 287-3010, (670) 664-3751/61"))
       (is (= fax "(670) 664-3711"))
       (is (= email "jocelyn.jeter@cnmipss.org")))
     (let [parsed (parse-data :personnel
@@ -38,7 +40,7 @@
           {fax :fax} parsed
           {email :email} parsed]
       (is (= name "Assessment Program - Fasefulu Tigilau"))
-      (is (= tel "(670) 237-3199/3024 / (670) 789-8739"))
+      (is (= tel "(670) 237-3199/3024, (670) 789-8739"))
       (is (= fax ""))
       (is (= email "fasefulu.tigilau@cnmipss.org"))))
   (testing "should correctly parse office contact data")

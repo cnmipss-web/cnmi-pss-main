@@ -9,7 +9,8 @@
                  [http-kit "2.2.0"]
                  [com.cemerick/url "0.1.1"]
                  [environ "1.1.0"]]
-  :plugins [[lein-environ "1.1.0"]]
+  :plugins [[lein-environ "1.1.0"]
+            [lein-cloverage "1.0.9"]]
   :main ^:skip-aot contact-uploader.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

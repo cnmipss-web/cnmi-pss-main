@@ -38,14 +38,14 @@
 
 (defn parse-tel
   [tel]
-  (if (> (count tel) 0)
+  (if (and (> (count tel) 0) (re-seq #"\d" tel))
     (let [correct-pattern #"^\(\d{3}\)\s*\d{3}\-\d{4}$"
           fix-pattern #"(\(\d{3}\))?\s*(\d{3})\-([\d\/\-\s]{4,})"]
       (if (re-seq correct-pattern tel)
         (identity tel) ;; Already correctly formated
         (let [matches (first (re-seq fix-pattern tel))]
           (str const/area-code (nth matches 2) "-" (nth matches 3)))))
-    (identity tel))) ;; Empty string
+    (identity ""))) ;; Empty string
 
 (defn parse-data
   [key data]
@@ -57,7 +57,6 @@
                 :location location
                 :tel (nth data 3) ; Some weird data in source, so not trying to parse or correct.
                 :fax (parse-tel (nth data 4))})
-    :schools ()
     :personnel (let [[name phone cell alt-tel fax email] data
                      phone-nums [(parse-tel phone) (parse-tel cell) (parse-tel alt-tel)]]
                  {:name name
@@ -67,6 +66,30 @@
                             (filter #(and (= (type %) java.lang.String)
                                           (> (count (trim %)) 0)))
                             (join ", "))})))
+
+
+(defn reduce-schools
+  [school-list next-line]
+  (if (= clojure.lang.PersistentVector (type (first school-list)))
+    (if (re-seq #"\d" (first next-line))
+      (conj school-list [next-line])
+      (let [curr (conj (last school-list) next-line)]
+        (conj (pop school-list) curr)))
+    [[next-line]]))
+
+(defn parse-school
+  [school]
+  {:name (get-in school [0 1])
+   :short (get-in school [1 0])
+   :address (join "\r\n" [(get-in school [1 1]) (get-in school [2 1]) (get-in school [3 1])])
+   :fax (parse-tel (get-in school [0 4]))
+   :tel (parse-tel (get-in school [0 3]))
+   :staff (map (fn [row] {:name (get row 2)
+                          :tel (->> [(get row 3) (get row 5)]
+                                 (filter #(> (count %) 0))
+                                 (map parse-tel)
+                                 (join ", "))
+                          :email (get row 6)}) school)})
 
 (defn set-acf
   [id fields]
@@ -79,40 +102,77 @@
     (http/request add-fields)))
 
 (defn create-contact-info
-  [body fields]
-  (println "Creating: " body)
-  (let [headers {"Authorization" (str "Bearer " @auth-token)
-                     "Content-Type" "application/json"}
-            create {:url (str const/wp-host (:main @target-urls))
-                     :method :post
-                     :headers headers
-                     :body body}]
-        (let [{:keys [body error]} @(http/request create)
-              id (get (json/read-str body) "id")]
-          (if error
-            (throw error)
-            (set-acf id fields)))))
+  ([body fields] create-contact-info nil body fields)
+  ([id body fields]
+   (let [headers {"Authorization" (str "Bearer " @auth-token)
+                  "Content-Type" "application/json"}
+         create {:url (str const/wp-host (:main @target-urls) (str "/" id))
+                 :method :post
+                 :headers headers
+                 :body body}]
+     (let [{:keys [body error]} @(http/request create)
+           id (get (json/read-str body) "id")]
+       (if error
+         (throw error)
+         (set-acf id fields))))))
+
+(defn create-acf-fields
+  [key data]
+  (case key
+    :personnel {:address (:address data)
+                :telephone (:tel data)
+                :fax (:fax data)
+                :email (:email data)
+                :job_title (:job-title data)}
+    :offices {:address (:address data)
+                :telephone (:tel data)
+                :fax (:fax data)
+                :email (:email data)
+                :job_title (:job-title data)}
+    :schools {:address (:address data)
+              :fax (:fax data)
+              :long_name (:name data)
+              
+              :short_name (:short data)
+              :telephone (:tel data)
+              :website "https://cnmipss.org"
+              :email (:email data)
+              :admin_staff (->> (:staff data)
+                                (filter #(> (count (:name %)) 0))
+                                (map (fn [{:keys [name, tel, email]}]
+                                       (join "\r\n" [name, (str "Tel: " tel), (str "Email: " email)])))
+                                (join "\r\n\r\n"))}))
+
+(defn create-post-info
+  [key data]
+  (let [{name :name} data]
+    (case key
+      :personnel {:title name :status "publish"}
+      :offices {:title name :status "publish"}
+      :schools {:title name :status "publish"
+                :level (let [name (:name data)]
+                         (cond
+                           (re-seq #"(?i)Elem" name) ["51"]
+                           (re-seq #"(?i)Middle" name) ["50"]
+                           (re-seq #"(?i)jr" name) ["53"]
+                           (re-seq #"(?i)High" name) ["52"]
+                           :else (throw (Exception. (str "Unknown school type: " name)))))})))
 
 (defn post-info
-  [data]
+  [key data]
   (let [{name :name} data
         search-name (v/encode-name (subs name 0 (min (count name) 50)))
         {get-body :body} @(http/get (str const/wp-host (:main @target-urls) "?per_page=50&search=" search-name))
         contacts (walk/keywordize-keys (json/read-str get-body))
         posted (filter #(= (get-in % [:title :rendered]) name) contacts)
-        body (json/write-str {:title name :status "publish"})
-        fields {:address (:address data)
-                :telephone (:tel data)
-                :fax (:fax data)
-                :email (:email data)
-                :job_title (:job-title data)}]
+        body (json/write-str (create-post-info key data))
+        fields (create-acf-fields key data)]
     (if (> (count contacts) 0)
       (let [id (:id (first posted))]
         (println "Updating: " name)
-        (set-acf id fields))
+        (create-contact-info id  body fields))
       (do
-        ;(println contacts posted (url-encode name))
-        ;(throw (Error. body))
+        (println "Creating: " body)
         (create-contact-info body fields)))
     (identity data)))
 
@@ -121,7 +181,8 @@
   (case key
     :personnel (filter #(v/valid-email? (last %)) data)
     :offices (filter #(and (> (count (trim (nth % 2))) 1)
-                           (> (count (trim (first %))) 0)) data)))
+                           (> (count (trim (first %))) 0)) data)
+    :schools (reduce reduce-schools data)))
 
 (defn upload-data
   [key file]
@@ -129,11 +190,15 @@
   (as-> file data
    (csv/read-csv (slurp data))
    (apply-filters key data)
-   (map #(parse-data key %) data)
+   (if (not= key :schools)
+     (map #(parse-data key %) data)
+     (map #(parse-school %) data))
    (sort #(compare (get-in %1 [:name])
                    (get-in %2 [:name]))
                     data)
-   (dorun (map post-info data))))
+   (dorun (map #(post-info key %) data))
+   ;(println data)
+   ))
 
 (defn validate-args
   [key file]
