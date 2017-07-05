@@ -1,111 +1,123 @@
 div.jumbotron {
-  background: inherit !important;
-  border-radius: 0px !important;
-  box-shadow: none !important;
-  padding: 0px;
-  z-index: -100;
-  height: 100%;
+    background: inherit !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    padding: 0px;
+    z-index: -100;
+    height: 100%;
 
-  @include container-width;
-
-  @include for-xs {
-    margin-top: -30px;
-  }
-  @include for-sm {
-    margin-top: -36px;
-  }
-  img {
-    @include for-sm {height: $sm-width * 9/16}
-    @include for-md {height: $md-width * 9/16}
-    @include for-lg {height: $lg-width * 9/16}
-  }
-  #carousel-inner > div.item.active > a:focus {
-    outline: $alt-outline !important;
-    outline-offset: 0px;
-  }
-
-  .carousel, .carousel-control.right, .carousel-control.left {
-    background-image: none;
-    color: white;
+    @include container-width;
 
     @include for-xs {
-      height: 100%;
+        margin-top: -30px;
     }
     @include for-sm {
-      height: auto;
+        margin-top: -36px;
     }
-  }
-
-   .carousel-control.right, .carousel-control.left {
-     @include for-sm {
-       margin: 20% 0;
-     }
-   }
-
-  .carousel-indicators {
-    bottom: -20px;
-  }
-
-  h2.carousel-img-title {
-    background-color: transparentize(black, 0.33);
-    color: white;
-    position: relative;
-    text-align: left !important;
-    z-index: 100;
-
-    @include for-xs {
-      font-size: 16px;
-      padding-left: 50px;
-      top: 50px;
-      white-space: pre-wrap;
+    img {
+        @include for-sm {
+            height: $sm-width * 9/16
+        }
+        @include for-md {
+            height: $md-width * 9/16
+        }
+        @include for-lg {
+            height: $lg-width * 9/16
+        }
+    }
+    #carousel-inner>div.item.active>a:focus {
+        outline: $alt-outline !important;
+        outline-offset: 0px;
     }
 
-    @include for-sm {
-      font-size: 24px;
-      padding-left: 100px;
-      top: 75px;
+    .carousel,
+    .carousel-control.right,
+    .carousel-control.left {
+        background-image: none;
+        color: white;
+
+        @include for-xs {
+            height: 100%;
+        }
+        @include for-sm {
+            height: auto;
+        }
     }
 
-    @include for-lg {
-      font-size: 24px;
-      padding-left: 150px;
-      top: 100px;
+    .carousel-control.right,
+    .carousel-control.left {
+        @include for-sm {
+            margin: 20% 0;
+        }
     }
-  }
+
+    .carousel-indicators {
+        bottom: -20px;
+    }
+
+    h2.carousel-img-title {
+        background-color: transparentize(black, 0.33);
+        color: white;
+        position: relative;
+        text-align: left !important;
+        z-index: 100;
+
+        @include for-xs {
+            font-size: 16px;
+            padding-left: 50px;
+            top: 50px;
+            white-space: pre-wrap;
+        }
+
+        @include for-sm {
+            font-size: 24px;
+            padding-left: 100px;
+            top: 75px;
+        }
+
+        @include for-lg {
+            font-size: 24px;
+            padding-left: 150px;
+            top: 100px;
+        }
+    }
 }
 
 .jumbo-img {
-  @include for-xs{
-    height: 240px;
-    margin-left: 49vw;
-    margin-top: 12vh;
-    min-width: 768px;
-    transform: translate(-50%, -50%);
-    width: auto;
-  }
-  @include for-sm {
-    height: auto;
-    margin: 0px 0px;
-    transform: none;
-    width: 100vw;
-  }
+    @include for-xs {
+        height: 240px;
+        margin-left: 49vw;
+        margin-top: 12vh;
+        min-width: 768px;
+        transform: translate(-50%, -50%);
+        width: auto;
+    }
+    @include for-sm {
+        height: auto;
+        margin: 0px 0px;
+        transform: none;
+        width: 100vw;
+    }
 }
 
 .btn.btn-school {
-  @include custom-transition(color 0.3s, ease, 0s);
-  background-color: $dark-blue;
-  color: $light-gold;
-  font-weight: bold;
-  width: 100%;
-
-  &:hover {
+    @include custom-transition(color 0.3s, ease, 0s);
     background-color: $dark-blue;
-    color: lightyellow;
+    color: $light-gold;
     font-weight: bold;
-  }
+    width: 100%;
 
-  &:focus {
-    outline: $alt-outline !important;
-  }
+    &:hover {
+        background-color: $dark-blue;
+        color: lightyellow;
+        font-weight: bold;
+    }
 
+    &:focus {
+        outline: $alt-outline !important;
+    }
+}
+
+.desc_ {
+    margin: 10% 10%;
 }
