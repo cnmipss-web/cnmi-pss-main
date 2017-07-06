@@ -70,12 +70,68 @@
           <div class="col-xs-12">
             <h2 class="section-title">Our Schools</h2>
           </div>
-          <?php
-          cnmi_create_school_btns('Elementary School');
-          cnmi_create_school_btns('Middle School');
-          cnmi_create_school_btns('Jr Sr High School');
-          cnmi_create_school_btns('High School');
-           ?>
+          <div class="col-xs-12">
+            <ul class="nav nav-tabs" role="tablist" id="tablist">
+              <li role="presentation"
+                class="active">
+                <a
+                  href="#head-start-links"
+                  role="tab"
+                  aria-controls="head-start-links"
+                  data-toggle="tab">
+                  Head Start
+                </a>
+              </li>
+              <li role="presentation">
+                <a
+                  href="#elem-links"
+                  role="tab"
+                  aria-controls="elem-links"
+                  data-toggle="tab">
+                  Elementary Schools
+                </a>
+              </li>
+              <li role="presentation">
+                <a
+                  href="#middle-links"
+                  role="tab"
+                  aria-controls="middle-links"
+                  data-toggle="tab">
+                  Middle Schools
+                </a>
+              </li>
+              <li role="presentation">
+                <a
+                  href="#high-links"
+                  role="tab"
+                  aria-controls="high-links"
+                  data-toggle="tab">
+                  High Schools
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane fade in active" id="head-start-links">
+
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="elem-links">
+                <?php
+                cnmi_create_school_btns('Elementary School');
+                ?>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="middle-links">
+                <?php
+                cnmi_create_school_btns('Middle School');
+                ?>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="high-links">
+                <?php
+                cnmi_create_school_btns('Jr Sr High School');
+                cnmi_create_school_btns('High School');
+                ?>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <br />

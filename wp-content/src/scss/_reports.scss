@@ -17,7 +17,7 @@ ul.nav.nav-tabs {
     flex-direction: column;
     justify-content: center;
   }
-  
+
   @include for-sm {
     display: flex;
     flex-direction: row;
@@ -42,6 +42,10 @@ ul.nav.nav-tabs {
 
   }
 
+}
+
+.tab-pane{
+  min-height: 175px;
 }
 
 .tab-content {
