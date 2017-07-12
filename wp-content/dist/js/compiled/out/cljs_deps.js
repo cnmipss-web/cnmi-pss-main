@@ -1,17 +1,17 @@
 goog.addDependency("base.js", ['goog'], []);
 goog.addDependency("../cljs/core.js", ['cljs.core'], ['goog.string', 'goog.object', 'goog.math.Integer', 'goog.string.StringBuffer', 'goog.array', 'goog.math.Long']);
 goog.addDependency("../devtools/version.js", ['devtools.version'], ['cljs.core']);
-goog.addDependency("../devtools/protocols.js", ['devtools.protocols'], ['cljs.core']);
-goog.addDependency("../devtools/context.js", ['devtools.context'], ['cljs.core']);
-goog.addDependency("../devtools/format.js", ['devtools.format'], ['cljs.core', 'devtools.context']);
-goog.addDependency("../devtools/defaults.js", ['devtools.defaults'], ['cljs.core']);
-goog.addDependency("../devtools/prefs.js", ['devtools.prefs'], ['cljs.core', 'devtools.defaults']);
 goog.addDependency("../clojure/string.js", ['clojure.string'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
 goog.addDependency("../cljs/pprint.js", ['cljs.pprint'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'clojure.string']);
+goog.addDependency("../devtools/context.js", ['devtools.context'], ['cljs.core']);
+goog.addDependency("../devtools/defaults.js", ['devtools.defaults'], ['cljs.core']);
 goog.addDependency("../clojure/set.js", ['clojure.set'], ['cljs.core']);
 goog.addDependency("../clojure/data.js", ['clojure.data'], ['cljs.core', 'clojure.set']);
+goog.addDependency("../devtools/prefs.js", ['devtools.prefs'], ['cljs.core', 'devtools.defaults']);
 goog.addDependency("../devtools/util.js", ['devtools.util'], ['cljs.core', 'devtools.version', 'goog.userAgent', 'cljs.pprint', 'devtools.context', 'devtools.defaults', 'clojure.data', 'devtools.prefs']);
 goog.addDependency("../devtools/munging.js", ['devtools.munging'], ['devtools.util', 'cljs.core', 'goog.object', 'goog.string.StringBuffer', 'devtools.context', 'clojure.string']);
+goog.addDependency("../devtools/protocols.js", ['devtools.protocols'], ['cljs.core']);
+goog.addDependency("../devtools/format.js", ['devtools.format'], ['cljs.core', 'devtools.context']);
 goog.addDependency("../devtools/formatters/helpers.js", ['devtools.formatters.helpers'], ['cljs.core', 'devtools.protocols', 'devtools.format', 'devtools.prefs', 'devtools.munging']);
 goog.addDependency("../devtools/formatters/state.js", ['devtools.formatters.state'], ['cljs.core']);
 goog.addDependency("../devtools/formatters/printing.js", ['devtools.formatters.printing'], ['devtools.formatters.helpers', 'devtools.formatters.state', 'cljs.core', 'devtools.protocols', 'devtools.format', 'devtools.prefs']);
@@ -58,4 +58,3 @@ goog.addDependency("../figwheel/client/socket.js", ['figwheel.client.socket'], [
 goog.addDependency("../figwheel/client/heads_up.js", ['figwheel.client.heads_up'], ['goog.dom', 'goog.string', 'cljs.core', 'goog.dom.dataset', 'goog.object', 'cljs.core.async', 'cljs.pprint', 'figwheel.client.utils', 'figwheel.client.socket', 'clojure.string']);
 goog.addDependency("../figwheel/client.js", ['figwheel.client'], ['goog.userAgent.product', 'goog.Uri', 'cljs.core', 'goog.object', 'cljs.core.async', 'figwheel.client.file_reloading', 'figwheel.client.utils', 'cljs.repl', 'figwheel.client.heads_up', 'figwheel.client.socket', 'clojure.string', 'cljs.reader']);
 goog.addDependency("../figwheel/connect/build_dev.js", ['figwheel.connect.build_dev'], ['cljs.core', 'cnmipss.core', 'figwheel.client', 'figwheel.client.utils']);
-goog.addDependency("../cnmipss/components.js", ['cnmipss.components'], ['cljs.core']);

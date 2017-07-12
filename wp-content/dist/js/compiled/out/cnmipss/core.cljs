@@ -3,9 +3,8 @@
 
 (enable-console-print!)
 (def jq js/jQuery)
-(defn debug-log
-  [fn & msgs]
-  (println "fn: " fn ", " msgs))
+(defn path []
+  (.-pathname js/location))
 
 ;; define your app data so that it doesn't get over-written on reload
 (defonce state (r/atom {:search-text ""
@@ -47,7 +46,7 @@
       [:p.text-center start_date]]
      [:td.col-xs-2
       [:p.text-center expiry_date]]]))
-
+ 
 (defn table-list [table]
   [:table.lookup-list
    [:caption.sr-only "Certified Personnel Table"]
@@ -56,6 +55,7 @@
     [:tr.row.lookup-row
      [:th.col-xs-2.text-center {:scope "col"} "Last Name"]
      [:th.col-xs-2.text-center {:scope "col"} "First Name"]
+
      [:th.col-xs-2.text-center {:scope "col"} "Cert Type"]
      [:th.col-xs-2.text-center {:scope "col"} "Cert No"]
      [:th.col-xs-2.text-center {:scope "col"} "Effective Date"]
@@ -76,11 +76,6 @@
                                     (display-row %)))
                       (reverse))]]))
 
-(defn path 
-  []
-  (.-pathname js/location))
-
-
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
@@ -91,7 +86,7 @@
   []
   (if (= (path) "/cnmi-certification-look-up-database/")
     (-> jq
-        (.get  "http://localhost:3000/api/lookup"
+        (.get  "https://cnmipss-webtools.herokuapp.com/api/lookup"
                (fn [data]
                  (swap! state assoc-in [:table] data)
                  (r/render [lookup-table state]
