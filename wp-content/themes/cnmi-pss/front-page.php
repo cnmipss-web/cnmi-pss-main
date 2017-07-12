@@ -112,7 +112,9 @@
             </ul>
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane fade in active" id="head-start-links">
-
+                <?php
+                cnmi_create_school_btns('Head Start');
+                ?>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="elem-links">
                 <?php
