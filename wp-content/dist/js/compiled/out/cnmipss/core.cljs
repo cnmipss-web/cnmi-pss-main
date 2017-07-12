@@ -2,23 +2,21 @@
   (:require [reagent.core :as r]))
 
 (enable-console-print!)
+(def jq js/jQuery)
+(defn debug-log
+  [fn & msgs]
+  (println "fn: " fn ", " msgs))
 
 ;; define your app data so that it doesn't get over-written on reload
-
 (defonce state (r/atom {:search-text ""
-                        :table [["Jim" (js/Date) "Level 1"]
-                                ["John" (js/Date) "Level 1"]
-                                ["Alice" (js/Date) "Level 2"]
-                                ["George" (js/Date) "Level 1"]
-                                ["Carol" (js/Date) "Level 3"]]}))
+                        :table []}))
 
 (defn set-search-text [event]
   (let [search (.-value (.getElementById js/document "search-certified"))]
-    (reset! state {:search-text search
-                    :table (:table @state)})))
+    (swap! state assoc-in [:search-text] search)))
 
 (defn search-bar []
-  [:div
+  [:div#search-box
    [:form {:role "search"}
     [:div.form-group
      [:label.sr-only {:for "search-certified"} "Search Certified Personnel"]
@@ -28,40 +26,57 @@
                            :on-change set-search-text
                            :ref "search-certified"}]]]])
 
-(defn table-row [row]
-  [:tr.row.lookup-row
-   ;; (for [col row]
-   ;;   ^{:key col} [:td.col-xs-4
-   ;;                [:p {:style {:textAlign "center"}} col]])
+(defn display-row [row]
+  (let [searches (clojure.string/split (@state :search-text) #" ")
+        {:keys [last_name first_name cert_no]} row]
+    (every? #(re-seq (re-pattern (str "(?i)" %))
+                          (str last_name " " first_name " " cert_no)) searches)))
 
-   [:th.col-xs-4 {:scope "row"}
-    [:p {:style {:textAlign "center"}} (first row)]]
-   (for [col (next row)]
-     ^{:key col} [:td.col-xs-4
-                  [:p {:style {:textAlign "center"}} col]])])
+(defn table-row [row]
+  (let [{:keys [last_name first_name cert_type cert_no start_date expiry_date mi]} row]
+    [:tr.row.lookup-row {:style {:display (display-row row)}}
+     [:td.col-xs-2
+      [:p.text-center last_name]]
+     [:td.col-xs-2
+      [:p.text-center (str first_name " " mi)]]
+     [:td.col-xs-2
+      [:p.text-center cert_type]]
+     [:td.col-xs-2
+      [:p.text-center cert_no]]
+     [:td.col-xs-2
+      [:p.text-center start_date]]
+     [:td.col-xs-2
+      [:p.text-center expiry_date]]]))
 
 (defn table-list [table]
   [:table.lookup-list
    [:caption.sr-only "Certified Personnel Table"]
-   [:summary.sr-only "This table lists records of CNMI Board of Education certifications for teachers and administrators.  Entering text in the search box above will filter the table to display only those records matching the search terms."]
-   [:thead [:tr.row.lookup-row
-            [:th.col-xs-4 {:scope "col"}  "Name"]
-            [:th.col-xs-4 {:scope "col"}  "Date"]
-            [:th.col-xs-4 {:scope "col"}  "Level"]]]
+   [:summary.sr-only "This table lists records of CNMI Board of Education certifications for teachers and administrators.  Entering text in the search box above will filter the table to display only those records matching the search terms.  You may search by name or by certification number."]
+   [:thead
+    [:tr.row.lookup-row
+     [:th.col-xs-2.text-center {:scope "col"} "Last Name"]
+     [:th.col-xs-2.text-center {:scope "col"} "First Name"]
+     [:th.col-xs-2.text-center {:scope "col"} "Cert Type"]
+     [:th.col-xs-2.text-center {:scope "col"} "Cert No"]
+     [:th.col-xs-2.text-center {:scope "col"} "Effective Date"]
+     [:th.col-xs-2.text-center {:scope "col"} "Expiration Date"]]]
    [:tbody
     (for [row table]
-      ^{:key (first row)} [table-row row])]])
+      ^{:key (get row :cert_no)} [table-row row])]])
 
 (defn lookup-table [state]
   (let [search-text (:search-text @state)
-        table (:table @state)
-        pattern (re-pattern (str "(?i)" search-text))]
+        table (:table @state)]
     [:div
      [search-bar]
-     [table-list (filter #(not-empty (re-seq pattern (first %))) table)]]))
+     [table-list (->> table
+                      js->clj
+                      clojure.walk/keywordize-keys
+                      (filter #(and (every? (fn [el] (string? (second el))) %)
+                                    (display-row %)))
+                      (reverse))]]))
 
-
-(defn path
+(defn path 
   []
   (.-pathname js/location))
 
@@ -75,9 +90,11 @@
 (defn ^:export init!
   []
   (if (= (path) "/cnmi-certification-look-up-database/")
-    (r/render [lookup-table state]
-              (js/document.getElementById "certification-lookup"))))
+    (-> jq
+        (.get  "http://localhost:3000/api/lookup"
+               (fn [data]
+                 (swap! state assoc-in [:table] data)
+                 (r/render [lookup-table state]
+                           (js/document.getElementById "certification-lookup")))))))
 
-
-(js/setTimeout #(
-                 init!) 2000)
+(init!)

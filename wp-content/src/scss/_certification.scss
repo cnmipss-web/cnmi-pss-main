@@ -9,7 +9,7 @@
     }
 }
 
-#certification-lookup div {
+#certification-lookup>div {
     overflow-y: visible;
     margin: 0px;
     padding: 0px;
@@ -19,8 +19,25 @@
     justify-content: center;
     width: 100%;
 
-    form {
+    #search-box {
         width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 0px;
+
+        form {
+            width: 100%;
+            .form-group {
+                margin: auto;
+                padding: 5px;
+            }
+        }
+
+        button {
+            height: 34px;
+            margin: auto;
+        }
     }
 
     table.lookup-list {

@@ -13,12 +13,12 @@ throw e;
 }),(0));
 });
 devtools.async.promise_based_set_immediate = (function devtools$async$promise_based_set_immediate(callback){
-var o__47175__auto___71870 = (function (){var o__47175__auto__ = (function (){var o__47175__auto__ = Promise;
-return goog.object.get(o__47175__auto__,"resolve").call(o__47175__auto__);
+var o__38036__auto___41341 = (function (){var o__38036__auto__ = (function (){var o__38036__auto__ = Promise;
+return goog.object.get(o__38036__auto__,"resolve").call(o__38036__auto__);
 })();
-return goog.object.get(o__47175__auto__,"then").call(o__47175__auto__,callback);
+return goog.object.get(o__38036__auto__,"then").call(o__38036__auto__,callback);
 })();
-goog.object.get(o__47175__auto___71870,"catch").call(o__47175__auto___71870,devtools.async.rethrow_outside_promise);
+goog.object.get(o__38036__auto___41341,"catch").call(o__38036__auto___41341,devtools.async.rethrow_outside_promise);
 
 return null;
 });
@@ -39,14 +39,14 @@ return null;
 } else {
 devtools.async._STAR_installed_STAR_ = true;
 
-var G__71872_71873 = Error;
-var target__47194__auto___71874 = G__71872_71873;
-if(cljs.core.truth_(target__47194__auto___71874)){
+var G__41343_41344 = Error;
+var target__38055__auto___41345 = G__41343_41344;
+if(cljs.core.truth_(target__38055__auto___41345)){
 } else {
-throw (new Error([cljs.core.str("Assert failed: "),cljs.core.str([cljs.core.str("unable to locate object path "),cljs.core.str(null),cljs.core.str(" in "),cljs.core.str(G__71872_71873)].join('')),cljs.core.str("\n"),cljs.core.str("target__47194__auto__")].join('')));
+throw (new Error([cljs.core.str("Assert failed: "),cljs.core.str([cljs.core.str("unable to locate object path "),cljs.core.str(null),cljs.core.str(" in "),cljs.core.str(G__41343_41344)].join('')),cljs.core.str("\n"),cljs.core.str("target__38055__auto__")].join('')));
 }
 
-goog.object.set(target__47194__auto___71874,cljs.core.last.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["stackTraceLimit"], null)),Infinity);
+goog.object.set(target__38055__auto___41345,cljs.core.last.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["stackTraceLimit"], null)),Infinity);
 
 
 devtools.async.install_async_set_immediate_BANG_.call(null);
@@ -64,4 +64,4 @@ return null;
 }
 });
 
-//# sourceMappingURL=async.js.map?rel=1498707057144
+//# sourceMappingURL=async.js.map?rel=1499813253518

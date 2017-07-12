@@ -5,29 +5,29 @@ goog.require('cnmipss.core');
 goog.require('figwheel.client');
 goog.require('figwheel.client.utils');
 figwheel.client.start.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"on-jsload","on-jsload",-395756602),(function() { 
-var G__29329__delegate = function (x){
+var G__32523__delegate = function (x){
 if(cljs.core.truth_(cnmipss.core.on_js_reload)){
 return cljs.core.apply.call(null,cnmipss.core.on_js_reload,x);
 } else {
 return figwheel.client.utils.log.call(null,new cljs.core.Keyword(null,"debug","debug",-1608172596),"Figwheel: :on-jsload hook 'cnmipss.core/on-js-reload' is missing");
 }
 };
-var G__29329 = function (var_args){
+var G__32523 = function (var_args){
 var x = null;
 if (arguments.length > 0) {
-var G__29330__i = 0, G__29330__a = new Array(arguments.length -  0);
-while (G__29330__i < G__29330__a.length) {G__29330__a[G__29330__i] = arguments[G__29330__i + 0]; ++G__29330__i;}
-  x = new cljs.core.IndexedSeq(G__29330__a,0);
+var G__32524__i = 0, G__32524__a = new Array(arguments.length -  0);
+while (G__32524__i < G__32524__a.length) {G__32524__a[G__32524__i] = arguments[G__32524__i + 0]; ++G__32524__i;}
+  x = new cljs.core.IndexedSeq(G__32524__a,0);
 } 
-return G__29329__delegate.call(this,x);};
-G__29329.cljs$lang$maxFixedArity = 0;
-G__29329.cljs$lang$applyTo = (function (arglist__29331){
-var x = cljs.core.seq(arglist__29331);
-return G__29329__delegate(x);
+return G__32523__delegate.call(this,x);};
+G__32523.cljs$lang$maxFixedArity = 0;
+G__32523.cljs$lang$applyTo = (function (arglist__32525){
+var x = cljs.core.seq(arglist__32525);
+return G__32523__delegate(x);
 });
-G__29329.cljs$core$IFn$_invoke$arity$variadic = G__29329__delegate;
-return G__29329;
+G__32523.cljs$core$IFn$_invoke$arity$variadic = G__32523__delegate;
+return G__32523;
 })()
 ,new cljs.core.Keyword(null,"open-urls","open-urls",-1478664930),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, ["http://localhost:3449/index.html"], null),new cljs.core.Keyword(null,"build-id","build-id",1642831089),"dev",new cljs.core.Keyword(null,"websocket-url","websocket-url",-490444938),"ws://localhost:3449/figwheel-ws"], null));
 
-//# sourceMappingURL=build_dev.js.map?rel=1498775151739
+//# sourceMappingURL=build_dev.js.map?rel=1499827411589
