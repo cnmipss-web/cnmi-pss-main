@@ -11,3 +11,12 @@
 (def school-acf "/wp-json/acf/v3/school/")
 
 (def token-route "/wp-json/jwt-auth/v1/token")
+
+(def target-urls {:personnel {:main contact-info-main
+                              :acf contact-info-acf}
+                  :offices {:main contact-info-main
+                            :acf contact-info-acf}
+                  :schools {:main school-main
+                            :acf school-acf}
+                  :headstarts {:main school-main
+                               :acf school-acf}})

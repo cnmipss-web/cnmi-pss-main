@@ -1,44 +1,36 @@
 (ns contact-uploader.core-test
   (:require [clojure.test :refer :all]
             [contact-uploader.core :refer :all]
+            [contact-uploader.parsers :as parse]
             [contact-uploader.validators :refer :all]))
 
 (deftest test-parse-tel
   (testing "should correctly parse telephone numbers and add area code as needed"
-    (is (= "" (parse-tel "NONE")))
-    (is (= "(670) 555-5555" (parse-tel "(670) 555-5555")))
-    (is (= "(670) 555-5555" (parse-tel "555-5555")))
-    (is (= "(670) 237-3199/3024" (parse-tel "237-3199/3024")))
-    (is (= "(670) 664-3751/62" (parse-tel "664-3751/62"))))) 
+    (is (= "" (parse/telephone "NONE")))
+    (is (= "(670) 555-5555" (parse/telephone "(670) 555-5555")))
+    (is (= "(670) 555-5555" (parse/telephone "555-5555")))
+    (is (= "(670) 237-3199/3024" (parse/telephone "237-3199/3024")))
+    (is (= "(670) 664-3751/62" (parse/telephone "664-3751/62"))))) 
 
-(deftest test-parse-data
+(deftest test-parse-contact
   (testing "should correctly parse personnel contact data"
-    (let [parsed (parse-data :personnel
+    (let [parsed (parse/personnel
                   ["MaryLou S. Ada, J.D., Chairwoman" "237-3027" "" "" "" "boe.ada@cnmipss.org"])
-          {name :name} parsed
-          {tel :tel} parsed
-          {fax :fax} parsed
-          {email :email} parsed]
+          {:keys [name tel fax email]} parsed]
       (is (= name "MaryLou S. Ada, J.D., Chairwoman"))
       (is (= tel "(670) 237-3027"))
       (is (= fax ""))
       (is (= email "boe.ada@cnmipss.org")))
-    (let [parsed (parse-data :personnel
+    (let [parsed (parse/personnel
                   ["Jocelyn Jeter, Administrative Assistant" "237-3027" "287-3010" "664-3751/61" "664-3711" "jocelyn.jeter@cnmipss.org"])
-          {name :name} parsed
-          {tel :tel} parsed
-          {fax :fax} parsed
-          {email :email} parsed]
+          {:keys [name tel fax email]} parsed]
       (is (= name "Jocelyn Jeter, Administrative Assistant"))
       (is (= tel "(670) 237-3027, (670) 287-3010, (670) 664-3751/61"))
       (is (= fax "(670) 664-3711"))
       (is (= email "jocelyn.jeter@cnmipss.org")))
-    (let [parsed (parse-data :personnel
+    (let [parsed (parse/personnel
                   ["Assessment Program - Fasefulu Tigilau" "237-3199/3024" "789-8739" "" "" "fasefulu.tigilau@cnmipss.org"])
-          {name :name} parsed
-          {tel :tel} parsed
-          {fax :fax} parsed
-          {email :email} parsed]
+          {:keys [name tel fax email]} parsed]
       (is (= name "Assessment Program - Fasefulu Tigilau"))
       (is (= tel "(670) 237-3199/3024, (670) 789-8739"))
       (is (= fax ""))
@@ -46,7 +38,7 @@
   (testing "should correctly parse office contact data")
   (testing "should correclty parse school contact data"))
 
-(deftest test-valid?-email
+(deftest test-valid-email?
   (testing "should reject invalid emails"
     (is (not (valid-email? 1)))
     (is (not (valid-email? :email)))
