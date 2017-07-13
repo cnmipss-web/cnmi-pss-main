@@ -173,7 +173,7 @@ function cnmi_header_dropdown($nav_category) {
  * @param  {string} $location location of search bar. Must be either 'header' or 'nav'
  */
 function cnmi_search_form ($location) {
-	echo '<form role="search" class="form-inline" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
+	echo '<form role="search" class="form-inline l-nav-form" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
 		<div class="form-group">
 			<label for="' . $location . '-search-bar" class="screen-reader-text">Search:</label>
 			<input class="form-control" type="search" placeholder="Search" id="' . $location . '-search-bar" name="s"/>
@@ -337,20 +337,28 @@ if (! function_exists('sort_query_posts_by'))
  * 														-High School
  *
  */
-function cnmi_create_school_btns($level) {
-	$schools = new WP_Query(array(
-		'post_type' => 'school',
-		'level' => $level,
-		'posts_per_page' => -1
-	));
-	sort_by($schools, 'title');
-	while($schools->have_posts()):
-		$schools->the_post();
-
-		$elem = '<div class="col-xs-4 col-sm-3"><a href="' . get_the_permalink() . '" title="' . get_field('long_name') . '" class="btn btn-school">' . '<span class="screen-reader-text">' . get_field('long_name') . '</span><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
-		echo $elem;
-	endwhile;
-	wp_reset_postdata();
+function cnmi_create_school_btns($level_list) {
+    echo '<div class="row">';
+    foreach ($level_list as $level) {
+        $schools = new WP_Query(array(
+            'post_type' => 'school',
+            'level' => $level,
+            'posts_per_page' => -1
+        ));
+        sort_by($schools, 'title');
+        while($schools->have_posts()) {
+            $schools->the_post();
+            if ($level == 'Head Start') {
+                $div_class = "col-xs-12 col-sm-6 col-lg-4";
+            } else {
+                $div_class= "col-xs-6 col-sm-3";
+            }
+            $elem = '<div class="' . $div_class . '"><a href="' . get_the_permalink() . '" title="' . get_field('long_name') . '" class="btn btn-school">' . '<span class="screen-reader-text">' . get_field('long_name') . '</span><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
+            echo $elem;
+        }
+    }
+    echo "</div>";
+    wp_reset_postdata();
 }
 
 
@@ -374,32 +382,32 @@ function cnmi_create_school_btns($level) {
  * @return string Markup for posts links.
  */
 function cnmi_posts_navigation( $args = array() ) {
-	$navigation = '';
-
-	// Don't print empty markup if there's only one page.
-	if ( $GLOBALS['wp_query']->max_num_pages > 1 ) {
-		$args = wp_parse_args( $args, array(
-			'prev_text'          => __( 'Older News' ),
-			'next_text'          => __( 'More Recent News' ),
-			'screen_reader_text' => __( 'Posts navigation' ),
-		) );
-
-		$next_link = get_previous_posts_link( $args['next_text'] );
-		$prev_link = get_next_posts_link( $args['prev_text'] );
-
-		if ( $next_link ) {
-			$navigation .= '<button class="btn nav-next">' . $next_link . '</button>';
-		}
-		$navigation .= '&nbsp;';
-		if ( $prev_link ) {
-			$navigation .= '<button class="btn nav-previous">' . $prev_link . '</button>';
-		}
-
-
-		$navigation = _navigation_markup( $navigation, 'posts-navigation', $args['screen_reader_text'] );
+    $navigation = '';
+    
+    // Don't print empty markup if there's only one page.
+    if ( $GLOBALS['wp_query']->max_num_pages > 1 ) {
+	$args = wp_parse_args( $args, array(
+	    'prev_text'          => __( 'Older News' ),
+	    'next_text'          => __( 'More Recent News' ),
+	    'screen_reader_text' => __( 'Posts navigation' ),
+	) );
+        
+	$next_link = get_previous_posts_link( $args['next_text'] );
+	$prev_link = get_next_posts_link( $args['prev_text'] );
+        
+	if ( $next_link ) {
+	    $navigation .= '<button class="btn nav-next">' . $next_link . '</button>';
 	}
-
-	echo $navigation;
+	$navigation .= '&nbsp;';
+	if ( $prev_link ) {
+	    $navigation .= '<button class="btn nav-previous">' . $prev_link . '</button>';
+	}
+        
+        
+	$navigation = _navigation_markup( $navigation, 'posts-navigation', $args['screen_reader_text'] );
+    }
+    
+    echo $navigation;
 }
 
 function cnmi_get_report_tabs() {
