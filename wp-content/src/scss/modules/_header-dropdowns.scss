@@ -1,0 +1,34 @@
+ul.nav-menu,
+ul.dropdown-menu {
+    background-color: $header-bg-color;
+    li>a {
+        @include custom-transition(color 0.3s, ease, 0s);
+        color: $nav-link-color;
+        
+        &:hover,
+        &:focus,
+        {
+            color: $nav-link-hover-color;
+            background-color: $header-bg-color;
+        }
+    }
+    .open>a,
+    .nav .open>a {
+        color: $nav-link-color;
+        background-color: $header-bg-color;
+        &,
+        &:hover,
+        &:focus {
+            color: $nav-link-hover-color;
+            background-color: $header-bg-color;
+        }
+    }
+}
+
+ul.nav-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    white-space: nowrap;
+    width: 100%;
+}

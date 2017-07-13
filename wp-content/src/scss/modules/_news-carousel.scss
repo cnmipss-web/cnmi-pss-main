@@ -1,4 +1,4 @@
-div.jumbotron {
+.site-main>.jumbotron {
     background: inherit !important;
     border-radius: 0px !important;
     box-shadow: none !important;
@@ -8,21 +8,22 @@ div.jumbotron {
 
     @include container-width;
 
-    @include for-xs {
-        margin-top: -30px;
-    }
-    @include for-sm {
-        margin-top: -36px;
-    }
     img {
+        @include for-xs {
+            height: 56.25vw;
+            width: 100%;
+        }
         @include for-sm {
-            height: $sm-width * 9/16
+            height: $sm-width * 9/16;
+            width: $sm-width;                              
         }
         @include for-md {
-            height: $md-width * 9/16
+            height: $md-width * 9/16;
+            width: $md-width;
         }
         @include for-lg {
-            height: $lg-width * 9/16
+            height: $lg-width * 9/16;
+            width: $lg-width;
         }
     }
     #carousel-inner>div.item.active>a:focus {
@@ -46,13 +47,20 @@ div.jumbotron {
 
     .carousel-control.right,
     .carousel-control.left {
+        opacity: 1;
+        
         @include for-sm {
             margin: 20% 0;
         }
     }
 
     .carousel-indicators {
-        bottom: -20px;
+        @include for-xs {
+            bottom: -20px;
+        }
+        @include for-sm {
+            bottom: -15px;
+        }
     }
 
     h2.carousel-img-title {
@@ -81,43 +89,4 @@ div.jumbotron {
             top: 100px;
         }
     }
-}
-
-.jumbo-img {
-    @include for-xs {
-        height: 240px;
-        margin-left: 49vw;
-        margin-top: 12vh;
-        min-width: 768px;
-        transform: translate(-50%, -50%);
-        width: auto;
-    }
-    @include for-sm {
-        height: auto;
-        margin: 0px 0px;
-        transform: none;
-        width: 100vw;
-    }
-}
-
-.btn.btn-school {
-    @include custom-transition(color 0.3s, ease, 0s);
-    background-color: $dark-blue;
-    color: $light-gold;
-    font-weight: bold;
-    width: 100%;
-
-    &:hover {
-        background-color: $dark-blue;
-        color: lightyellow;
-        font-weight: bold;
-    }
-
-    &:focus {
-        outline: $alt-outline !important;
-    }
-}
-
-.desc_ {
-    margin: 10% 10%;
 }

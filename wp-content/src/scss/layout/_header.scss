@@ -1,0 +1,113 @@
+/**
+ * Main Navbar Style
+ */
+
+#site-navigation {
+    background-color: $header-bg-color;
+    border-radius: 0px;
+    border-top: solid 5px $light-gold;
+    font-size: 1rem;
+    margin-bottom: 0px;
+    min-height: 50px; // Breaks bootstrap header dropdowns
+    padding-bottom: 0px;
+    padding: 5px;
+    z-index: 100;
+}
+
+.l-nav-form {
+    height: 34px;
+}
+
+/**
+ * Bootstrap Row Holding Header Image, Help Text & Search Form Above Navbar
+ */
+
+.site-branding>.row {
+    @include for-xs {
+        padding-bottom: 10px;
+    }
+    @include for-md {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+.header-image {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.header-search {
+    margin-bottom: 10px;
+    @include for-xs {
+        display: none;
+    }
+    @include for-sm {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+/**
+ * Mobile: Navbar Header w/ Search Form
+ */
+
+.navbar-header {
+    @include for-xs {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+        margin: 0px auto;
+        padding-top: 5px;
+        width: 100%;
+    }
+    @include for-sm {
+        padding: 0px;
+    }
+}
+
+#nav-search-form {
+    @include for-xs {
+        display: inline-flex;
+        width: 100%;
+    }
+    @include for-sm {
+        display: none;
+    }
+    top: 0px;
+    bottom: 0px;
+}
+
+#nav-search-bar {
+    width: 50vw;
+    min-width: 150px;
+    max-width: 500px;
+
+    &:focus {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+}
+
+#nav-search-submit {
+    max-width: 75px;
+    margin-left: 5px;
+}
+
+/**
+ * Mobile: Hamburger Toggle Button for Header Links
+ */
+
+button.navbar-toggle {
+    margin-top: 0px;
+    margin-right: -30px;
+    padding: 5px;
+    width: 34px;
+    height: 34px;
+}

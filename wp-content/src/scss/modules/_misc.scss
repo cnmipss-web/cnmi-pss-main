@@ -1,0 +1,21 @@
+.header-help>p {
+    color: #696969;
+    font-family: $base-font-family;
+    font-size: $base-font-size;
+    font-weight: $bold - 100;
+    text-align: center;
+    margin: 0px;
+    @include for-sm {
+        margin-top: 5px;
+    }
+    @include for-md {
+        margin-top: 0px;
+    }
+}
+
+.header-help>p>br {
+    display: none;
+    @include for-tablet-portrait-up {
+        display: block;
+    }
+}

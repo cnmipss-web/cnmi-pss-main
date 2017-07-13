@@ -1,6 +1,7 @@
 /**
  * Bootstrap v3 Breakpoints for Custom Media Queries
  */
+
 $phone-screen: 768px;
 $tblt-port: 992px;
 $tblt-land: 1024px;
@@ -15,6 +16,7 @@ $lg-width: 1170px;
 /**
  * Colors by Name
  */
+
 $blue: #1a4167;
 $dark-blue: #022c55;
 $gold: darken(#b9972f, 0);
@@ -25,6 +27,7 @@ $manila: #f1d592;
 /**
  * Colors by Function
  */
+
 $footer-bg-color: $blue;
 $footer-txt-color: white;
 $header-bg-color: $blue;
@@ -33,13 +36,46 @@ $nav-link-color: white;
 $nav-link-hover-color: $light-gold;
 
 /**
+ * Font Weights
+ */
+
+$light: 100;
+$regular: 400;
+$bold: 600;
+
+/**
+ * Fonts
+ */
+
+$base-font-family: 'Roboto', Arial, sans-serif;
+$base-font-weight: $regular;
+$base-font-size: 14px;
+$base-font-line-height: 1.5;
+
+$article-font-family: serif;
+$article-font-weight: $regular;
+$article-font-size: 14px;
+$article-font-line-height: 1.5;
+
+$title-font-family: $base-font-family;
+$title-font-weight: $bold;
+$title-font-size: 24px;
+$title-font-line-height: 2;
+
+$fixed-font-family: monospace;
+$fixed-font-weight: $regular;
+$fixed-font-size: 85%;
+$fixed-font-line-height: $base-font-line-height;
+
+/**
  * Accessibility Variables
  */
-$focus-outline: 1px solid $gold;
-$alt-outline: 1px solid red;
 
+$focus-outline: 1px solid $gold !important;
+$alt-outline: 1px solid red !important;
 
 /**
  * Borders
  */
+
 $report-tabs-border: 1px solid $manila;

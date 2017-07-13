@@ -1,0 +1,48 @@
+button[type="submit"].btn,
+input[type="submit"].btn {
+    background-color: $blue;
+    color: $light-gold;
+    font-weight: $bold;
+}
+
+button#nav-search-submit {
+    background-color: $gold;
+    color: $dark-blue;
+    font-weight: $bold;
+
+    &:focus {
+        outline: $alt-outline;
+        border-color: $gold;
+    }
+}
+
+button.navbar-toggle {
+    background-color: $nav-btn-bg-color;
+    border-color: $nav-link-color;
+    color: $nav-link-color;
+
+    &:focus {
+        outline: $alt-outline;
+        border-color: $gold;
+    }
+}
+
+.btn-school { 
+    @include custom-transition(color 0.3s, ease, 0s);
+    background-color: $dark-blue;
+    color: $light-gold;
+    font-weight: $bold;
+    white-space: pre-wrap;
+    width: 100%;
+    
+    &:hover, &:focus {
+        background-color: $dark-blue;
+        color: lightyellow !important;
+        font-weight: $bold;
+        outline: $alt-outline !important;
+    }
+
+    &:visited {
+        color: $light-gold;
+    }
+}

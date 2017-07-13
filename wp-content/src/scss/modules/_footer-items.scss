@@ -1,0 +1,23 @@
+#colophon {
+    background-color: $footer-bg-color;
+    border-top: solid 5px $light-gold;
+    color: $footer-txt-color;
+
+    .site-info {
+        background-color: $dark-blue;
+    }
+
+    h2 {
+        text-align: center;
+        color: $light-gold;
+    }
+
+    p {
+        font-size: $base-font-size - 2px;
+        white-space: nowrap;
+    }
+
+    a {
+        color: $light-gold;
+    }
+}

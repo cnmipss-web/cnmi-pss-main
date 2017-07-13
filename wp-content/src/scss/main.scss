@@ -1,27 +1,40 @@
+// Base: Modules and variables
 @import 'base/reset';
 @import 'base/variables';
 @import 'base/breakpoints';
 @import 'base/mixins';
+@import 'base/accessibility';
 
-@import 'accessibility';
-@import 'certification';
-@import 'footer';
-@import 'front-page';
-@import 'header';
-@import 'news';
-@import 'page';
-@import 'reports';
-@import 'school';
-@import 'search';
-@import 'site';
+// Layout
+@import 'layout/header';
+@import 'layout/main';
+@import 'layout/article';
+@import 'layout/footer';
+
+//Modules
+@import 'modules/buttons';
+@import 'modules/footer-items';
+@import 'modules/header-dropdowns';
+@import 'modules/inputs';
+@import 'modules/main-container';
+@import 'modules/mobile-navbar';
+@import 'modules/news-carousel';
+@import 'modules/tab-panels';
+@import 'modules/misc';
+
+@import 'partials/certification';
+@import 'partials/page';
+@import 'partials/school';
+@import 'partials/search';
+@import 'partials/site';
 
 .section-title {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
 .section-text {
-  font-size: 14px;
-  font-weight: lighter;
+    font-size: 14px;
+    font-weight: lighter;
 }

@@ -1,62 +1,90 @@
 /**
  * Breakpoints Based on Bootstrap v3
  */
+
 @mixin for-phone-only {
-  // Bootstrap Size: xs
-  @media (max-width: $phone-screen - 1) { @content; }
+    // Bootstrap Size: xs
+    @media (max-width: $phone-screen - 1) {
+        @content;
+    }
 }
+
 @mixin for-phone-up {
-  @media (min-width: $phone-screen) {@content; }
+    // Boostrap Size: sm
+    @media (min-width: $phone-screen) {
+        @content;
+    }
 }
+
 @mixin for-tablet-portrait-up {
-  // Bootstrap Size: sm
-  @media (min-width: $tblt-port) { @content; }
+    // Bootstrap Size: md
+    @media (min-width: $tblt-port) {
+        @content;
+    }
 }
+
 @mixin for-tablet-landscape-up {
-  // Bootstrap Size: md
-  @media (min-width: $tblt-land) { @content; }
+    // Bootstrap Size: md
+    @media (min-width: $tblt-land) {
+        @content;
+    }
 }
+
 @mixin for-desktop-up {
-  // Bootstrap Size: lg
-  @media (min-width: $desktop) { @content; }
+    // Bootstrap Size: lg
+    @media (min-width: $desktop) {
+        @content;
+    }
 }
+
 @mixin for-big-desktop-up {
-  @media (min-width: $big-desktop) { @content; }
+    @media (min-width: $big-desktop) {
+        @content;
+    }
 }
 
 @mixin for-xs {
-  @content;
+    @content;
 }
+
 @mixin for-sm {
-  @media (min-width: $phone-screen) {@content;}
+    @media (min-width: $phone-screen) {
+        @content;
+    }
 }
+
 @mixin for-md {
-  @media (min-width: $tblt-port) {@content;}
+    @media (min-width: $tblt-port) {
+        @content;
+    }
 }
+
 @mixin for-lg {
-  @media (min-width: $desktop) {@content;}
+    @media (min-width: $desktop) {
+        @content;
+    }
 }
 
 .col-xs-0 {
-  @include for-phone-only {
-    display: none;
-  }
+    @include for-xs {
+        display: none;
+    }
 }
 
 .col-sm-0 {
-  @include for-phone-up {
-    display: none;
-  }
+    @include for-sm {
+        display: none;
+    }
 }
 
 .col-md-0 {
-  @include for-tablet-portrait-up {
-    display: none;
-  }
+    @include for-md {
+        display: none;
+    }
 }
 
 .col-lg-0 {
-  @include for-desktop-up {
-    display: none;
-  }
+    @include for-lg {
+        display: none;
+    }
 }
