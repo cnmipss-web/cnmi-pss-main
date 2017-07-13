@@ -8,8 +8,8 @@
  */
  get_header(); ?>
 
- 	<div id="primary" class="content-area">
- 		<main id="main" class="site-main" role="main">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
       <h1 class="sr-only">CNMI PSS Main Page</h1>
       <div class="jumbotron container">
         <div id="myCarousel" class="carousel slide">
@@ -33,7 +33,7 @@
               <div class="item">
                 <h2 class="carousel-img-title">PSS News: <?php the_title(); ?></h2>
                 <a title="Link to <?php the_title()?> article" href=<?php the_permalink() ?>>
-                  <?php the_post_thumbnail('full'); ?>
+                  <?php the_post_thumbnail('full', array('class' => 'jumbo-img')); ?>
                 </a>
               </div>
             <?php endwhile;
@@ -79,7 +79,7 @@
                   role="tab"
                   aria-controls="head-start-links"
                   data-toggle="tab">
-                  Head Start
+                  Head Start / Early Head Start
                 </a>
               </li>
               <li role="presentation">
@@ -113,23 +113,22 @@
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane fade in active" id="head-start-links">
                 <?php
-                cnmi_create_school_btns('Head Start');
+                cnmi_create_school_btns(array('Head Start'));
                 ?>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="elem-links">
                 <?php
-                cnmi_create_school_btns('Elementary School');
+                cnmi_create_school_btns(array('Elementary School'));
                 ?>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="middle-links">
                 <?php
-                cnmi_create_school_btns('Middle School');
+                cnmi_create_school_btns(array('Middle School'));
                 ?>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="high-links">
                 <?php
-                cnmi_create_school_btns('Jr Sr High School');
-                cnmi_create_school_btns('High School');
+                cnmi_create_school_btns(array('Jr Sr High School', 'High School'));
                 ?>
               </div>
             </div>
@@ -151,8 +150,8 @@
         </div>
       </div>
 
- 		</main><!-- #main -->
- 	</div><!-- #primary -->
+    </main><!-- #main -->
+  </div><!-- #primary -->
 
  <?php
  get_footer();
