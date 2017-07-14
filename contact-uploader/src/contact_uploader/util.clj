@@ -1,6 +1,8 @@
 (ns contact-uploader.util
   (:require [clojure.data.json :as json]
-            [clojure.walk :as walk]))
+            [clojure.string :refer [trim]]
+            [clojure.walk :as walk])
+  (:import (org.apache.commons.text StringEscapeUtils)))
 
 (def json->edn
   (comp walk/keywordize-keys json/read-str))
@@ -20,3 +22,19 @@
        (let [transform (comp (partial list `quote)
                              (transforms key-type))]
          (into {} (map (juxt transform identity) vars))))))
+
+(defn- sanitize-dashes
+  [str]
+  (.replaceAll str "\\p{Pd}", "-"))
+
+(defn- sanitize-single-quotes
+  [str]
+  (.replaceAll str "\u2019" "\u0027"))
+
+(defn sanitize
+  [str]
+  (-> str
+      (StringEscapeUtils/unescapeHtml4)
+      (trim)
+      (sanitize-single-quotes)
+      (sanitize-dashes)))

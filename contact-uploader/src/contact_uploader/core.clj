@@ -11,12 +11,14 @@
             [contact-uploader.validators :as v]
             [environ.core :refer [env]]
             [org.httpkit.client :as http])
-  (:import (org.apache.commons.text StringEscapeUtils))
+  (:import (org.apache.commons.text StringEscapeUtils)
+           (org.apache.commons.lang3 StringUtils))
   (:gen-class))
 
 ;; Define Global State
 (def auth-token (atom ""))
 (def target-urls (atom {}))
+(def allow-new? (atom false))
 
 (defn set-target-urls
   [key]
@@ -112,7 +114,7 @@
 (defn create-post-info
   [key data]
   (let [{name :name} data
-        title (trim name)
+        title (sanitize name)
         status "publish"
         level (level-set name)]
     (cond
@@ -124,30 +126,30 @@
   (let [{name :name} data
         search-name (v/encode-name (subs name 0 (min (count name) 50)))
         {get-body :body} @(http/get (str const/wp-host (:main @target-urls) "?per_page=50&search=" search-name))
-        contacts (filter #(= (trim name) (StringEscapeUtils/unescapeHtml4 (get-in % [:title :rendered])))
-                         (walk/keywordize-keys (json/read-str get-body)))
+        contacts (filter #(= (sanitize name) (sanitize (get-in % ["title" "rendered"])))
+                         (json/read-str get-body))
         body (json/write-str (create-post-info key data))
         fields (create-acf-fields key data)]
     (if (> (count contacts) 0)
       (if (> (count contacts) 1)
-        (throw (Exception. (str "Name collision: " contacts)))
-        (let [id (:id (first contacts))]
-          (println "Updating: " name)
+        (throw (Exception. (str "Name collision: " (apply str contacts))))
+        (let [id (get (first contacts) "id")]
+          (println "Updating: " name id)
           (create-contact-info id  body fields)))
       (do
         (println "Creating: " body)
-        (throw (Exception. "No new"))
-        (create-contact-info body fields)))
+        (if @allow-new?
+          (create-contact-info body fields)
+          (throw (Exception. "No new entries unless specified with :new")))))
     (identity data)))
 
 (defn apply-filters
   [key data]
-  (case key
-    :personnel (filter #(v/valid-email? (last %)) data)
-    :offices (filter #(and (> (count (trim (nth % 2))) 1)
-                           (> (count (trim (first %))) 0)) data)
-    :schools (reduce reduce-schools data)
-    :headstarts (reduce reduce-schools data)))
+  (cond
+    (#{:personnel} key) (filter #(v/valid-email? (last %)) data)
+    (#{:offices} key) (filter #(and (> (count (trim (nth % 2))) 1)
+                                 (> (count (trim (first %))) 0)) data)
+    (#{:schools :headstarts} key) (reduce reduce-schools data)))
 
 (defn upload-data
   [key file]
@@ -173,14 +175,18 @@
   [& args]
   {:pre [(s/assert seq? args)
          (s/assert (s/every keyword?) args)]}
-  (loop [as args]
+  (if (some #{:new} args)
+    (reset! allow-new? true))
+  (loop [as (filter #(not (= :new %)) args)]
     (let [key (first as)
           file (-> key (name) (str ".csv"))
           rem (rest as)]
-      (if (not (#{:personnel :schools :offices :headstarts} key))
-        (throw (Exception. "Arguments must be one of: :personnel :schools :offices :headstarts")))
-      (set-target-urls key)
-      (validate-args key file)
-      (upload-data key file)
-      (if (< 1 (count rem))
-        (recur rem)))))
+      (if (not (#{:personnel :schools :offices :headstarts :all} key))
+        (throw (Exception. "Arguments must be one of: :personnel :schools :offices :headstarts :all")))
+      (if (= key :all)
+        (recur [:personnel :offices :schools :headstarts])
+        (do (set-target-urls key)
+            (validate-args key file)
+            (upload-data key file)
+            (if (< 1 (count rem))
+              (recur rem)))))))
