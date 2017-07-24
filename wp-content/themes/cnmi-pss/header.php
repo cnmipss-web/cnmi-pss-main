@@ -76,7 +76,7 @@
                 <?php cnmi_header_dropdown('Employees'); ?>
                 <?php cnmi_header_dropdown('Community'); ?>
                 <?php cnmi_header_dropdown('District Offices'); ?>
-                <?php cnmi_header_dropdown('Reports'); ?>
+                <?php cnmi_header_dropdown('Public Reports'); ?>
               </ul>
             </div><!-- /.navbar-collapse -->
           </div>
