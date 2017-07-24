@@ -8,10 +8,11 @@
 
   :dependencies [[com.andrewmcveigh/cljs-time "0.5.0"]
                  [org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.229"]
+                 [org.clojure/clojurescript "1.9.671"]
                  [org.clojure/core.async  "0.3.442"
                   :exclusions [org.clojure/tools.reader]]
                  [reagent "0.7.0"]
+                 [re-frame "0.9.4"]
                  [cljs-ajax "0.6.0"]]
 
   :plugins [[lein-figwheel "0.5.10"]
