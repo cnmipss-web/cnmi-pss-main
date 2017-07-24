@@ -29,7 +29,7 @@ get_header(); ?>
                 </div>
                 
                 <div class="row">
-                    <div id="jva-table" class="col-xs-12">
+                    <div id="jva-table" class="searchable-table col-xs-12">
                         <div id="floatingCirclesG">
                             <div class="f_circleG" id="frotateG_01"></div>
                             <div class="f_circleG" id="frotateG_02"></div>

@@ -29,17 +29,17 @@ get_header(); ?>
     </div>
                 
     <div class="row">
-        <div id="certification-lookup" class="col-xs-12">
-                        <div id="floatingCirclesG">
-                      <div class="f_circleG" id="frotateG_01"></div>
-                      <div class="f_circleG" id="frotateG_02"></div>
-                      <div class="f_circleG" id="frotateG_03"></div>
-                      <div class="f_circleG" id="frotateG_04"></div>
-                      <div class="f_circleG" id="frotateG_05"></div>
-                      <div class="f_circleG" id="frotateG_06"></div>
-                      <div class="f_circleG" id="frotateG_07"></div>
-                      <div class="f_circleG" id="frotateG_08"></div>
-                        </div>
+        <div id="certification-lookup" class="searchable-table col-xs-12">
+            <div id="floatingCirclesG">
+                <div class="f_circleG" id="frotateG_01"></div>
+                <div class="f_circleG" id="frotateG_02"></div>
+                <div class="f_circleG" id="frotateG_03"></div>
+                <div class="f_circleG" id="frotateG_04"></div>
+                <div class="f_circleG" id="frotateG_05"></div>
+                <div class="f_circleG" id="frotateG_06"></div>
+                <div class="f_circleG" id="frotateG_07"></div>
+                <div class="f_circleG" id="frotateG_08"></div>
+            </div>
         </div>
     </div>
     <div class="row">
