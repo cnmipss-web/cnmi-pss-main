@@ -4,11 +4,15 @@
     box-shadow: inset 0px 0px 1px 2px transparentize($dark-blue, 0.75);
     margin-bottom: 15px;
 
-    h2 {
-      text-align: center;
+    @for $i from 1 through 6 {
+        h#{$i} {
+            font-size: $base-font-size + 16px / $i ;
+            font-weight: $bold;
+            font-family: $base-font-family;
+        }
     }
 
     .row div {
-      padding: 10px;
+        padding: 10px;
     }
 }

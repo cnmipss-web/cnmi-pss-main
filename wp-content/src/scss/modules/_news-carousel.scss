@@ -70,6 +70,7 @@
         text-align: left !important;
         z-index: 100;
 
+        font-weight: 400 !important;
         @include for-xs {
             font-size: 16px;
             padding-left: 50px;

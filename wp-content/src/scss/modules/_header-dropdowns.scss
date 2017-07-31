@@ -4,6 +4,9 @@ ul.dropdown-menu {
     li>a {
         @include custom-transition(color 0.3s, ease, 0s);
         color: $nav-link-color;
+        @include for-xs {
+            font-size: $base-font-size;
+        }
         
         &:hover,
         &:focus,
@@ -27,8 +30,27 @@ ul.dropdown-menu {
 
 ul.nav-menu {
     display: flex;
-    flex-direction: row;
+    @include for-xs {
+        flex-direction: column;
+    }
+    @include for-sm {
+        flex-direction: row;
+    }
     justify-content: space-around;
     white-space: nowrap;
     width: 100%;
+
+    @for $i from 1 through 6 {
+        @include for-sm {
+            & > li:nth-child(#{$i}) > ul.dropdown-menu {
+                left: 50% - 25% * $i;
+            }
+        }
+
+        @include for-md {
+            & > li:nth-child(#{$i}) > ul.dropdown-menu {
+                left: 30% - 15% * $i;
+            }
+        }
+    }
 }
