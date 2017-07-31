@@ -58,10 +58,9 @@
                   (filter-by :cert_no :first_name :last_name)
                   sort-certs)]]))
 
-
 (defn parse-date
   [date]
-  (format/parse (format/formatter "dd MMM YYYY") date))
+  (format/parse (format/formatter "MMMM dd, YYYY") date))
 
 (defn force-close?
   [{:keys [status close_date]}]
@@ -108,7 +107,7 @@
     (for [jva (-> table js->clj clojure.walk/keywordize-keys
                   (filter-by :announce_no :position :location)
                   sort-jvas)]
-      ^{:key (str "jva-" (jva :announce_no))} [jva-row jva])]])
+      ^{:key (str "jva-" (:announce_no jva))} [jva-row jva])]])
 
 (defn jva-table [state]
   (let [table @(rf/subscribe [:table])]

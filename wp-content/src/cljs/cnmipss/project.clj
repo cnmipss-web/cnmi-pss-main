@@ -41,7 +41,10 @@
                            :source-map-timestamp true
                            ;; To console.log CLJS data-structures make sure you enable devtools in Chrome
                            ;; https://github.com/binaryage/cljs-devtools
-                           :preloads [devtools.preload]}}
+                           :preloads [devtools.preload]
+                           :npm-deps {:axe-core "2.3.1"}
+                           :language-in :ecmascript5
+                           :language-out :ecmascript3}}
                ;; This next build is an compressed minified build for
                ;; production. You can build this with:
                ;; lein cljsbuild once min
@@ -50,7 +53,8 @@
                 :compiler {:output-to "../../../dist/js/compiled/cnmipss.js"
                            :main cnmipss.core
                            :optimizations :advanced
-                           :pretty-print false}}]}
+                           :pretty-print false
+                           :npm-deps {:axe-core "2.3.1"}}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default

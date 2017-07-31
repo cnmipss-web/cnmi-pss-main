@@ -4,9 +4,13 @@
             [cnmipss.components.forms :as forms]
             [cnmipss.components.tables :as tables]
             [reagent.core :as r]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            axe-core))
 
 (enable-console-print!)
+(defn log
+  [& args]
+  (mapv #(.log js/console %) args))
 (def jq js/jQuery)
 (defn path []
   (.-pathname js/location))
@@ -20,6 +24,14 @@
   ;; (swap! app-state update-in [:__figwheel_counter] inc)
   )
 
+(defn test-accessibility []
+  (.run js/axe (fn [err data]
+                 (if err (.error js/console err)
+                     (let [{:keys [violations passes incomplete inapplicable]}
+                           (-> data js->clj clojure.walk/keywordize-keys)]
+                       (log (str "Violations: " (count violations)) violations)
+                       (log (str "Passes: " (count passes)) passes)
+                       (log "Incomplete: " incomplete))))))
 (defn ^:export init!
   []
   (case (path)

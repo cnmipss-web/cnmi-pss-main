@@ -63,9 +63,10 @@ goog.addDependency("../cljs_time/internal/parse.js", ['cljs_time.internal.parse'
 goog.addDependency("../cljs_time/internal/unparse.js", ['cljs_time.internal.unparse'], ['cljs_time.internal.parse', 'goog.date.UtcDateTime', 'cljs.core', 'goog.date.Interval', 'cljs_time.internal.core', 'goog.date.DateTime', 'goog.date.Date', 'goog.date']);
 goog.addDependency("../cljs_time/format.js", ['cljs_time.format'], ['cljs_time.internal.parse', 'cljs_time.internal.unparse', 'cljs.core', 'goog.date.duration', 'cljs_time.core', 'clojure.set', 'cljs_time.internal.core']);
 goog.addDependency("../cnmipss/components/tables.js", ['cnmipss.components.tables'], ['cljs.core', 'cnmipss.components.forms', 'cljs_time.core', 'cljs_time.format', 'clojure.string', 're_frame.core']);
+goog.addDependency("../node_modules/axe-core/axe.js", ['module$home$tjscollins$public_html$wp_content$src$cljs$cnmipss$node_modules$axe_core$axe'], []);
 goog.addDependency("../cnmipss/db.js", ['cnmipss.db'], ['cljs.core']);
 goog.addDependency("../cnmipss/handlers/re_frame.js", ['cnmipss.handlers.re_frame'], ['cnmipss.db', 'cljs.core', 're_frame.core']);
-goog.addDependency("../cnmipss/core.js", ['cnmipss.core'], ['cnmipss.handlers.rf_subs', 'reagent.core', 'cljs.core', 'cnmipss.components.forms', 'cnmipss.components.tables', 'cnmipss.handlers.re_frame', 're_frame.core']);
+goog.addDependency("../cnmipss/core.js", ['cnmipss.core'], ['cnmipss.handlers.rf_subs', 'reagent.core', 'cljs.core', 'cnmipss.components.forms', 'cnmipss.components.tables', 'module$home$tjscollins$public_html$wp_content$src$cljs$cnmipss$node_modules$axe_core$axe', 'cnmipss.handlers.re_frame', 're_frame.core']);
 goog.addDependency("../cljs/core/async/impl/protocols.js", ['cljs.core.async.impl.protocols'], ['cljs.core']);
 goog.addDependency("../cljs/core/async/impl/buffers.js", ['cljs.core.async.impl.buffers'], ['cljs.core', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async/impl/dispatch.js", ['cljs.core.async.impl.dispatch'], ['cljs.core', 'cljs.core.async.impl.buffers', 'goog.async.nextTick']);

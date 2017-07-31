@@ -1,42 +1,43 @@
 {
-  "name": "cnmipss-main-site",
-  "version": "0.0.1",
-  "description": "District Website for CNMI PSS",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "test-access": "nodejs test/access/tenon.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tjscollins/cnmi-pss-main.git"
-  },
-  "author": "Tyler Collins",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tjscollins/cnmi-pss-main/issues"
-  },
-  "homepage": "https://github.com/tjscollins/cnmi-pss-main#readme",
-  "devDependencies": {
-    "axios": "^0.16.2",
-    "csv": "^1.1.1",
-    "google-spreadsheet": "^2.0.4",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^4.0.0",
-    "gulp-clean-css": "^3.4.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-livereload": "^3.8.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.0",
-    "gulp-tenon-client": "^0.1.1",
-    "mysql": "^2.13.0",
-    "phantomjs-prebuilt": "^2.1.14",
-    "querystring": "^0.2.0",
-    "tenon-api-client": "^0.1.7",
-    "validator": "^7.1.0",
-    "validators": "^0.3.1",
-    "webpack": "^3.0.0",
-    "webpack-stream": "^3.2.0",
-    "wordpress": "^1.4.0"
-  }
+    "name": "cnmipss-main-site",
+    "version": "0.0.1",
+    "description": "District Website for CNMI PSS",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "test-access": "nodejs test/access/tenon.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tjscollins/cnmi-pss-main.git"
+    },
+    "author": "Tyler Collins",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/tjscollins/cnmi-pss-main/issues"
+    },
+    "homepage": "https://github.com/tjscollins/cnmi-pss-main#readme",
+    "devDependencies": {
+        "axe-core": "^2.3.1",
+        "axios": "^0.16.2",
+        "csv": "^1.1.1",
+        "google-spreadsheet": "^2.0.4",
+        "gulp": "^3.9.1",
+        "gulp-autoprefixer": "^4.0.0",
+        "gulp-clean-css": "^3.4.2",
+        "gulp-concat": "^2.6.1",
+        "gulp-livereload": "^3.8.1",
+        "gulp-sass": "^3.1.0",
+        "gulp-sourcemaps": "^2.6.0",
+        "gulp-tenon-client": "^0.1.1",
+        "mysql": "^2.13.0",
+        "phantomjs-prebuilt": "^2.1.14",
+        "querystring": "^0.2.0",
+        "tenon-api-client": "^0.1.7",
+        "validator": "^7.1.0",
+        "validators": "^0.3.1",
+        "webpack": "^3.0.0",
+        "webpack-stream": "^3.2.0",
+        "wordpress": "^1.4.0"
+    }
 }
