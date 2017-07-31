@@ -71,11 +71,11 @@
                 <li role="menuitem">
                     <a href="/news" > PSS News </a>
                 </li>
-                <?php cnmi_header_dropdown('Students'); ?>
-                <?php cnmi_header_dropdown('Parents'); ?>
+                <?php cnmi_header_dropdown('Students & Parents'); ?>
+                <?php /*cnmi_header_dropdown('Parents');*/ ?>
                 <?php cnmi_header_dropdown('Employees'); ?>
                 <?php cnmi_header_dropdown('Community'); ?>
-                <?php cnmi_header_dropdown('District Offices'); ?>
+                <?php cnmi_header_dropdown('District Information'); ?>
                 <?php cnmi_header_dropdown('Public Reports'); ?>
               </ul>
             </div><!-- /.navbar-collapse -->
