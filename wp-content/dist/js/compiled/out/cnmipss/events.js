@@ -7,4 +7,4 @@ var search = document.getElementById("search-certified").value;
 return re_frame.core.dispatch.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"set-search-text","set-search-text",650643537),search], null));
 });
 
-//# sourceMappingURL=events.js.map?rel=1501568769294
+//# sourceMappingURL=events.js.map?rel=1501628488818

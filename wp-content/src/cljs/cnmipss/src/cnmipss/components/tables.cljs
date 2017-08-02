@@ -8,7 +8,8 @@
 (defn- filter-by
   [rows & ks]
   (filter
-   (fn [row] (let [searches (clojure.string/split @(rf/subscribe [:search-text]) #" ")]
+   (fn [row] (let [search-text @(rf/subscribe [:search-text])
+                   searches (clojure.string/split search-text #" ")]
                (every? #(re-seq (re-pattern (str "(?i)" %))
                                 (clojure.string/join " " (map row ks))) searches)))
    rows))
@@ -17,7 +18,7 @@
   (let [{:keys [last_name first_name cert_type cert_no start_date expiry_date mi]} row]
     [:tr.row.lookup-row 
      [:th.col-xs-2 {:scope "row"}
-      [:p.text-center cert_no]]
+      [:p.text-center (second (re-find #"(.*?)(\-renewal\-\d+)?$" cert_no))]]
      [:td.col-xs-2
       [:p.text-center last_name]]
      [:td.col-xs-2
@@ -42,8 +43,9 @@
        [:th.col-xs-2.text-center th-props "Effective Date"]
        [:th.col-xs-2.text-center th-props "Expiration Date"]]]
      [:tbody
-      (for [row (doall (filter-by table :cert_no :first_name :last_name))]
-        ^{:key (join " " (map row [:cert_no :first_name :last_name]))} [table-row row])]]))
+      (if (< 0 (count @(rf/subscribe [:search-text])))
+        (for [row (doall (filter-by table :cert_no :first_name :last_name))]
+          ^{:key (join " " (map row [:cert_no :first_name :last_name]))} [table-row row]))]]))
 
 (defn- sort-certs
   [certs]
@@ -73,19 +75,19 @@
      [:th.col-xs-1 {:scope "row"
                     :role "rowheader"} (jva :announce_no)]
      [:td.col-xs-2 (jva :position)]
-     [:td.col-xs-1 (if (force-close? jva)
-                [:em "Closed"]
-                [:strong "Open"])]
+     [:td.col-xs-1.text-center (if (force-close? jva)
+                                 [:em "Closed"]
+                                 [:strong "Open"])]
      [:td.col-xs-1 (jva :open_date)]
      [:td.col-xs-1 (if close_date
-                close_date
-                "Until Filled")]
+                     close_date
+                     "Until Filled")]
      [:td.col-xs-3 (jva :salary)]
      [:td.col-xs-2 (jva :location)]
      [:td.col-xs-1.text-center
       [:a.btn.btn-info.jva-file-link {:href (jva :file_link)}
-       [:span.sr-only (str "Complete job vacancy announcement for: " (jva :position))]
-       [:i.fa.fa-download]]]]))
+       [:i.fa.fa-download]
+       [:span.sr-only (str "Complete job vacancy announcement for: " (jva :position))]]]]))
 
 (defn sort-jvas [jvas]
   (concat (->> jvas (filter (comp not force-close?)) (sort-by :announce_no) reverse)
@@ -94,7 +96,7 @@
 (defn jva-list [table]
   (let [th-props {:scope "col"}]
     [:table.lookup-list
-     [:caption "Job Vacancy List Table"]
+     [:caption.sr-only "Job Vacancy List Table"]
      [:tbody
       [:tr.row.jva-list-row
        [:th.col-xs-1.text-center th-props "Number"]

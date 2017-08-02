@@ -9,4 +9,4 @@ re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"table","table",-5649
 return new cljs.core.Keyword(null,"table","table",-564943036).cljs$core$IFn$_invoke$arity$1(db);
 }));
 
-//# sourceMappingURL=rf_subs.js.map?rel=1501568769196
+//# sourceMappingURL=rf_subs.js.map?rel=1501628488710
