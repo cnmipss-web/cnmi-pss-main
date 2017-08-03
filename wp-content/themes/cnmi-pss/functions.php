@@ -142,6 +142,21 @@ require get_template_directory() . '/inc/customizer.php';
  */
 require get_template_directory() . '/inc/jetpack.php';
 
+/**
+ * Modifying user roles so contributors can only make pending, not public changes
+ */
+function change_post_status($data) {
+    if( (current_user_can('contributor'))
+     && (($data['post_type'] == 'page') || ($data['post_type'] == 'post'))) {
+        if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        //then set the fields you want to update
+        $data['post_status'] = 'draft';     
+    }
+    return $data;
+}
+
+//add_filter('wp_insert_post_data', 'change_post_status', '99');
+
 
 
 /**

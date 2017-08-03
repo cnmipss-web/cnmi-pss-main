@@ -3,6 +3,7 @@
 }
 
 .search-entry-title,
+.search-entry-title a,
 .search-entry-title a:visited {
     color: $dark-blue;
     margin: 15px;
@@ -16,7 +17,7 @@
 
 .search-entry-meta {
     @extends .entry-meta;
-    margin-left: 15px;
+    margin-left: 15px; 
 }
 
 .search-entry-summary {
