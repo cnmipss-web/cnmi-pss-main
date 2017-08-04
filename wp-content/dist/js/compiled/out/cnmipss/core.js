@@ -99,4 +99,4 @@ return cljs.core.println.call(null,"Path is",cnmipss.core.path.call(null));
 goog.exportSymbol('cnmipss.core.init_BANG_', cnmipss.core.init_BANG_);
 cnmipss.core.init_BANG_.call(null);
 
-//# sourceMappingURL=core.js.map?rel=1501646118562
+//# sourceMappingURL=core.js.map?rel=1501820539656

@@ -75,19 +75,22 @@
      [:th.col-xs-1 {:scope "row"
                     :role "rowheader"} (jva :announce_no)]
      [:td.col-xs-2 (jva :position)]
-     [:td.col-xs-1.text-center (if (force-close? jva)
-                                 [:em "Closed"]
-                                 [:strong "Open"])]
+     [:td.col-xs-1.text-center
+      (if (force-close? jva)
+        [:em "Closed"]
+        [:strong "Open"])]
      [:td.col-xs-1 (jva :open_date)]
-     [:td.col-xs-1 (if close_date
-                     close_date
-                     "Until Filled")]
+     [:td.col-xs-1
+      (if close_date
+        close_date
+        "Until Filled")]
      [:td.col-xs-3 (jva :salary)]
      [:td.col-xs-2 (jva :location)]
      [:td.col-xs-1.text-center
-      [:a.btn.btn-info.jva-file-link {:href (jva :file_link)}
-       [:i.fa.fa-download]
-       [:span.sr-only (str "Complete job vacancy announcement for: " (jva :position))]]]]))
+      [:a {:href (jva :file_link)}
+       [:button.btn.btn-info.jva-file-link
+        {:title (str "Complete job vacancy announcement for: " (jva :position))}
+        [:i.fa.fa-download]]]]]))
 
 (defn sort-jvas [jvas]
   (concat (->> jvas (filter (comp not force-close?)) (sort-by :announce_no) reverse)
