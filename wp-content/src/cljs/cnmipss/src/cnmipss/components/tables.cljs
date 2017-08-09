@@ -120,3 +120,19 @@
     [:div
      [forms/search-bar "Search Job Vacancies"]
      [jva-list table]]))
+
+
+(def pns-announcement-row
+  [k table]
+  [:table])
+
+(defn pns-announcement-table
+  [k d])
+
+
+(defn procurement-tables
+  []
+  (let [table (-> @(rf/subscribe [:table]) js->clj clojure.walk/keywordize-keys)]
+    [:div
+     [pns-announcement-table :rfp table]
+     [pns-announcement-table :ifb table]]))

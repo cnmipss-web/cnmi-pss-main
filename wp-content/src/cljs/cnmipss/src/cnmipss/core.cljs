@@ -15,9 +15,6 @@
 (defn path []
   (.-pathname js/location))
 
-(println "Loading...")
-
-
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
   ;; your application
@@ -49,6 +46,13 @@
                     (rf/dispatch [:load-table data])
                     (r/render [tables/jva-table]
                               (js/document.getElementById "jva-table")))))
+        "/contractors-and-vendors/"
+        (-> jq
+            (.get "/webtools/api/all-procurement"
+                  (fn [data]
+                    (rf/dispatch [:load-table data])
+                    (r/render [tables/procurement-tables]
+                              (js/document.getElementById "procurement-tables")))))
         (println "Path is" (path))))
 
  (init!)
