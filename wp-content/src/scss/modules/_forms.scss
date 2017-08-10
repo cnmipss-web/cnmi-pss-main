@@ -1,0 +1,16 @@
+form.cnmipss-form {
+
+    label {
+        color: $dark-blue;
+        font-weight: $bold;
+
+        span {
+            color: darken(red, 15) !important;
+        }
+    }
+    
+    input {
+        color: $dark-blue;
+        background-color: lighten($light-gold, 35);
+    }
+}

@@ -46,15 +46,29 @@
         max-height: 500px;
         overflow-y: scroll;
 
+        caption {
+            text-align: center;
+            font-size: $base-font-size * 1.5;
+            font-weight: $bold;
+            color: inherit;
+        }
+
         tr.row {
-            &:nth-of-type(even) {
+            &:nth-of-type(2n+3) {
                 background-color: lighten($light-gold, 35);
             }
-            &.jva-list-row.closed {
-                background-color: lightgrey !important;
+            &.closed {
+                background-color: lightgrey;
+                .btn {
+                    border: none;
+                    color: black;
+                    background-color: #888;
+                    cursor: default;
+                    pointer-events: none;
+                }
             }
             &.jva-list-row em {
-                color: red;
+                color: darken(red, 15);
                 font-weight: 600;
             }
         }
@@ -81,11 +95,4 @@
         }
     }
 
-    button.jva-file-link {
-        margin-top: 10%;
-        color: white;
-        &, &:visited {
-            color: white;
-        }
-    }
 }

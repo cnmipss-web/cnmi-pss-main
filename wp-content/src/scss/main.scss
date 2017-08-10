@@ -1,5 +1,5 @@
 //Libraries
-//@import 'libraries/font-awesome';
+//@import 'font-awesome';
 
 // Base: Modules and variables
 @import 'base/variables';
@@ -17,10 +17,12 @@
 //Modules
 @import 'modules/buttons';
 @import 'modules/footer-items';
+@import 'modules/forms';
 @import 'modules/header-dropdowns';
 @import 'modules/inputs';
 @import 'modules/main-container';
 @import 'modules/mobile-navbar';
+@import 'modules/modals';
 @import 'modules/news-carousel';
 @import 'modules/tab-panels';
 @import 'modules/tables';
