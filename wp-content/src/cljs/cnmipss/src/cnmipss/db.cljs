@@ -3,4 +3,5 @@
 
 (def default-db
   {:search-text ""
-   :table []})
+   :table []
+   :pns-modal nil})

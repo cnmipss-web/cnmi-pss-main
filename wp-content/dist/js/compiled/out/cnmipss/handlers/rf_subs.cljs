@@ -10,3 +10,13 @@
  :table
  (fn [db _]
    (:table db)))
+
+(reg-sub
+ :pns-modal
+ (fn [db _]
+   (:pns-modal db)))
+
+(reg-sub
+ :pns-subs-errors
+ (fn [db _]
+   (:pns-subs-errors db)))

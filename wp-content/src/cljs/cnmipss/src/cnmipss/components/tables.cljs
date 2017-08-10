@@ -1,5 +1,7 @@
 (ns cnmipss.components.tables
   (:require [cnmipss.components.forms :as forms]
+            [cnmipss.components.buttons :as buttons]
+            [cnmipss.components.modals :as modals]
             [cljs-time.core :as time]
             [cljs-time.format :as format]
             [re-frame.core :as rf]
@@ -61,7 +63,14 @@
 
 (defn parse-date
   [date]
-  (format/parse (format/formatter "MMMM dd, YYYY") date))
+  (try
+    (format/parse (format/formatter "MMMM dd, YYYY") date)
+    (catch :default e
+      (let [parser (partial format/parse (format/formatter "MMMM dd, YYYY h:mm a"))]
+        (-> date
+            (clojure.string/replace #"at" "")
+            (clojure.string/replace #"\s+" " ")
+            (parser))))))
 
 (defn force-close?
   [{:keys [status close_date]}]
@@ -87,10 +96,9 @@
      [:td.col-xs-3 (jva :salary)]
      [:td.col-xs-2 (jva :location)]
      [:td.col-xs-1.text-center
-      [:a {:href (jva :file_link)}
-       [:button.btn.btn-info.jva-file-link
-        {:title (str "Complete job vacancy announcement for: " (jva :position))}
-        [:i.fa.fa-download]]]]]))
+      [:a.btn.btn-info.table-link {:href (jva :file_link)}
+       [:span.sr-only "Download"]
+       [:i.fa.fa-download]]]]))
 
 (defn sort-jvas [jvas]
   (concat (->> jvas (filter (comp not force-close?)) (sort-by :announce_no) reverse)
@@ -122,17 +130,52 @@
      [jva-list table]]))
 
 
-(def pns-announcement-row
-  [k table]
-  [:table])
+(defn pns-announcement-row
+  [row]
+  [:tr.row.jva-list-row {:class (if (force-close? row) "closed")}
+   [:td.col-xs-1.text-center (or (:rfp_no row) (:ifb_no row))]
+   [:td.col-xs-1 (:open_date row)]
+   [:td.col-xs-1 (:close_date row)]
+   [:td.col-xs-3 (:title row)]
+   [:td.col-xs-4 (-> row :description (subs 0 140) (str "..."))]
+   (if (force-close? row)
+     [:td.col-xs-2 [:p.text-center [:em "Closed"]]]
+     [:td.col-xs-2
+      [buttons/link-file (:file_link row) "Full Announcement"]
+      [:br]
+      [buttons/get-addendums row]
+      [:br]
+      [:button.btn.btn-primary.table-link.full-width
+       {:on-click #(rf/dispatch [:pns-subscribe row])
+        :data-toggle "modal"
+        :data-target "#pns-modal"
+        :aria-controls "pns-modal"} "Subscribe"]])])
 
 (defn pns-announcement-table
-  [k d])
-
+  [k table]
+  (let [th-props {:scope "col"}
+        data (get table k)]
+    [:table.col-xs-12.lookup-list
+     [:caption (if (= :rfps k)
+                 "Requests for Proposals"
+                 "Invitations for Bids")]
+     [:thead
+      [:tr.row.jva-list-row
+       [:th.col-xs-1.text-center th-props "Number"]
+       [:th.col-xs-1.text-center th-props "Open Date"]
+       [:th.col-xs-1.text-center th-props "Close Date"]
+       [:th.col-xs-3.text-center th-props "Title"]
+       [:th.col-xs-4.text-center th-props "Description"]
+       [:th.col-xs-2.text-center th-props "Links"]]]
+     [:tbody
+      (for [row data]
+        ^{:key (str "pns-" (:id row))} [pns-announcement-row (assoc row :status true)])]]))
+ 
 
 (defn procurement-tables
   []
   (let [table (-> @(rf/subscribe [:table]) js->clj clojure.walk/keywordize-keys)]
     [:div
-     [pns-announcement-table :rfp table]
-     [pns-announcement-table :ifb table]]))
+     [modals/pns-modal]
+     [pns-announcement-table :rfps table]
+     [pns-announcement-table :ifbs table]]))

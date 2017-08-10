@@ -17,3 +17,13 @@
  (fn [db [_ table]]
    (assoc db :table table)))
 
+(reg-event-db
+ :pns-subscribe
+ (fn [db [_ announcement]]
+   ;Display a modal w/ form to sign up for information about announcement
+   (assoc db :pns-modal announcement)))
+
+(reg-event-db
+ :pns-subs-errors
+ (fn [db [_ errors]]
+   (assoc db :pns-subs-errors errors)))
