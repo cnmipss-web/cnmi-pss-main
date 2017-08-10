@@ -44,3 +44,18 @@
         (pns-focus-invalid)
         ;Ajax to values to server
         ))))
+
+(defn download-addenda
+  [items]
+  (fn []
+    (let [jq js/jQuery
+          item (first items)
+          r (next items)
+          a  (-> "a" js/document.createElement jq
+                 (.attr "href" (:file_link item))
+                 (.attr "target" "_blank"))] 
+      (-> "body" jq (.append a))
+      (-> a (aget 0) (.click))
+      (.remove a)
+      (if (not (empty? r))
+        (js/setTimeout (download-addenda r) 500)))))

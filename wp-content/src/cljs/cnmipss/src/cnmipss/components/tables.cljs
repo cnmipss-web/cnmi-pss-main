@@ -144,7 +144,6 @@
       [buttons/link-file (:file_link row) "Full Announcement"]
       [:br]
       [buttons/get-addendums row]
-      [:br]
       [:button.btn.btn-primary.table-link.full-width
        {:on-click #(rf/dispatch [:pns-subscribe row])
         :data-toggle "modal"
