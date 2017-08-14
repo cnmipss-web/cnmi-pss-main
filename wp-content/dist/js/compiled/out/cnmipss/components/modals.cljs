@@ -29,7 +29,9 @@
         [:p (str "Please enter your contact information below and click 'Subscribe' to request be notified of any addendums or additional information relevant to this " (procurement-type pns) ".  If you have any questions please contact PSS Procurement & Supply via any of the methods listed at the bottom of this page.")]
         [forms/pns-subscribe pns]]
        [:div.modal-footer
-        [:div.col-xs-6]
+        [:div.col-xs-6
+         (if (empty? (filter #(first (clojure.data/diff pns %)) @(rf/subscribe [:subscribed])))
+           [:p "You have successfully subscribed to this announcement."])]
         [:div.col-xs-6
          [:button.btn.btn-default {:data-dismiss "modal"} "Exit"]
          [:button.btn.btn-primary {:type "submit" :form "pns-subscribe"} "Subscribe"]]]]]]))

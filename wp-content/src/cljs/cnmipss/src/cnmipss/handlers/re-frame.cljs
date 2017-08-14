@@ -27,3 +27,12 @@
  :pns-subs-errors
  (fn [db [_ errors]]
    (assoc db :pns-subs-errors errors)))
+
+
+(reg-event-db
+ :subscribed
+ (fn [db [_ pns]]
+   (println "DB" db)
+   (if-let [list (:subscribed db)]
+     (assoc db :subscribed (conj list pns))
+     (assoc db :subscribed [pns]))))

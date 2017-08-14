@@ -12,3 +12,15 @@
        (let [transform (comp (partial list `quote)
                              (transforms key-type))]
          (into {} (map (juxt transform identity) vars))))))
+
+(defn json->edn [json-string] (->> json-string (.parse js/JSON) js->clj))
+(defn edn->json [ds] (.stringify js/JSON (clj->js ds)))
+
+(defn full-response-format
+  [body-format]
+  (-> (body-format)
+      (update :read (fn [original-handler]
+                      (fn [response-obj]
+                        {:headers (js->clj (.getResponseHeaders response-obj))
+                         :body    (original-handler response-obj)
+                         :status  (.getStatus response-obj)})))))

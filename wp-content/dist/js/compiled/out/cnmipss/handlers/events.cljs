@@ -1,6 +1,7 @@
 (ns cnmipss.handlers.events
   (:require [cnmipss.validation :as v]
-            [cnmipss.util :refer [keyed]]
+            [cnmipss.util :refer [edn->json full-response-format]]
+            [cnmipss.handlers.api :as handle-api]
             [struct.core :as st]
             [ajax.core :as ajax]
             [re-frame.core :as rf]))
@@ -30,7 +31,7 @@
           person (-> "#pns-subs-cp" jq .val)
           email (-> "#pns-subs-em" jq .val)
           tel (-> "#pns-subs-tel" jq .val)
-          [{:keys [company person email tel] :as errors} values]
+          [errors values]
           (st/validate {:company company
                         :person person
                         :email email
@@ -42,8 +43,17 @@
       (rf/dispatch [:pns-subs-errors errors])
       (if (some? errors)
         (pns-focus-invalid)
-        ;Ajax to values to server
-        ))))
+        (ajax/ajax-request {:uri "/webtools/api/subscribe-procurement"
+                            :method :post
+                            :params (edn->json {:company company
+                                                :person person
+                                                :email email
+                                                :tel tel
+                                                :rfp_id (if (:rfp_no pns) (:id pns))
+                                                :ifb_id (if (:ifb_no pns) (:id pns))})
+                            :format (ajax/json-request-format)
+                            :response-format (full-response-format ajax/json-response-format)
+                            :handler (handle-api/subscribed pns)})))))
 
 (defn download-addenda
   [items]

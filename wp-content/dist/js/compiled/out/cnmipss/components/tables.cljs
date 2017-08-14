@@ -137,14 +137,14 @@
    [:td.col-xs-1 (:open_date row)]
    [:td.col-xs-1 (:close_date row)]
    [:td.col-xs-3 (:title row)]
-   [:td.col-xs-4 (-> row :description (subs 0 140) (str "..."))]
+   [:td.col-xs-4 (-> row :description (subs 0 280) (str "..."))]
    (if (force-close? row)
      [:td.col-xs-2 [:p.text-center [:em "Closed"]]]
      [:td.col-xs-2
       [buttons/link-file (:file_link row) "Full Announcement"]
       [:br]
       [buttons/get-addendums row]
-      [:button.btn.btn-primary.table-link.full-width
+     [:button.btn.btn-primary.table-link.full-width
        {:on-click #(rf/dispatch [:pns-subscribe row])
         :data-toggle "modal"
         :data-target "#pns-modal"

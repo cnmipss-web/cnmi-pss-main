@@ -3,6 +3,7 @@ goog.provide('cnmipss.handlers.events');
 goog.require('cljs.core');
 goog.require('cnmipss.validation');
 goog.require('cnmipss.util');
+goog.require('cnmipss.handlers.api');
 goog.require('struct.core');
 goog.require('ajax.core');
 goog.require('re_frame.core');
@@ -11,12 +12,12 @@ var search = document.getElementById("search-certified").value;
 return re_frame.core.dispatch.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"set-search-text","set-search-text",650643537),search], null));
 });
 cnmipss.handlers.events.pns_focus_invalid = (function cnmipss$handlers$events$pns_focus_invalid(){
-var map__44507 = cljs.core.deref.call(null,re_frame.core.subscribe.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085)], null)));
-var map__44507__$1 = ((((!((map__44507 == null)))?((((map__44507.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__44507.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__44507):map__44507);
-var company = cljs.core.get.call(null,map__44507__$1,new cljs.core.Keyword(null,"company","company",-340475075));
-var person = cljs.core.get.call(null,map__44507__$1,new cljs.core.Keyword(null,"person","person",-1059806875));
-var email = cljs.core.get.call(null,map__44507__$1,new cljs.core.Keyword(null,"email","email",1415816706));
-var tel = cljs.core.get.call(null,map__44507__$1,new cljs.core.Keyword(null,"tel","tel",224138159));
+var map__42718 = cljs.core.deref.call(null,re_frame.core.subscribe.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085)], null)));
+var map__42718__$1 = ((((!((map__42718 == null)))?((((map__42718.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__42718.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__42718):map__42718);
+var company = cljs.core.get.call(null,map__42718__$1,new cljs.core.Keyword(null,"company","company",-340475075));
+var person = cljs.core.get.call(null,map__42718__$1,new cljs.core.Keyword(null,"person","person",-1059806875));
+var email = cljs.core.get.call(null,map__42718__$1,new cljs.core.Keyword(null,"email","email",1415816706));
+var tel = cljs.core.get.call(null,map__42718__$1,new cljs.core.Keyword(null,"tel","tel",224138159));
 if(!((company == null))){
 return document.getElementById("pns-subs-cn").focus();
 } else {
@@ -44,21 +45,15 @@ var company = jq.call(null,"#pns-subs-cn").val();
 var person = jq.call(null,"#pns-subs-cp").val();
 var email = jq.call(null,"#pns-subs-em").val();
 var tel = jq.call(null,"#pns-subs-tel").val();
-var vec__44509 = struct.core.validate.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"company","company",-340475075),company,new cljs.core.Keyword(null,"person","person",-1059806875),person,new cljs.core.Keyword(null,"email","email",1415816706),email,new cljs.core.Keyword(null,"tel","tel",224138159),tel], null),new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"company","company",-340475075),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [struct.core.required,struct.core.string], null),new cljs.core.Keyword(null,"person","person",-1059806875),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [struct.core.required,struct.core.string], null),new cljs.core.Keyword(null,"email","email",1415816706),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cnmipss.validation.email_QMARK_], null),new cljs.core.Keyword(null,"tel","tel",224138159),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cnmipss.validation.tel_QMARK_], null)], null));
-var map__44512 = cljs.core.nth.call(null,vec__44509,(0),null);
-var map__44512__$1 = ((((!((map__44512 == null)))?((((map__44512.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__44512.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__44512):map__44512);
-var errors = map__44512__$1;
-var company__$1 = cljs.core.get.call(null,map__44512__$1,new cljs.core.Keyword(null,"company","company",-340475075));
-var person__$1 = cljs.core.get.call(null,map__44512__$1,new cljs.core.Keyword(null,"person","person",-1059806875));
-var email__$1 = cljs.core.get.call(null,map__44512__$1,new cljs.core.Keyword(null,"email","email",1415816706));
-var tel__$1 = cljs.core.get.call(null,map__44512__$1,new cljs.core.Keyword(null,"tel","tel",224138159));
-var values = cljs.core.nth.call(null,vec__44509,(1),null);
+var vec__42720 = struct.core.validate.call(null,new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"company","company",-340475075),company,new cljs.core.Keyword(null,"person","person",-1059806875),person,new cljs.core.Keyword(null,"email","email",1415816706),email,new cljs.core.Keyword(null,"tel","tel",224138159),tel], null),new cljs.core.PersistentArrayMap(null, 4, [new cljs.core.Keyword(null,"company","company",-340475075),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [struct.core.required,struct.core.string], null),new cljs.core.Keyword(null,"person","person",-1059806875),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [struct.core.required,struct.core.string], null),new cljs.core.Keyword(null,"email","email",1415816706),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cnmipss.validation.email_QMARK_], null),new cljs.core.Keyword(null,"tel","tel",224138159),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [cnmipss.validation.tel_QMARK_], null)], null));
+var errors = cljs.core.nth.call(null,vec__42720,(0),null);
+var values = cljs.core.nth.call(null,vec__42720,(1),null);
 re_frame.core.dispatch.call(null,new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085),errors], null));
 
 if(!((errors == null))){
 return cnmipss.handlers.events.pns_focus_invalid.call(null);
 } else {
-return null;
+return ajax.core.ajax_request.call(null,new cljs.core.PersistentArrayMap(null, 6, [new cljs.core.Keyword(null,"uri","uri",-774711847),"/webtools/api/subscribe-procurement",new cljs.core.Keyword(null,"method","method",55703592),new cljs.core.Keyword(null,"post","post",269697687),new cljs.core.Keyword(null,"params","params",710516235),cnmipss.util.edn__GT_json.call(null,new cljs.core.PersistentArrayMap(null, 6, [new cljs.core.Keyword(null,"company","company",-340475075),company,new cljs.core.Keyword(null,"person","person",-1059806875),person,new cljs.core.Keyword(null,"email","email",1415816706),email,new cljs.core.Keyword(null,"tel","tel",224138159),tel,new cljs.core.Keyword(null,"rfp_id","rfp_id",-2126089212),(cljs.core.truth_(new cljs.core.Keyword(null,"rfp_no","rfp_no",-1735597295).cljs$core$IFn$_invoke$arity$1(pns))?new cljs.core.Keyword(null,"id","id",-1388402092).cljs$core$IFn$_invoke$arity$1(pns):null),new cljs.core.Keyword(null,"ifb_id","ifb_id",1028058615),(cljs.core.truth_(new cljs.core.Keyword(null,"ifb_no","ifb_no",282350117).cljs$core$IFn$_invoke$arity$1(pns))?new cljs.core.Keyword(null,"id","id",-1388402092).cljs$core$IFn$_invoke$arity$1(pns):null)], null)),new cljs.core.Keyword(null,"format","format",-1306924766),ajax.core.json_request_format.call(null),new cljs.core.Keyword(null,"response-format","response-format",1664465322),cnmipss.util.full_response_format.call(null,ajax.core.json_response_format),new cljs.core.Keyword(null,"handler","handler",-195596612),cnmipss.handlers.api.subscribed.call(null,pns)], null));
 }
 });
 });
@@ -82,4 +77,4 @@ return null;
 });
 });
 
-//# sourceMappingURL=events.js.map?rel=1502404036752
+//# sourceMappingURL=events.js.map?rel=1502666782437

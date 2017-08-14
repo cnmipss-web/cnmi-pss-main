@@ -1,12 +1,13 @@
 goog.addDependency("base.js", ['goog'], []);
 goog.addDependency("../cljs/core.js", ['cljs.core'], ['goog.string', 'goog.object', 'goog.math.Integer', 'goog.string.StringBuffer', 'goog.array', 'goog.math.Long']);
-goog.addDependency("../clojure/string.js", ['clojure.string'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
+goog.addDependency("../devtools/async.js", ['devtools.async'], ['cljs.core', 'goog.async.nextTick']);
 goog.addDependency("../devtools/protocols.js", ['devtools.protocols'], ['cljs.core']);
 goog.addDependency("../devtools/context.js", ['devtools.context'], ['cljs.core']);
 goog.addDependency("../devtools/format.js", ['devtools.format'], ['cljs.core', 'devtools.context']);
 goog.addDependency("../devtools/defaults.js", ['devtools.defaults'], ['cljs.core']);
 goog.addDependency("../devtools/prefs.js", ['devtools.prefs'], ['cljs.core', 'devtools.defaults']);
 goog.addDependency("../devtools/version.js", ['devtools.version'], ['cljs.core']);
+goog.addDependency("../clojure/string.js", ['clojure.string'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
 goog.addDependency("../cljs/pprint.js", ['cljs.pprint'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer', 'clojure.string']);
 goog.addDependency("../clojure/set.js", ['clojure.set'], ['cljs.core']);
 goog.addDependency("../clojure/data.js", ['clojure.data'], ['cljs.core', 'clojure.set']);
@@ -23,7 +24,6 @@ goog.addDependency("../devtools/formatters/budgeting.js", ['devtools.formatters.
 goog.addDependency("../devtools/formatters/core.js", ['devtools.formatters.core'], ['devtools.formatters.helpers', 'devtools.formatters.markup', 'devtools.formatters.templating', 'devtools.formatters.state', 'cljs.core', 'devtools.reporter', 'devtools.protocols', 'devtools.formatters.budgeting', 'devtools.format', 'devtools.prefs']);
 goog.addDependency("../devtools/toolbox.js", ['devtools.toolbox'], ['devtools.formatters.markup', 'devtools.formatters.templating', 'cljs.core', 'devtools.protocols']);
 goog.addDependency("../cljs/stacktrace.js", ['cljs.stacktrace'], ['goog.string', 'cljs.core', 'clojure.string']);
-goog.addDependency("../devtools/async.js", ['devtools.async'], ['cljs.core', 'goog.async.nextTick']);
 goog.addDependency("../devtools/formatters.js", ['devtools.formatters'], ['devtools.formatters.core', 'devtools.util', 'cljs.core', 'goog.labs.userAgent.browser', 'devtools.context', 'devtools.prefs']);
 goog.addDependency("../devtools/hints.js", ['devtools.hints'], ['cljs.stacktrace', 'cljs.core', 'devtools.context', 'devtools.prefs']);
 goog.addDependency("../devtools/core.js", ['devtools.core'], ['devtools.toolbox', 'devtools.util', 'cljs.core', 'devtools.async', 'devtools.formatters', 'devtools.hints', 'devtools.defaults', 'devtools.prefs']);
@@ -75,7 +75,8 @@ goog.addDependency("../cuerdas/core.js", ['cuerdas.core'], ['goog.string', 'cljs
 goog.addDependency("../struct/core.js", ['struct.core'], ['cljs.core', 'cuerdas.core']);
 goog.addDependency("../cnmipss/util.js", ['cnmipss.util'], ['cljs.core']);
 goog.addDependency("../cnmipss/validation.js", ['cnmipss.validation'], ['struct.core', 'cljs.core']);
-goog.addDependency("../cnmipss/handlers/events.js", ['cnmipss.handlers.events'], ['ajax.core', 'struct.core', 'cnmipss.util', 'cljs.core', 'cnmipss.validation', 're_frame.core']);
+goog.addDependency("../cnmipss/handlers/api.js", ['cnmipss.handlers.api'], ['cljs.core', 're_frame.core']);
+goog.addDependency("../cnmipss/handlers/events.js", ['cnmipss.handlers.events'], ['ajax.core', 'struct.core', 'cnmipss.util', 'cljs.core', 'cnmipss.validation', 'cnmipss.handlers.api', 're_frame.core']);
 goog.addDependency("../cnmipss/components/forms.js", ['cnmipss.components.forms'], ['reagent.core', 'cnmipss.handlers.events', 'cljs.core', 'cnmipss.validation', 're_frame.core']);
 goog.addDependency("../cnmipss/components/buttons.js", ['cnmipss.components.buttons'], ['cnmipss.handlers.events', 'cljs.core', 're_frame.core']);
 goog.addDependency("../cljs_time/internal/core.js", ['cljs_time.internal.core'], ['goog.string', 'cljs.core', 'goog.string.format', 'clojure.string']);

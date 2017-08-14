@@ -20,3 +20,8 @@
  :pns-subs-errors
  (fn [db _]
    (:pns-subs-errors db)))
+
+(reg-sub
+ :subscribed
+ (fn [db _]
+   (:pns-subscribed db)))
