@@ -2,6 +2,7 @@
   (:require))
 
 (def default-db
-  {:search-text ""
+  {:active-view nil
+   :search-text ""
    :table []
    :pns-modal nil})

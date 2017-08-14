@@ -12,7 +12,7 @@
 
 (defn get-addendums
   [{:keys [id] :as pns}]
-  (let [addenda (->> @(rf/subscribe [:table])
+  (let [addenda (->> @(rf/subscribe [:page-data])
                     js->clj
                     clojure.walk/keywordize-keys
                     :addenda
@@ -21,7 +21,4 @@
     (if ((comp not empty?) addenda)
       [:button.btn.btn-warning.table-link.full-width
        {:onClick (events/download-addenda addenda)}
-       (str (count addenda) " Addendums")]))
-
-  ;Download all
-  )
+       (str (count addenda) " Addendums")])))

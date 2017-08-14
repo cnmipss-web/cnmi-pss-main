@@ -2,11 +2,17 @@
 goog.provide('cnmipss.handlers.rf_subs');
 goog.require('cljs.core');
 goog.require('re_frame.core');
+re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"db","db",993250759),(function (db,_){
+return db;
+}));
+re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"active-view","active-view",-1531689252),(function (db,_){
+return new cljs.core.Keyword(null,"active-view","active-view",-1531689252).cljs$core$IFn$_invoke$arity$1(db);
+}));
 re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"search-text","search-text",1559451259),(function (db,_){
 return new cljs.core.Keyword(null,"search-text","search-text",1559451259).cljs$core$IFn$_invoke$arity$1(db);
 }));
-re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"table","table",-564943036),(function (db,_){
-return new cljs.core.Keyword(null,"table","table",-564943036).cljs$core$IFn$_invoke$arity$1(db);
+re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"page-data","page-data",1443840710),(function (db,_){
+return new cljs.core.Keyword(null,"page-data","page-data",1443840710).cljs$core$IFn$_invoke$arity$1(db);
 }));
 re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"pns-modal","pns-modal",-205148737),(function (db,_){
 return new cljs.core.Keyword(null,"pns-modal","pns-modal",-205148737).cljs$core$IFn$_invoke$arity$1(db);
@@ -18,4 +24,4 @@ re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"subscribed","subscri
 return new cljs.core.Keyword(null,"pns-subscribed","pns-subscribed",-65220948).cljs$core$IFn$_invoke$arity$1(db);
 }));
 
-//# sourceMappingURL=rf_subs.js.map?rel=1502662380222
+//# sourceMappingURL=rf_subs.js.map?rel=1502754721167

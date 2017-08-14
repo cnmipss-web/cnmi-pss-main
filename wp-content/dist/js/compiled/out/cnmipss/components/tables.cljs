@@ -54,7 +54,7 @@
   (sort-by :cert_no certs))
 
 (defn lookup-table [state]
-  (let [table @(rf/subscribe [:table])]
+  (let [table @(rf/subscribe [:page-data])]
     [:div
      [forms/search-bar "Search Certified Personnel"]
      [table-list (-> table js->clj clojure.walk/keywordize-keys
@@ -124,7 +124,7 @@
         ^{:key (str "jva-" (:announce_no jva))} [jva-row jva])]]))
 
 (defn jva-table [state]
-  (let [table @(rf/subscribe [:table])]
+  (let [table @(rf/subscribe [:page-data])]
     [:div
      [forms/search-bar "Search Job Vacancies"]
      [jva-list table]]))
@@ -173,7 +173,7 @@
 
 (defn procurement-tables
   []
-  (let [table (-> @(rf/subscribe [:table]) js->clj clojure.walk/keywordize-keys)]
+  (let [table (-> @(rf/subscribe [:page-data]) js->clj clojure.walk/keywordize-keys)]
     [:div
      [modals/pns-modal]
      [pns-announcement-table :rfps table]

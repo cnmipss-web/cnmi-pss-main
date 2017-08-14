@@ -8,6 +8,7 @@
 
   :dependencies [[com.andrewmcveigh/cljs-time "0.5.0"]
                  [funcool/struct "1.0.0"]
+                 [klang "0.5.7"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.671"]
                  [org.clojure/core.async  "0.3.442"

@@ -1,19 +1,13 @@
 (ns cnmipss.core
-  (:require [cnmipss.handlers.re-frame]
+  (:require [cnmipss.handlers.rf-events]
             [cnmipss.handlers.rf-subs]
-            [cnmipss.components.forms :as forms]
-            [cnmipss.components.tables :as tables]
+            [cnmipss.views :refer [interactive-view]]
+            [klang.core :refer-macros [info!]]
             [reagent.core :as r]
             [re-frame.core :as rf]
             axe-core))
 
 (enable-console-print!)
-(defn log
-  [& args]
-  (mapv #(.log js/console %) args))
-(def jq js/jQuery)
-(defn path []
-  (.-pathname js/location))
 
 (defn on-js-reload []
   ;; optionally touch your app-state to force rerendering depending on
@@ -26,34 +20,16 @@
                  (if err (.error js/console err)
                      (let [{:keys [violations passes incomplete inapplicable]}
                            (-> data js->clj clojure.walk/keywordize-keys)]
-                       (log (str "Violations: " (count violations)) violations)
-                       (log (str "Passes: " (count passes)) passes)
-                       (log "Incomplete: " incomplete))))))
+                       (info! (str "Violations: " (count violations)) violations)
+                       (info! (str "Passes: " (count passes)) passes)
+                       (info! "Incomplete: " incomplete))))))
 (defn ^:export init!
   []
-  (case (path)
-        "/cnmi-certification-look-up-database/"
-        (-> jq
-            (.get  "/webtools/api/all-certs"
-                   (fn [data]
-                     (rf/dispatch [:load-table data])
-                     (r/render [tables/lookup-table]
-                               (js/document.getElementById "certification-lookup")))))
-        "/job-vacancy-announcements/"
-        (-> jq
-            (.get "/webtools/api/all-jvas"
-                  (fn [data]
-                    (rf/dispatch [:load-table data])
-                    (r/render [tables/jva-table]
-                              (js/document.getElementById "jva-table")))))
-        "/contractors-and-vendors/"
-        (-> jq
-            (.get "/webtools/api/all-procurement"
-                  (fn [data]
-                    (rf/dispatch [:load-table data])
-                    (r/render [tables/procurement-tables]
-                              (js/document.getElementById "procurement-tables")))))
-        (println "Path is" (path))))
+  (let [view (-> (.-pathname js/location) (clojure.string/replace #"/" "") keyword)]
+    (info! (str "Starting init! for " view))
+    (rf/dispatch [:initialize-db])
+    (rf/dispatch [:load-interactive-app view])
+    (r/render [interactive-view]
+              (.getElementById js/document "react-app"))))
 
- (init!)
-
+(init!)

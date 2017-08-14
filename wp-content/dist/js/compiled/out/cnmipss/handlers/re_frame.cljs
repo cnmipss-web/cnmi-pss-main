@@ -1,5 +1,6 @@
 (ns cnmipss.handlers.re-frame
   (:require [cnmipss.db :as db]
+            [ajax.core :as ajax]
             [re-frame.core :refer [dispatch reg-event-db]]))
 
 (reg-event-db

@@ -2,14 +2,24 @@
   (:require [re-frame.core :refer [reg-sub]]))
 
 (reg-sub
+ :db
+ (fn [db _]
+   db))
+
+(reg-sub
+ :active-view
+ (fn [db _]
+   (:active-view db)))
+
+(reg-sub
  :search-text
  (fn [db _]
    (:search-text db)))
 
 (reg-sub
- :table
+ :page-data
  (fn [db _]
-   (:table db)))
+   (:page-data db)))
 
 (reg-sub
  :pns-modal
