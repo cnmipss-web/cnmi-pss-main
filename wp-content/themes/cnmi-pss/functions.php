@@ -436,3 +436,20 @@ function cnmi_get_report_tabs() {
     }
     return $tabs;
 }
+
+function react_app_loading_component() {
+    echo '<div class="row">
+            <div id="react-app" class="searchable-table col-xs-12">
+              <div id="floatingCirclesG">
+                <div class="f_circleG" id="frotateG_01"></div>
+                <div class="f_circleG" id="frotateG_02"></div>
+                <div class="f_circleG" id="frotateG_03"></div>
+                <div class="f_circleG" id="frotateG_04"></div>
+                <div class="f_circleG" id="frotateG_05"></div>
+                <div class="f_circleG" id="frotateG_06"></div>
+                <div class="f_circleG" id="frotateG_07"></div>
+                <div class="f_circleG" id="frotateG_08"></div>
+              </div>
+            </div>
+          </div>';
+}
