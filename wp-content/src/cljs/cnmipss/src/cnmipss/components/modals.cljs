@@ -1,6 +1,7 @@
 (ns cnmipss.components.modals
   (:require [cnmipss.components.forms :as forms]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [klang.core :refer-macros [info!]]))
 
 (defn procurement-type
   [item]
@@ -11,6 +12,7 @@
 (defn pns-modal
   []
   (let [pns @(rf/subscribe [:pns-modal])]
+    (info! "Building pns-modal" pns @(rf/subscribe [:subscribed]))
     [:div#pns-modal.modal.fade {:role "dialog"
                                 :tabIndex "-1"
                                 :aria-labelledby "pns-modal-label"
@@ -30,8 +32,10 @@
         [forms/pns-subscribe pns]]
        [:div.modal-footer
         [:div.col-xs-6
-         (if (empty? (filter #(first (clojure.data/diff pns %)) @(rf/subscribe [:subscribed])))
-           [:p "You have successfully subscribed to this announcement."])]
+         (if (not (empty? (filter #(= (:id pns) (:id %)) @(rf/subscribe [:subscribed]))))
+           [:p#subscription-success {:aria-live "polite"} "You have successfully subscribed to this announcement."])
+         (if-let [message @(rf/subscribe [:subscription-error])]
+           [:p#subscription-error {:role "alert"} "Error: " message])]
         [:div.col-xs-6
          [:button.btn.btn-default {:data-dismiss "modal"} "Exit"]
          [:button.btn.btn-primary {:type "submit" :form "pns-subscribe"} "Subscribe"]]]]]]))

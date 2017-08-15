@@ -18,7 +18,7 @@
      (ajax/GET (get opts path)
                {:handler
                 (fn [data]
-                  (info! "Ajax returned" path data)
+                  ;(info! "Ajax returned" path data)
                   (dispatch [:store-data data]))}))
    (info! "Setting active-view: " path)
    (assoc db :active-view path)))
@@ -48,10 +48,15 @@
  (fn [db [_ errors]]
    (assoc db :pns-subs-errors errors)))
 
+(reg-event-db
+ :subscription-error
+ (fn [db [_ error]]
+   (assoc db :subscription-error error)))
 
 (reg-event-db
  :subscribed
  (fn [db [_ pns]]
+   (info! "Subscribed to" pns)
    (if-let [list (:subscribed db)]
      (assoc db :subscribed (conj list pns))
      (assoc db :subscribed [pns]))))

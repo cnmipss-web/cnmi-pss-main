@@ -17,11 +17,14 @@ return new cljs.core.Keyword(null,"page-data","page-data",1443840710).cljs$core$
 re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"pns-modal","pns-modal",-205148737),(function (db,_){
 return new cljs.core.Keyword(null,"pns-modal","pns-modal",-205148737).cljs$core$IFn$_invoke$arity$1(db);
 }));
+re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"subscription-error","subscription-error",417516592),(function (db,_){
+return new cljs.core.Keyword(null,"subscription-error","subscription-error",417516592).cljs$core$IFn$_invoke$arity$1(db);
+}));
 re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085),(function (db,_){
 return new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085).cljs$core$IFn$_invoke$arity$1(db);
 }));
 re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"subscribed","subscribed",1012088257),(function (db,_){
-return new cljs.core.Keyword(null,"pns-subscribed","pns-subscribed",-65220948).cljs$core$IFn$_invoke$arity$1(db);
+return new cljs.core.Keyword(null,"subscribed","subscribed",1012088257).cljs$core$IFn$_invoke$arity$1(db);
 }));
 
-//# sourceMappingURL=rf_subs.js.map?rel=1502754721167
+//# sourceMappingURL=rf_subs.js.map?rel=1502763249491

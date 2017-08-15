@@ -145,7 +145,9 @@
       [:br]
       [buttons/get-addendums row]
      [:button.btn.btn-primary.table-link.full-width
-       {:on-click #(rf/dispatch [:pns-subscribe row])
+      {:on-click (fn []
+                   (rf/dispatch [:pns-subscribe row])
+                   (rf/dispatch [:subscription-error nil]))
         :data-toggle "modal"
         :data-target "#pns-modal"
         :aria-controls "pns-modal"} "Subscribe"]])])

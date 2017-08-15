@@ -27,11 +27,16 @@
    (:pns-modal db)))
 
 (reg-sub
- :pns-subs-errors
+ :subscription-error
  (fn [db _]
+   (:subscription-error db)))
+
+(reg-sub
+ :pns-subs-errors
+ (fn [db _ ]
    (:pns-subs-errors db)))
 
 (reg-sub
  :subscribed
  (fn [db _]
-   (:pns-subscribed db)))
+   (:subscribed db)))
