@@ -1,17 +1,17 @@
 // Compiled by ClojureScript 1.9.671 {}
 goog.provide('cnmipss.util');
 goog.require('cljs.core');
-var transforms_42642 = new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"keys","keys",1068423698),cljs.core.keyword,new cljs.core.Keyword(null,"strs","strs",1175537277),cljs.core.str,new cljs.core.Keyword(null,"syms","syms",-1575891762),cljs.core.identity], null);
-var ret__37936__auto___42643 = (function (){
+var transforms_42865 = new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"keys","keys",1068423698),cljs.core.keyword,new cljs.core.Keyword(null,"strs","strs",1175537277),cljs.core.str,new cljs.core.Keyword(null,"syms","syms",-1575891762),cljs.core.identity], null);
+var ret__37934__auto___42866 = (function (){
 /**
  * Create a map in which, for each symbol S in vars, (keyword S) is a
  *   key mapping to the value of S in the current scope. If passed an optional
  *   :strs or :syms first argument, use strings or symbols as the keys instead.
  */
-cnmipss.util.keyed = ((function (transforms_42642){
+cnmipss.util.keyed = ((function (transforms_42865){
 return (function cnmipss$util$keyed(var_args){
-var G__42641 = arguments.length;
-switch (G__42641) {
+var G__42864 = arguments.length;
+switch (G__42864) {
 case 3:
 return cnmipss.util.keyed.cljs$core$IFn$_invoke$arity$3((arguments[(0)]),(arguments[(1)]),(arguments[(2)]));
 
@@ -24,22 +24,22 @@ default:
 throw (new Error([cljs.core.str.cljs$core$IFn$_invoke$arity$1("Invalid arity: "),cljs.core.str.cljs$core$IFn$_invoke$arity$1((arguments.length - (2)))].join('')));
 
 }
-});})(transforms_42642))
+});})(transforms_42865))
 ;
 
-cnmipss.util.keyed.cljs$core$IFn$_invoke$arity$3 = ((function (transforms_42642){
+cnmipss.util.keyed.cljs$core$IFn$_invoke$arity$3 = ((function (transforms_42865){
 return (function (_AMPERSAND_form,_AMPERSAND_env,vars){
-return cljs.core.sequence.call(null,cljs.core.seq.call(null,cljs.core.concat.call(null,cljs.core._conj.call(null,cljs.core.List.EMPTY,new cljs.core.Symbol("cnmipss.util","keyed","cnmipss.util/keyed",-191738580,null)),cljs.core._conj.call(null,cljs.core.List.EMPTY,new cljs.core.Keyword(null,"keys","keys",1068423698)),(function (){var x__37614__auto__ = vars;
-return cljs.core._conj.call(null,cljs.core.List.EMPTY,x__37614__auto__);
+return cljs.core.sequence.call(null,cljs.core.seq.call(null,cljs.core.concat.call(null,cljs.core._conj.call(null,cljs.core.List.EMPTY,new cljs.core.Symbol("cnmipss.util","keyed","cnmipss.util/keyed",-191738580,null)),cljs.core._conj.call(null,cljs.core.List.EMPTY,new cljs.core.Keyword(null,"keys","keys",1068423698)),(function (){var x__37612__auto__ = vars;
+return cljs.core._conj.call(null,cljs.core.List.EMPTY,x__37612__auto__);
 })())));
-});})(transforms_42642))
+});})(transforms_42865))
 ;
 
-cnmipss.util.keyed.cljs$core$IFn$_invoke$arity$4 = ((function (transforms_42642){
+cnmipss.util.keyed.cljs$core$IFn$_invoke$arity$4 = ((function (transforms_42865){
 return (function (_AMPERSAND_form,_AMPERSAND_env,key_type,vars){
-var transform = cljs.core.comp.call(null,cljs.core.partial.call(null,cljs.core.list,new cljs.core.Symbol(null,"quote","quote",1377916282,null)),transforms_42642.call(null,key_type));
+var transform = cljs.core.comp.call(null,cljs.core.partial.call(null,cljs.core.list,new cljs.core.Symbol(null,"quote","quote",1377916282,null)),transforms_42865.call(null,key_type));
 return cljs.core.into.call(null,cljs.core.PersistentArrayMap.EMPTY,cljs.core.map.call(null,cljs.core.juxt.call(null,transform,cljs.core.identity),vars));
-});})(transforms_42642))
+});})(transforms_42865))
 ;
 
 cnmipss.util.keyed.cljs$lang$maxFixedArity = 4;
@@ -63,4 +63,4 @@ return new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"he
 }));
 });
 
-//# sourceMappingURL=util.js.map?rel=1502664469792
+//# sourceMappingURL=util.js.map?rel=1502846510059

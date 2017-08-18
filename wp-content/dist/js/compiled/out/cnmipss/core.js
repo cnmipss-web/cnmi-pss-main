@@ -17,25 +17,25 @@ return axe.run((function (err,data){
 if(cljs.core.truth_(err)){
 return console.error(err);
 } else {
-var map__44871 = clojure.walk.keywordize_keys.call(null,cljs.core.js__GT_clj.call(null,data));
-var map__44871__$1 = ((((!((map__44871 == null)))?((((map__44871.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__44871.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__44871):map__44871);
-var violations = cljs.core.get.call(null,map__44871__$1,new cljs.core.Keyword(null,"violations","violations",835165468));
-var passes = cljs.core.get.call(null,map__44871__$1,new cljs.core.Keyword(null,"passes","passes",-2141861841));
-var incomplete = cljs.core.get.call(null,map__44871__$1,new cljs.core.Keyword(null,"incomplete","incomplete",-998567478));
-var inapplicable = cljs.core.get.call(null,map__44871__$1,new cljs.core.Keyword(null,"inapplicable","inapplicable",-1070062408));
-klang.core.add_log_BANG_.call(null,"cnmipss.core","INFO",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword("klang.core","meta-data","klang.core/meta-data",765484551),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"env","env",-1815813235),new cljs.core.PersistentArrayMap(null, 7, [new cljs.core.Symbol(null,"err","err",-448925678,null),err,new cljs.core.Symbol(null,"data","data",1407862150,null),data,new cljs.core.Symbol(null,"map__44871","map__44871",757544027,null),map__44871__$1,new cljs.core.Symbol(null,"violations","violations",-1819270301,null),violations,new cljs.core.Symbol(null,"passes","passes",-501330314,null),passes,new cljs.core.Symbol(null,"incomplete","incomplete",641964049,null),incomplete,new cljs.core.Symbol(null,"inapplicable","inapplicable",570469119,null),inapplicable], null),new cljs.core.Keyword(null,"trace","trace",-1082747415),(function (){try{throw (new Error());
-}catch (e44873){var e__38742__auto__ = e44873;
-return e__38742__auto__;
+var map__51678 = clojure.walk.keywordize_keys.call(null,cljs.core.js__GT_clj.call(null,data));
+var map__51678__$1 = ((((!((map__51678 == null)))?((((map__51678.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__51678.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__51678):map__51678);
+var violations = cljs.core.get.call(null,map__51678__$1,new cljs.core.Keyword(null,"violations","violations",835165468));
+var passes = cljs.core.get.call(null,map__51678__$1,new cljs.core.Keyword(null,"passes","passes",-2141861841));
+var incomplete = cljs.core.get.call(null,map__51678__$1,new cljs.core.Keyword(null,"incomplete","incomplete",-998567478));
+var inapplicable = cljs.core.get.call(null,map__51678__$1,new cljs.core.Keyword(null,"inapplicable","inapplicable",-1070062408));
+klang.core.add_log_BANG_.call(null,"cnmipss.core","INFO",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword("klang.core","meta-data","klang.core/meta-data",765484551),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"env","env",-1815813235),new cljs.core.PersistentArrayMap(null, 7, [new cljs.core.Symbol(null,"err","err",-448925678,null),err,new cljs.core.Symbol(null,"data","data",1407862150,null),data,new cljs.core.Symbol(null,"map__51678","map__51678",-1918183432,null),map__51678__$1,new cljs.core.Symbol(null,"violations","violations",-1819270301,null),violations,new cljs.core.Symbol(null,"passes","passes",-501330314,null),passes,new cljs.core.Symbol(null,"incomplete","incomplete",641964049,null),incomplete,new cljs.core.Symbol(null,"inapplicable","inapplicable",570469119,null),inapplicable], null),new cljs.core.Keyword(null,"trace","trace",-1082747415),(function (){try{throw (new Error());
+}catch (e51680){var e__42921__auto__ = e51680;
+return e__42921__auto__;
 }})()], null)], null),[cljs.core.str.cljs$core$IFn$_invoke$arity$1("Violations: "),cljs.core.str.cljs$core$IFn$_invoke$arity$1(cljs.core.count.call(null,violations))].join(''),violations);
 
-klang.core.add_log_BANG_.call(null,"cnmipss.core","INFO",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword("klang.core","meta-data","klang.core/meta-data",765484551),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"env","env",-1815813235),new cljs.core.PersistentArrayMap(null, 7, [new cljs.core.Symbol(null,"err","err",-448925678,null),err,new cljs.core.Symbol(null,"data","data",1407862150,null),data,new cljs.core.Symbol(null,"map__44871","map__44871",757544027,null),map__44871__$1,new cljs.core.Symbol(null,"violations","violations",-1819270301,null),violations,new cljs.core.Symbol(null,"passes","passes",-501330314,null),passes,new cljs.core.Symbol(null,"incomplete","incomplete",641964049,null),incomplete,new cljs.core.Symbol(null,"inapplicable","inapplicable",570469119,null),inapplicable], null),new cljs.core.Keyword(null,"trace","trace",-1082747415),(function (){try{throw (new Error());
-}catch (e44874){var e__38742__auto__ = e44874;
-return e__38742__auto__;
+klang.core.add_log_BANG_.call(null,"cnmipss.core","INFO",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword("klang.core","meta-data","klang.core/meta-data",765484551),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"env","env",-1815813235),new cljs.core.PersistentArrayMap(null, 7, [new cljs.core.Symbol(null,"err","err",-448925678,null),err,new cljs.core.Symbol(null,"data","data",1407862150,null),data,new cljs.core.Symbol(null,"map__51678","map__51678",-1918183432,null),map__51678__$1,new cljs.core.Symbol(null,"violations","violations",-1819270301,null),violations,new cljs.core.Symbol(null,"passes","passes",-501330314,null),passes,new cljs.core.Symbol(null,"incomplete","incomplete",641964049,null),incomplete,new cljs.core.Symbol(null,"inapplicable","inapplicable",570469119,null),inapplicable], null),new cljs.core.Keyword(null,"trace","trace",-1082747415),(function (){try{throw (new Error());
+}catch (e51681){var e__42921__auto__ = e51681;
+return e__42921__auto__;
 }})()], null)], null),[cljs.core.str.cljs$core$IFn$_invoke$arity$1("Passes: "),cljs.core.str.cljs$core$IFn$_invoke$arity$1(cljs.core.count.call(null,passes))].join(''),passes);
 
-return klang.core.add_log_BANG_.call(null,"cnmipss.core","INFO",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword("klang.core","meta-data","klang.core/meta-data",765484551),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"env","env",-1815813235),new cljs.core.PersistentArrayMap(null, 7, [new cljs.core.Symbol(null,"err","err",-448925678,null),err,new cljs.core.Symbol(null,"data","data",1407862150,null),data,new cljs.core.Symbol(null,"map__44871","map__44871",757544027,null),map__44871__$1,new cljs.core.Symbol(null,"violations","violations",-1819270301,null),violations,new cljs.core.Symbol(null,"passes","passes",-501330314,null),passes,new cljs.core.Symbol(null,"incomplete","incomplete",641964049,null),incomplete,new cljs.core.Symbol(null,"inapplicable","inapplicable",570469119,null),inapplicable], null),new cljs.core.Keyword(null,"trace","trace",-1082747415),(function (){try{throw (new Error());
-}catch (e44875){var e__38742__auto__ = e44875;
-return e__38742__auto__;
+return klang.core.add_log_BANG_.call(null,"cnmipss.core","INFO",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword("klang.core","meta-data","klang.core/meta-data",765484551),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"env","env",-1815813235),new cljs.core.PersistentArrayMap(null, 7, [new cljs.core.Symbol(null,"err","err",-448925678,null),err,new cljs.core.Symbol(null,"data","data",1407862150,null),data,new cljs.core.Symbol(null,"map__51678","map__51678",-1918183432,null),map__51678__$1,new cljs.core.Symbol(null,"violations","violations",-1819270301,null),violations,new cljs.core.Symbol(null,"passes","passes",-501330314,null),passes,new cljs.core.Symbol(null,"incomplete","incomplete",641964049,null),incomplete,new cljs.core.Symbol(null,"inapplicable","inapplicable",570469119,null),inapplicable], null),new cljs.core.Keyword(null,"trace","trace",-1082747415),(function (){try{throw (new Error());
+}catch (e51682){var e__42921__auto__ = e51682;
+return e__42921__auto__;
 }})()], null)], null),"Incomplete: ",incomplete);
 }
 }));
@@ -43,8 +43,8 @@ return e__38742__auto__;
 cnmipss.core.init_BANG_ = (function cnmipss$core$init_BANG_(){
 var view = cljs.core.keyword.call(null,clojure.string.replace.call(null,location.pathname,/\//,""));
 klang.core.add_log_BANG_.call(null,"cnmipss.core","INFO",new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword("klang.core","meta-data","klang.core/meta-data",765484551),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"env","env",-1815813235),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Symbol(null,"view","view",-1406440955,null),view], null),new cljs.core.Keyword(null,"trace","trace",-1082747415),(function (){try{throw (new Error());
-}catch (e44876){var e__38742__auto__ = e44876;
-return e__38742__auto__;
+}catch (e51683){var e__42921__auto__ = e51683;
+return e__42921__auto__;
 }})()], null)], null),[cljs.core.str.cljs$core$IFn$_invoke$arity$1("Starting init! for "),cljs.core.str.cljs$core$IFn$_invoke$arity$1(view)].join(''));
 
 re_frame.core.dispatch.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"initialize-db","initialize-db",230998432)], null));
@@ -56,4 +56,4 @@ return reagent.core.render.call(null,new cljs.core.PersistentVector(null, 1, 5, 
 goog.exportSymbol('cnmipss.core.init_BANG_', cnmipss.core.init_BANG_);
 cnmipss.core.init_BANG_.call(null);
 
-//# sourceMappingURL=core.js.map?rel=1502766047213
+//# sourceMappingURL=core.js.map?rel=1502849686140

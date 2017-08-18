@@ -13,6 +13,7 @@
                  [org.clojure/clojurescript "1.9.671"]
                  [org.clojure/core.async  "0.3.442"
                   :exclusions [org.clojure/tools.reader]]
+                 [org.clojure/tools.logging "0.4.0"]
                  [reagent "0.7.0"]
                  [re-frame "0.9.4"]
                  [cljs-ajax "0.6.0"]]
@@ -47,7 +48,7 @@
                            :npm-deps {:axe-core "2.3.1"}
                            :language-in :ecmascript5
                            :language-out :ecmascript3}}
-               ;; This next build is an compressed minified build for
+               ;; This next build is an compressed minified build forq
                ;; production. You can build this with:
                ;; lein cljsbuild once min
                {:id "min"

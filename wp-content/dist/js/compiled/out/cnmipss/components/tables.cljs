@@ -108,7 +108,7 @@
   (let [th-props {:scope "col"}]
     [:table.lookup-list
      [:caption.sr-only "Job Vacancy List Table"]
-     [:tbody
+     [:thead
       [:tr.row.jva-list-row
        [:th.col-xs-1.text-center th-props "Number"]
        [:th.col-xs-2.text-center th-props "Position/Title"]
@@ -117,7 +117,8 @@
        [:th.col-xs-1.text-center th-props "Closing Date"]
        [:th.col-xs-3.text-center th-props "Salary"]
        [:th.col-xs-2.text-center th-props "Location"]
-       [:th.col-xs-1.text-center th-props "Link"]]
+       [:th.col-xs-1.text-center th-props "Link"]]]
+     [:tbody
       (for [jva (-> table js->clj clojure.walk/keywordize-keys 
                     (filter-by :announce_no :position :location)
                     sort-jvas)]
@@ -129,10 +130,15 @@
      [forms/search-bar "Search Job Vacancies"]
      [jva-list table]]))
 
+(defn expired?
+  "Determine if a pns-announcement has been close for more than 48 hours"
+  [{:keys [close_date]}]
+  (time/after? (time/minus (time/now) (time/days 2)) (parse-date close_date)))
 
 (defn pns-announcement-row
   [row]
-  [:tr.row.jva-list-row {:class (if (force-close? row) "closed")}
+  [:tr.row.jva-list-row {:class (if (force-close? row) "closed")
+                         :style (if (expired? row) {:display "none"})}
    [:td.col-xs-1.text-center (or (:rfp_no row) (:ifb_no row))]
    [:td.col-xs-1 (:open_date row)]
    [:td.col-xs-1 (:close_date row)]

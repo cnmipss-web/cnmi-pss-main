@@ -53,8 +53,8 @@
             color: inherit;
         }
 
-        tr.row {
-            &:nth-of-type(2n+3) {
+        tr.row { 
+            &:nth-of-type(even) {
                 background-color: lighten($light-gold, 35);
             }
             &.closed {

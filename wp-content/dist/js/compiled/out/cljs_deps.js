@@ -14,9 +14,9 @@ goog.addDependency("../devtools/util.js", ['devtools.util'], ['cljs.core', 'devt
 goog.addDependency("../devtools/munging.js", ['devtools.munging'], ['devtools.util', 'cljs.core', 'goog.object', 'goog.string.StringBuffer', 'devtools.context', 'clojure.string']);
 goog.addDependency("../devtools/formatters/helpers.js", ['devtools.formatters.helpers'], ['cljs.core', 'devtools.protocols', 'devtools.format', 'devtools.prefs', 'devtools.munging']);
 goog.addDependency("../devtools/formatters/state.js", ['devtools.formatters.state'], ['cljs.core']);
+goog.addDependency("../devtools/formatters/printing.js", ['devtools.formatters.printing'], ['devtools.formatters.helpers', 'devtools.formatters.state', 'cljs.core', 'devtools.protocols', 'devtools.format', 'devtools.prefs']);
 goog.addDependency("../clojure/walk.js", ['clojure.walk'], ['cljs.core']);
 goog.addDependency("../devtools/formatters/templating.js", ['devtools.formatters.templating'], ['devtools.formatters.helpers', 'devtools.formatters.state', 'devtools.util', 'cljs.core', 'devtools.protocols', 'cljs.pprint', 'clojure.string', 'clojure.walk']);
-goog.addDependency("../devtools/formatters/printing.js", ['devtools.formatters.printing'], ['devtools.formatters.helpers', 'devtools.formatters.state', 'cljs.core', 'devtools.protocols', 'devtools.format', 'devtools.prefs']);
 goog.addDependency("../devtools/formatters/markup.js", ['devtools.formatters.markup'], ['devtools.formatters.helpers', 'devtools.formatters.printing', 'devtools.formatters.templating', 'devtools.formatters.state', 'cljs.core', 'devtools.munging']);
 goog.addDependency("../devtools/reporter.js", ['devtools.reporter'], ['devtools.util', 'cljs.core']);
 goog.addDependency("../devtools/formatters/budgeting.js", ['devtools.formatters.budgeting'], ['devtools.formatters.helpers', 'devtools.formatters.markup', 'devtools.formatters.templating', 'devtools.formatters.state', 'cljs.core']);
