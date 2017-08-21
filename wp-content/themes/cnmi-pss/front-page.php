@@ -26,21 +26,29 @@ get_header(); ?>
                 $news = new WP_Query(array(
                     'posts_per_page' => 3,
                 ));
-                $showcases = new WP_Query(array(
-                    'post_type' => 'showcase',
-                    'posts_per_page' => 3,
-                ));
-                while($news->have_posts()):
-                             $news->the_post();?>
-                    <div class="col-xs-12 col-sm-4">
-                        <a title="Link to <?php the_title()?> article" href=<?php the_permalink() ?>>
-                            <div class="news-grid-card">
-                                <h2 class="news-grid-title"><?php the_title(); ?></h2>
-                            </div>
-                            <?php the_post_thumbnail('full', array('class' => 'news-grid-img')); ?>
-                        </a>
-                    </div>
-                <?php endwhile; ?>
+                $news->the_post(); ?>
+                <div class="col-xs-12 col-sm-8">
+                    <a title="Link to <?php the_title()?> article" href=<?php the_permalink() ?>>
+                        <div class="news-grid-card-prime">
+                            <h2 class="news-grid-title"><?php the_title(); ?></h2>
+                        </div>
+                        <?php the_post_thumbnail('full', array('class' => 'news-grid-img-prime')); ?>
+                    </a>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <?php 
+                    while($news->have_posts()):
+                    $news->the_post();?>
+                        <div class="col-xs-12" style="padding: 0px; margin-bottom: -6px;">
+                            <a title="Link to <?php the_title()?> article" href=<?php the_permalink() ?>>
+                                <div class="news-grid-card">
+                                    <h2 class="news-grid-title"><?php the_title(); ?></h2>
+                                </div>
+                                <?php the_post_thumbnail('full', array('class' => 'news-grid-img')); ?>
+                            </a>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
             </div>
             <!-- <div class="row">
                  <div class="col-xs-10">

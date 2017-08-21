@@ -6,7 +6,8 @@
     }
     a {
         z-index: 2;
-        &:focus .news-grid-card, & .news-grid-card:hover {
+        &:focus .news-grid-card, & .news-grid-card:hover,
+        &:focus .news-grid-card-prime, & .news-grid-card-prime:hover {
             color: black;
             background: transparentize(black, 1);
             .news-grid-title, .showcase-grid-title {
@@ -14,7 +15,7 @@
             }
         }
     }
-    .news-grid-card {
+    .news-grid-card, .news-grid-card-prime {
         position: absolute;
         background: transparentize(black, 0.5);
         padding: 0px;
@@ -41,6 +42,7 @@
 .news-grid-img {
     position: relative;
     z-index: 0;
+    width: 100%;
 }
 
 .news-grid-img, .news-grid-card, .showcase-grid-card {
@@ -48,13 +50,28 @@
         height: 100%;
     }
     @include for-sm {
-        height: $sm-width * 3 / 16;
+        height: $sm-width * 4.5 / 16 * 2/3;
     }
     @include for-md {
-        height: $md-width * 3 / 16
+        height: $md-width * 4.5 / 16*2/3;
     }
     @include for-lg {
-        height: $lg-width * 3 /16;
+        height: $lg-width * 4.5 /16 *2/3;
     }
+}
 
+.news-grid-img-prime, .news-grid-card-prime, .showcase-grid-card {
+    @include for-xs {
+        width: 100%;
+        height: 100%;
+    }
+    @include for-sm {
+        height: $sm-width *9 / 16 * 2/3;
+    }
+    @include for-md {
+        height: $md-width * 9 /16 * 2/3;
+    }
+    @include for-lg {
+        height: $lg-width * 9 /16 * 2/3;
+    }
 }
