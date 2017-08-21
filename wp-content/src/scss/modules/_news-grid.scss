@@ -1,0 +1,60 @@
+.site-main .row.news-grid {
+    padding: 1px;
+    @for $i from 1 through 12 {
+        >.col-xs-#{$i} { padding: 0px; }
+        >.col-sm-#{$i} { padding: 0px; }
+    }
+    a {
+        z-index: 2;
+        &:focus .news-grid-card, & .news-grid-card:hover {
+            color: black;
+            background: transparentize(black, 1);
+            .news-grid-title, .showcase-grid-title {
+                background: transparentize(black, 0.35);
+            }
+        }
+    }
+    .news-grid-card {
+        position: absolute;
+        background: transparentize(black, 0.5);
+        padding: 0px;
+        z-index: 1;
+        width: 100%;
+
+        @include custom-transition(background 0.5s, ease, 0s);
+    }
+}
+
+.news-grid-title, .showcase-grid-title {
+    @include custom-transition(background 0.5s, ease, 0s);
+    color: white;
+    background: transparentize(black, 1);
+    width: 100%;
+    position: absolute;
+    margin-top: 20px;
+    padding-left: 15px;
+    z-index: 2;
+
+}
+
+
+.news-grid-img {
+    position: relative;
+    z-index: 0;
+}
+
+.news-grid-img, .news-grid-card, .showcase-grid-card {
+    @include for-xs {
+        height: 100%;
+    }
+    @include for-sm {
+        height: $sm-width * 3 / 16;
+    }
+    @include for-md {
+        height: $md-width * 3 / 16
+    }
+    @include for-lg {
+        height: $lg-width * 3 /16;
+    }
+
+}
