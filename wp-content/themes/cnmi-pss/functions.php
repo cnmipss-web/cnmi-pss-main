@@ -190,10 +190,10 @@ function cnmi_header_dropdown($nav_category) {
 function cnmi_search_form ($location) {
     echo '<form class="form-inline l-nav-form" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
     <div class="form-group">
-      <label for="' . $location . '-search-bar" class="screen-reader-text">Search:</label>
-      <input class="form-control" type="search" placeholder="Search" id="' . $location . '-search-bar" name="s"/>
+      <label for="' . $location . '-search" class="screen-reader-text">Search:</label>
+      <input class="form-control" type="search" placeholder="Search" id="' . $location . '-search" name="s"/>
     </div>
-      <button class="btn btn-default form-control" type="submit" id="' . $location . '-search-submit">Search</button>
+    <button class="btn btn-default form-control" type="submit" id="' . $location . '-search-submit">Search</button>
   </form>';
 }
 
@@ -287,7 +287,7 @@ function cnmi_school_info($slug, $type = 'full') {
     if($type == 'full' || in_array('ema', $type))
         $contact_info .= $email;
 
-    $contact_info .= '<a href="' . get_field('website') .'">' . get_the_title() . ' Website</a>';
+    $contact_info .= '<a href="' . get_field('website') .'">' . 'School Websites Coming Soon</a>'; // get_the_title() . ' Website</a>';
     $second_column .= $contact_info . '</p></div>';
 
     echo $first_column . $second_column;
@@ -368,7 +368,12 @@ function cnmi_create_school_btns($level_list) {
             } else {
                 $div_class= "col-xs-6 col-sm-3";
             }
-            $elem = '<div class="' . $div_class . '"><a href="' . get_the_permalink() . '" title="' . get_field('long_name') . '" class="btn btn-school">' . '<span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
+            $elem = '<div class="' . $div_class . '"><a href="' . get_the_permalink() . '"';
+            if ($level != 'Head Start') {
+                $elem .= 'title="' . get_field('long_name') . '" class="btn btn-school"><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
+            } else {
+                $elem .= ' class="btn btn-school"><span>' . get_field('short_name') . '</span></a></div>';
+            }
             echo $elem;
         }
     }

@@ -11,7 +11,7 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
     <div class="row">
-    <header class="entry-header col-xs-12">
+    <header class="search-entry-header col-xs-12">
         <?php
 	$name = get_the_title();
 	$title = get_field('job_title');
@@ -25,17 +25,17 @@
 	$post_type = preg_replace('/\_/', ' ', $post_type);
 	$post_type = ucwords($post_type);
 	echo '<h2 class="search-entry-title">' .
-	     $post_type . ': ' .
+             '<span class="screen-reader-text">Search Result: ' $post_type . ' ' . $name . '</span>' .
+	     '<span aria-hidden="true">' . $post_type . '</span>: </h2>'
 	     '<a href="' .
 	     esc_url(get_permalink()) .
 	     '" rel="bookmark">' .
 	     $name .
-	     '</a>' .
-	     '</h2>'; ?>
+	     '</a>'; ?>
 
         <?php if ( 'post' === get_post_type() ) : ?>
             <div class="search-entry-meta">
-                <?php cnmi_pss_posted_on(); ?>
+                <p>&nbsp; <?php echo get_the_date(); ?></p>
             </div>
             <!-- .entry-meta -->
         <?php endif; ?>

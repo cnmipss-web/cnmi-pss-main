@@ -12,7 +12,7 @@ get_header(); ?>
     <main id="main" class="site-main" role="main">
         <h1 class="sr-only">CNMI PSS Main Page</h1>
         <br/>
-        <div class="container">
+        <div class="container news-grid-container">
             <!-- <div class="row">
                  <div class="col-xs-10">
                  <h2>PSS News</h2>
