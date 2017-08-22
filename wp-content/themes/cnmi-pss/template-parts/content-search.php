@@ -25,8 +25,8 @@
 	$post_type = preg_replace('/\_/', ' ', $post_type);
 	$post_type = ucwords($post_type);
 	echo '<h2 class="search-entry-title">' .
-             '<span class="screen-reader-text">Search Result: ' $post_type . ' ' . $name . '</span>' .
-	     '<span aria-hidden="true">' . $post_type . '</span>: </h2>'
+             '<span class="screen-reader-text">Search Result: '. $post_type . ' ' . $name . '</span>' .
+	     '<span aria-hidden="true">' . $post_type . ':</span> </h2>' .
 	     '<a href="' .
 	     esc_url(get_permalink()) .
 	     '" rel="bookmark">' .

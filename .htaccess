@@ -32,17 +32,9 @@
 RewriteEngine On
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
-#Rewrite Trailing Slash on webtools
-RewriteRule ^webtools$ webtools/ [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
-
-#Enable Auth Headers for JWT Authentication
-RewriteCond %{HTTP:Authorization} ^(.*)
-RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
-SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
-
 </IfModule>
 
 # END WordPress

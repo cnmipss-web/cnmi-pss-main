@@ -19,11 +19,9 @@ get_header(); ?>
             the_post();?>
                 <div class="row">
                     <div class="col-xs-12 col-sm-10 col-sm-push-1">
-                        <header>
-                            <h1 class="page-title">
-                                <?php the_title(); ?>
-                            </h1>
-                        </header>
+                        <h1 class="page-title">
+                            <?php the_title(); ?>
+                        </h1>
                         <?php the_content(); ?>
                     </div>
                 </div>
