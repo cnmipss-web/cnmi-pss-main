@@ -1,5 +1,11 @@
+.site-main .news-grid-container {
+    background-color: #eee;
+    border: none;
+    box-shadow: none;
+}
+
 .site-main .row.news-grid {
-    padding: 1px;
+    padding: 0px;
     @for $i from 1 through 12 {
         >.col-xs-#{$i} { padding: 0px; }
         >.col-sm-#{$i} { padding: 0px; }
@@ -48,15 +54,16 @@
 .news-grid-img, .news-grid-card, .showcase-grid-card {
     @include for-xs {
         height: 100%;
+        padding: 0;
     }
     @include for-sm {
-        height: $sm-width * 4.5 / 16 * 2/3;
+        height: round($sm-width *3/16);
     }
     @include for-md {
-        height: $md-width * 4.5 / 16*2/3;
+        height: round($md-width *3/16)
     }
     @include for-lg {
-        height: $lg-width * 4.5 /16 *2/3;
+        height: round($lg-width *3/16);
     }
 }
 
@@ -66,12 +73,12 @@
         height: 100%;
     }
     @include for-sm {
-        height: $sm-width *9 / 16 * 2/3;
+        height: round($sm-width *3/8)+1px;
     }
     @include for-md {
-        height: $md-width * 9 /16 * 2/3;
+        height: round($md-width *3/8);
     }
     @include for-lg {
-        height: $lg-width * 9 /16 * 2/3;
+        height: round($lg-width *3/8)-1px;
     }
 }
