@@ -18,7 +18,7 @@
      (ajax/GET (get opts path)
                {:handler
                 (fn [data]
-                  ;(info! "Ajax returned" path data)
+                  (info! (str "GET " (get opts path) " returned") data)
                   (dispatch [:store-data data]))}))
    (info! "Setting active-view: " path)
    (assoc db :active-view path)))
