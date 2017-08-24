@@ -20,16 +20,18 @@
                  (if err (.error js/console err)
                      (let [{:keys [violations passes incomplete inapplicable]}
                            (-> data js->clj clojure.walk/keywordize-keys)]
-                       (info! (str "Violations: " (count violations)) violations)
-                       (info! (str "Passes: " (count passes)) passes)
-                       (info! "Incomplete: " incomplete))))))
+                       (info! (str "Violations: " (count violations)))
+                       (info! (str "Passes: " (count passes)))
+                       (info! (str "Incomplete: " (count incomplete))))))))
+
 (defn ^:export init!
   []
   (let [view (-> (.-pathname js/location) (clojure.string/replace #"/" "") keyword)]
-    (info! (str "Starting init! for " view))
-    (rf/dispatch [:initialize-db])
-    (rf/dispatch [:load-interactive-app view])
-    (r/render [interactive-view]
-              (.getElementById js/document "react-app"))))
+    (when-let [target (.getElementById js/document "react-app")]
+      (info! (str "Starting init! for " view))
+      (rf/dispatch [:initialize-db])
+      (rf/dispatch [:load-interactive-app view])
+      (r/render [interactive-view] target))))
 
 (init!)
+ 

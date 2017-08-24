@@ -11,9 +11,9 @@ return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMP
 cnmipss.components.forms.check_validity = (function cnmipss$components$forms$check_validity(k,id){
 return (function (){
 var existing_errors = cljs.core.deref.call(null,re_frame.core.subscribe.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085)], null)));
-var vec__51421 = cnmipss.handlers.events.validate_subscription.call(null);
-var errors = cljs.core.nth.call(null,vec__51421,(0),null);
-var values = cljs.core.nth.call(null,vec__51421,(1),null);
+var vec__42981 = cnmipss.handlers.events.validate_subscription.call(null);
+var errors = cljs.core.nth.call(null,vec__42981,(0),null);
+var values = cljs.core.nth.call(null,vec__42981,(1),null);
 var new_errors = cljs.core.assoc.call(null,existing_errors,k,cljs.core.get.call(null,errors,k));
 cljs.core.println.call(null,existing_errors,errors,new_errors);
 
@@ -30,13 +30,13 @@ return null;
 });
 cnmipss.components.forms.pns_subscribe = (function cnmipss$components$forms$pns_subscribe(pns){
 return reagent.core.create_class.call(null,new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"component-did-update","component-did-update",-1468549173),cnmipss.handlers.events.pns_focus_invalid,new cljs.core.Keyword(null,"display-name","display-name",694513143),"pns-subscribe",new cljs.core.Keyword(null,"reagent-render","reagent-render",-985383853),(function (pns__$1){
-var map__51424 = cljs.core.deref.call(null,re_frame.core.subscribe.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085)], null)));
-var map__51424__$1 = ((((!((map__51424 == null)))?((((map__51424.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__51424.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__51424):map__51424);
-var errors = map__51424__$1;
-var company = cljs.core.get.call(null,map__51424__$1,new cljs.core.Keyword(null,"company","company",-340475075));
-var person = cljs.core.get.call(null,map__51424__$1,new cljs.core.Keyword(null,"person","person",-1059806875));
-var email = cljs.core.get.call(null,map__51424__$1,new cljs.core.Keyword(null,"email","email",1415816706));
-var tel = cljs.core.get.call(null,map__51424__$1,new cljs.core.Keyword(null,"tel","tel",224138159));
+var map__42984 = cljs.core.deref.call(null,re_frame.core.subscribe.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"pns-subs-errors","pns-subs-errors",-1721584085)], null)));
+var map__42984__$1 = ((((!((map__42984 == null)))?((((map__42984.cljs$lang$protocol_mask$partition0$ & (64))) || ((cljs.core.PROTOCOL_SENTINEL === map__42984.cljs$core$ISeq$)))?true:false):false))?cljs.core.apply.call(null,cljs.core.hash_map,map__42984):map__42984);
+var errors = map__42984__$1;
+var company = cljs.core.get.call(null,map__42984__$1,new cljs.core.Keyword(null,"company","company",-340475075));
+var person = cljs.core.get.call(null,map__42984__$1,new cljs.core.Keyword(null,"person","person",-1059806875));
+var email = cljs.core.get.call(null,map__42984__$1,new cljs.core.Keyword(null,"email","email",1415816706));
+var tel = cljs.core.get.call(null,map__42984__$1,new cljs.core.Keyword(null,"tel","tel",224138159));
 return new cljs.core.PersistentVector(null, 6, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"form#pns-subscribe.cnmipss-form","form#pns-subscribe.cnmipss-form",-1187424150),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"on-submit","on-submit",1227871159),cnmipss.handlers.events.pns_subscription.call(null,pns__$1)], null),(function (){var id = "pns-subs-cn";
 return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div.form-group","div.form-group",-1721134770),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"label","label",1718410804),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"for","for",-1323786319),id], null),"Company Name ",new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"span","span",1394872991),company], null)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"input.form-control","input.form-control",-1123419636),new cljs.core.PersistentArrayMap(null, 5, [new cljs.core.Keyword(null,"id","id",-1388402092),id,new cljs.core.Keyword(null,"name","name",1843675177),"company-name",new cljs.core.Keyword(null,"type","type",1174270348),"text",new cljs.core.Keyword(null,"aria-invalid","aria-invalid",242523818),!((company == null)),new cljs.core.Keyword(null,"on-change","on-change",-732046149),cnmipss.components.forms.check_validity.call(null,new cljs.core.Keyword(null,"company","company",-340475075),id)], null)], null)], null);
 })(),(function (){var id = "pns-subs-cp";
@@ -49,4 +49,4 @@ return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMP
 })], null));
 });
 
-//# sourceMappingURL=forms.js.map?rel=1503535960517
+//# sourceMappingURL=forms.js.map?rel=1503550040682

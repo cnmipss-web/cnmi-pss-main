@@ -27,4 +27,4 @@ re_frame.core.reg_sub.call(null,new cljs.core.Keyword(null,"subscribed","subscri
 return new cljs.core.Keyword(null,"subscribed","subscribed",1012088257).cljs$core$IFn$_invoke$arity$1(db);
 }));
 
-//# sourceMappingURL=rf_subs.js.map?rel=1503532139963
+//# sourceMappingURL=rf_subs.js.map?rel=1503550040130
