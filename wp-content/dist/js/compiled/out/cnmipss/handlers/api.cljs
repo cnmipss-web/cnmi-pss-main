@@ -3,9 +3,9 @@
             [klang.core :refer-macros [info!]]))
 
 (defn subscribed [pns]
-  (fn [[ok res]]
+  (fn [[ok res :as response]]
+    (info! "Subscribed: " ok res response)
     (let [jq js/jQuery]
-      (info! "Subscribed: " ok res)
       (if ok
         (do
           (rf/dispatch [:subscribed pns])

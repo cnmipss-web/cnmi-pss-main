@@ -21,7 +21,8 @@
           [errors values] (events/validate-subscription)
           new-errors (assoc existing-errors k (get errors k))]
       (println existing-errors errors new-errors)
-      (if (> (-> (str "#" id) js/jQuery .val .-length) 0)
+      (if (and (> (-> (str "#" id) js/jQuery .val .-length) 0)
+               (some? existing-errors))
         (rf/dispatch [:pns-subs-errors new-errors])
         (if (-> @(rf/subscribe [:pns-subs-errors])
                 (get k)
