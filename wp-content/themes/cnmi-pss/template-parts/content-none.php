@@ -35,12 +35,6 @@
                 get_search_form();
                 
                 endif; ?>
-                <script>
-                 // Apply Bootstrap Classes to Search Form
-                 jQuery('form').addClass('form-inline');
-                 jQuery('input.search-field').addClass('form-control');
-                 jQuery('input.search-submit').addClass('btn btn-default')
-                </script>
             </div>
         </section><!-- .no-results -->
     </div><!-- .page-content -->

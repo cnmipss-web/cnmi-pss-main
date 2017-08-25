@@ -25,13 +25,7 @@ get_header(); ?>
               <?php
               get_search_form();
               ?>
-              <script>
-               // Apply Bootstrap Classes to Search Form
-               jQuery('form').addClass('form-inline');
-               jQuery('input.search-field').addClass('form-control');
-               jQuery('input.search-submit').addClass('btn btn-default')
-                </script>
-                <br />
+              <br />
             </div><!-- .page-content -->
           </section><!-- .error-404 -->
         </div>
