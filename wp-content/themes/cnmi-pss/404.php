@@ -23,21 +23,21 @@ get_header(); ?>
               <p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try a search?', 'cnmi-pss' ); ?></p>
 
               <?php
-                get_search_form();
-                ?>
-                <script>
-                // Apply Bootstrap Classes to Search Form
-                jQuery('form').addClass('form-inline');
-                jQuery('input.search-field').addClass('form-control');
-                jQuery('input.search-submit').addClass('btn btn-default')
+              get_search_form();
+              ?>
+              <script>
+               // Apply Bootstrap Classes to Search Form
+               jQuery('form').addClass('form-inline');
+               jQuery('input.search-field').addClass('form-control');
+               jQuery('input.search-submit').addClass('btn btn-default')
                 </script>
-              <br />
+                <br />
             </div><!-- .page-content -->
           </section><!-- .error-404 -->
         </div>
       </div>
     </main><!-- #main -->
   </div><!-- #primary -->
-
+  
 <?php
 get_footer();
