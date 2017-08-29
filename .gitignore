@@ -38,3 +38,4 @@ pom.xml
 
 test-imgs
 profiles.clj
+dist/
