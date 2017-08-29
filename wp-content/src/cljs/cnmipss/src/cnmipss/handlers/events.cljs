@@ -51,8 +51,7 @@
         (ajax/ajax-request {:uri "/webtools/api/subscribe-procurement"
                             :method :post
                             :params (-> values
-                                        (assoc :rfp_id (if (:rfp_no pns) (:id pns)))
-                                        (assoc :ifb_id (if (:ifb_no pns) (:id pns)))
+                                        (assoc :proc_id (:id pns))
                                         edn->json)
                             :format (ajax/json-request-format)
                             :response-format (full-response-format ajax/json-response-format)

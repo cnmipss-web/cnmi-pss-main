@@ -168,13 +168,12 @@
         :aria-controls "pns-modal"} "Subscribe"]])])
 
 (defn pns-announcement-table
-  [k table]
-  (let [th-props {:scope "col"}
-        data (get table k)]
+  [k data]
+  (let [th-props {:scope "col"}]
     [:table.col-xs-12.lookup-list
-     [:caption (if (= :rfps k)
-                 "Requests for Proposals"
-                 "Invitations for Bids")]
+     [:caption (case k
+                 :rfps "Requests for Proposals"
+                 :ifbs "Invitations for Bids")]
      [:thead
       [:tr.row.jva-list-row
        [:th.col-xs-1.text-center th-props "Number"]
@@ -190,8 +189,10 @@
 
 (defn procurement-tables
   []
-  (let [table (-> @(rf/subscribe [:page-data]) js->clj clojure.walk/keywordize-keys)]
+  (let [table (-> @(rf/subscribe [:page-data]) js->clj clojure.walk/keywordize-keys)
+        rfps (filter #(= "rfp" (:type %)) (:pnsa table))
+        ifbs (filter #(= "ifb" (:type %)) (:pnsa table))]
     [:div
      [modals/pns-modal]
-     [pns-announcement-table :rfps table]
-     [pns-announcement-table :ifbs table]]))
+     [pns-announcement-table :rfps rfps]
+     [pns-announcement-table :ifbs ifbs]]))

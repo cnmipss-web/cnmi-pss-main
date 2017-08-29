@@ -16,9 +16,8 @@
                     js->clj
                     clojure.walk/keywordize-keys
                     :addenda
-                    (filter #(or (= id (:rfp_id %))
-                                 (= id (:ifb_id %)))))]
-    (if ((comp not empty?) addenda)
+                    (filter #(= id (:proc_id %))))]
+    (if-not (empty? addenda)
       [:button.btn.btn-warning.table-link.full-width
        {:onClick (events/download-addenda addenda)}
        (str (count addenda) " Addendums")])))
