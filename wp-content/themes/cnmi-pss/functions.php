@@ -169,6 +169,8 @@ function cnmi_header_dropdown($nav_category) {
     $pages = new WP_Query(array(
         'post_type' => 'page',
         'nav' => $nav_category,
+        'orderby' => 'menu_order',
+        'posts_per_page' => '-1'        
     ));
     if ($pages->have_posts()) {
         echo '<li role="menuitem" class="dropdown">
