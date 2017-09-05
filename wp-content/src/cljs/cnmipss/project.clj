@@ -54,9 +54,10 @@
                 :source-paths ["src" "env/prod/src"]
                 :compiler {:output-to "../../../dist/js/compiled/cnmipss.js"
                            :main cnmipss.core
-                           :optimizations :simple
-                           :pretty-print false
-                           :npm-deps {:axe-core "2.3.1"}
+                           :optimizations :advanced
+;                           :pretty-print true
+;                           :pseudo-names true
+                           :npm-deps {}
                            :language-in :ecmascript5
                            :language-out :ecmascript5}}]}
 

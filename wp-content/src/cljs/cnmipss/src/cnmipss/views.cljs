@@ -3,7 +3,7 @@
             [re-frame.core :as rf]
             [klang.core :refer-macros [info! erro!]]))
 
-(defn interactive-view []
+(defn ^:export interactive-view []
   (let [active-view @(rf/subscribe [:active-view])
         data @(rf/subscribe [:page-data])]
     (info! "Rendering interactive-view" active-view)
