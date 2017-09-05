@@ -96,6 +96,24 @@ gulp.task('styles', () => {
     .pipe(livereload());
 });
 
+// Production Styles 
+gulp.task('prod-styles', () => {
+  const prefixOpts = {
+    browsers: [
+      "> 1%",
+      "last 2 versions",
+      "iOS 8.1"
+    ],
+  };
+  return gulp
+    .src(SCSS. in + 'main.scss')
+    .pipe(sass(SCSS.sassOpts))
+    .pipe(autoprefixer(prefixOpts))
+    .pipe(cleanCss())
+    .pipe(gulp.dest(SCSS.out))
+    .pipe(livereload());
+});
+
 // Scripts
 gulp.task('dist-cljs', () => {
   return gulp
