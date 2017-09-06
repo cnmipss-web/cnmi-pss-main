@@ -24,6 +24,26 @@ apt-get install -y \
         emacs-nox \
         fail2ban \
         sendmail \
+        nmap \
+        ufw \
+        tasksel \
+        git \
+        nodejs \
+        nodejs-legacy \
+        npm \
+        openjdk-8-jdk \
+        
+
+
+#Configure firewall
+ufw default allow outgoing
+ufw default deny incomming
+
+ufw allow ssh
+ufw allow http/tcp
+ufw allow https/tcp
+
+
 
 
         
