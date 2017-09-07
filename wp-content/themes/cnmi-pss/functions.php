@@ -357,26 +357,31 @@ if (! function_exists('sort_query_posts_by'))
 function cnmi_create_school_btns($level_list) {
     echo '<div class="row">';
     foreach ($level_list as $level) {
-        $schools = new WP_Query(array(
-            'post_type' => 'school',
-            'level' => $level,
-            'posts_per_page' => -1
-        ));
-        sort_by($schools, 'title');
-        while($schools->have_posts()) {
-            $schools->the_post();
-            if ($level == 'Head Start') {
-                $div_class = "col-xs-12 col-sm-6 col-lg-4";
-            } else {
-                $div_class= "col-xs-6 col-sm-3";
+        if ($level == 'Early') {
+            echo '<div class="col-xs-12"><a href="' . '' . '" class="btn btn-school">Early Intervention Program</a></div>';
+        } else {
+            $schools = new WP_Query(array(
+                'post_type' => 'school',
+                'level' => $level,
+                'posts_per_page' => -1
+            ));
+            sort_by($schools, 'title');
+            while($schools->have_posts()) {
+                $schools->the_post();
+                if ($level == 'Head Start') {
+                    $div_class = "col-xs-12 col-sm-6 col-lg-4";
+                } else {
+                    $div_class= "col-xs-6 col-sm-3";
+                }
+                $elem = '<div class="' . $div_class . '"><a href="' . get_the_permalink() . '"';           
+                
+                if ($level != 'Head Start') {
+                    $elem .= 'title="' . get_field('long_name') . '" class="btn btn-school"><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
+                } else {
+                    $elem .= ' class="btn btn-school"><span>' . get_field('short_name') . '</span></a></div>';
+                }
+                echo $elem;
             }
-            $elem = '<div class="' . $div_class . '"><a href="' . get_the_permalink() . '"';
-            if ($level != 'Head Start') {
-                $elem .= 'title="' . get_field('long_name') . '" class="btn btn-school"><span aria-hidden="true">' . get_field('short_name') . '</span></a></div>';
-            } else {
-                $elem .= ' class="btn btn-school"><span>' . get_field('short_name') . '</span></a></div>';
-            }
-            echo $elem;
         }
     }
     echo "</div>";

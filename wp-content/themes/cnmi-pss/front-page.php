@@ -141,6 +141,9 @@ get_header(); ?>
                         </div>
                     </div>
                 </div>
+                <div class="col-xs-12 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3 text-center">
+                    <?php cnmi_create_school_btns(array('Early')); ?>
+                </div>
             </div>
         </div>
         <br />
