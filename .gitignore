@@ -39,3 +39,7 @@ pom.xml
 test-imgs
 profiles.clj
 dist/
+contact-uploader/headstarts.csv
+contact-uploader/offices.csv
+contact-uploader/personnel.csv
+contact-uploader/schools.csv
