@@ -139,7 +139,7 @@
                     sort-jvas)]]))
 
 (defn expired?
-  "Determine if a pns-announcement has been close for more than 48 hours"
+  "Determine if a pns-announcement has been closed for more than 48 hours"
   [{:keys [close_date]}]
   (time/after? (time/minus (time/now) (time/days 2)) (parse-date close_date)))
 
@@ -147,7 +147,7 @@
   [row]
   [:tr.row.jva-list-row {:class (if (force-close? row) "closed")
                          :style (if (expired? row) {:display "none"})}
-   [:th.col-xs-1.text-center {:scope "row"} (or (:rfp_no row) (:ifb_no row))]
+   [:th.col-xs-1.text-center {:scope "row"} (:number row)]
    [:td.col-xs-1 (:open_date row)]
    [:td.col-xs-1 (:close_date row)]
    [:td.col-xs-3 (:title row)]

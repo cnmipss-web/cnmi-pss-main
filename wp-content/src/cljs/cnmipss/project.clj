@@ -55,8 +55,6 @@
                 :compiler {:output-to "../../../dist/js/compiled/cnmipss.js"
                            :main cnmipss.core
                            :optimizations :advanced
-;                           :pretty-print true
-;                           :pseudo-names true
                            :npm-deps {}
                            :language-in :ecmascript5
                            :language-out :ecmascript5}}]}
