@@ -16,3 +16,14 @@
     width: 83.3%;
     margin-left: 8.33%;
 }
+
+@for $i from 1 through 5 {
+    article  h#{$i} {
+        font-weight: $bold;
+        font-size: 24px - 2 * $i;
+        strong {
+            font-size: inherit;
+            font-weight: inherit;
+        }
+    }
+}
