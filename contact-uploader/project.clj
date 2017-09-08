@@ -1,4 +1,4 @@
-(defproject contact-uploader "0.1.0-SNAPSHOT"
+(defproject contact-uploader "0.1.1"
   :description "Utility to upload contact info to WP site"
   :url ""
   :license {:name "Eclipse Public License"

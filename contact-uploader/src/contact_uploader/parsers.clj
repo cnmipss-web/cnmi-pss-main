@@ -29,11 +29,11 @@
 
 (defn offices
   [data]
-  (let [location (if (= "Capitol Hill" (nth data 2))
-                   (str "Capitol Hill Bldg #" (first data))
+  (let [location (if (= "Capitol Hill" (trim (nth data 2)))
+                   (str "Capitol Hill Bldg #" (trim (first data)))
                    (nth data 2))]
     {:name (second data)
-     :location location
+     :address location
      :tel (nth data 3) ; Some weird data in source, so not trying to parse or correct.
      :fax (telephone (nth data 4))}))
 
