@@ -17,7 +17,7 @@
     </header><!-- .entry-header -->
 
     <div class="page-entry-content col-xs-12 col-sm-10 col-sm-push-1">
-	<p><?php echo get_the_title() ?> may be contacted at:</p>
+	<p>Contact information for <?php echo get_the_title() ?>:</p>
 	<?php
 	cnmi_school_info(get_the_title(), 'full');
 	wp_link_pages( array(
