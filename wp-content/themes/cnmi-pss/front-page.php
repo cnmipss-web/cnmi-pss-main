@@ -50,6 +50,24 @@ get_header(); ?>
                     <?php endwhile; ?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="col-xs-12">More News:</p></div>
+                </div>
+                <div class="col-xs-10">
+                    <?php
+                    $news_links = new WP_Query(array('posts_per_page' => 3, 'paged' => 2));
+                    while($news_links->have_posts()) {
+                        $news_links->the_post(); ?>
+                        <div class="col-xs-12 col-sm-4 text-center" >
+                            <a title="Link to article" href=<?php the_permalink() ?>>
+                                <?php the_title() ?>
+                            </a>
+                        </div>
+                    <?php
+                    } ?>
+                </div>
+            </div>
             <!-- <div class="row">
                  <div class="col-xs-10">
                  <h2>PSS Showcase</h2>

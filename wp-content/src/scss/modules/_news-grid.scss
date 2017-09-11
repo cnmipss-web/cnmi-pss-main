@@ -1,7 +1,11 @@
 .site-main .news-grid-container {
-    background-color: #eee;
-    border: none;
+    //background-color: #eee;
+    //border: none;
     box-shadow: none;
+    
+    p {
+        margin: auto 0;
+    }
 }
 
 .site-main .row.news-grid {
