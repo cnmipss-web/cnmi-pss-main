@@ -84,12 +84,46 @@
         "document"
       ],
       "readyEvent": null,
+      "delay": 500,
+      "clickSelector": "#tab2",
+      "misMatchThreshold" : 0.1,
+      "requireSameDimensions" : true,
+      "onBeforeScript": "onBefore.js",
+      "onReadyScript": "onReady.js"
+    },
+    {
+      "label": "CNMI PSS JVA Page",
+      "url": "http://localhost.test/job-vacancy-announcements",
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "selectorExpansion": true,
+      "selectors": [
+        "document"
+      ],
+      "readyEvent": null,
+      "delay": 250,
+      "misMatchThreshold" : 0.1,
+      "requireSameDimensions" : true,
+      "onBeforeScript": "onBefore.js",
+      "onReadyScript": "onReady.js"
+    },
+    {
+      "label": "CNMI PSS Contractors Page",
+      "url": "http://localhost.test/contractors-and-vendors",
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "selectorExpansion": true,
+      "selectors": [
+        "document"
+      ],
+      "readyEvent": null,
       "delay": 250,
       "misMatchThreshold" : 0.1,
       "requireSameDimensions" : true,
       "onBeforeScript": "onBefore.js",
       "onReadyScript": "onReady.js"
     }
+
   ],
   "paths": {
     "bitmaps_reference": "backstop_data/bitmaps_reference",
