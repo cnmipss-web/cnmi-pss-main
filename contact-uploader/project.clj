@@ -9,6 +9,7 @@
                  [org.clojure/data.csv "0.1.4"]
                  [org.clojure/data.json "0.2.6"]
                  [org.clojure/test.check "0.9.0"]
+                 [org.clojure/tools.cli "0.3.5"]
                  [http-kit "2.2.0"]
                  [com.cemerick/url "0.1.1"]
                  [environ "1.1.0"]]

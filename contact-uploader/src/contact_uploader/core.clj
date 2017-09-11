@@ -9,6 +9,7 @@
             [contact-uploader.spec :as spec]
             [contact-uploader.util :refer :all]
             [contact-uploader.validators :as v]
+            [clojure.tools.cli :refer [parse-opts]]
             [environ.core :refer [env]]
             [org.httpkit.client :as http])
   (:import (org.apache.commons.text StringEscapeUtils)
@@ -30,8 +31,8 @@
   (let [{:keys [status body error]}
         @(http/post (str const/wp-host const/token-route)
                     {:headers {"Content-Type" "application/json"}
-                     :body (json/write-str {:username (env :admin-username)
-                                            :password (env :admin-password)})})]
+                     :body (json/write-str {:username (env :wp-un)
+                                            :password (env :wp-pw)})})]
     (if error
       (throw error)
       (reset! auth-token (get (json/read-str body) "token")))))
@@ -170,23 +171,36 @@
   (if (not= (type file) java.lang.String)
     (throw (Exception. "Filenames must be strings: " file))))
 
+(defprotocol parse-args
+  (parse-arg [arg] "Turn filename arg to associated keyword"))
+
+(extend-protocol parse-args
+  java.lang.String
+  (parse-arg [arg]
+    (-> (clojure.string/replace arg #"\.csv" "")
+        (clojure.string/replace #"\:" "")
+        (keyword)))
+  clojure.lang.Keyword
+  (parse-arg [arg] arg))
+
 (defn -main
   "Process CSV file and create WP Contact Info & School Posts from data"
   [& args]
   {:pre [(s/assert seq? args)
          (s/assert (s/every keyword?) args)]}
-  (if (some #{:new} args)
-    (reset! allow-new? true))
-  (loop [as (filter #(not (= :new %)) args)]
-    (let [key (first as)
-          file (-> key (name) (str ".csv"))
-          rem (rest as)]
-      (if (not (#{:personnel :schools :offices :headstarts :all} key))
-        (throw (Exception. "Arguments must be one of: :personnel :schools :offices :headstarts :all")))
-      (if (= key :all)
-        (recur [:personnel :offices :schools :headstarts])
-        (do (set-target-urls key)
-            (validate-args key file)
-            (upload-data key file)
-            (if (< 1 (count rem))
-              (recur rem)))))))
+  (let [args (map parse-arg args)]
+    (if (some #{:new} args)
+      (reset! allow-new? true))
+    (loop [as (filter #(not (= :new %)) args)]
+      (let [key (first as)
+            file (-> key (name) (str ".csv"))
+            rem (rest as)]
+        (if (not (#{:personnel :schools :offices :headstarts :all} key))
+          (throw (Exception. (str "Arguments must be one of: personnel, schools, offices, headstarts, or all, not " key))))
+        (if (= key :all)
+          (recur [:personnel :offices :schools :headstarts])
+          (do (set-target-urls key)
+              (validate-args key file)
+              (upload-data key file)
+              (if (< 1 (count rem))
+                (recur rem))))))))
