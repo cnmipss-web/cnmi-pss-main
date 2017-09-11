@@ -21,7 +21,13 @@
     article  h#{$i} {
         font-weight: $bold;
         font-size: 24px - 2 * $i;
-        strong {
+        margin-bottom: 30px - 5*$i; 
+        strong, em {
+            font-size: inherit;
+            font-weight: inherit;
+        }
+        em {
+            font-style: italic;
             font-size: inherit;
             font-weight: inherit;
         }

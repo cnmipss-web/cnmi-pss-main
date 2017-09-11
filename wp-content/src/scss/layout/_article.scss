@@ -1,5 +1,11 @@
 .entry-header img {
-  margin-top: 25px;
+  width: 100%;
+  @include for-xs {
+      margin-top: 0px;
+  }
+  @include for-sm {
+      margin-top: 25px;
+  }
 }
 
 .entry-title, .entry-title a, .entry-title a:visited {
@@ -8,7 +14,6 @@
 
   @include for-xs {
     font-size: 24px;
-    margin-top: -15px;
   }
   @include for-sm {
     font-size: 36px;
