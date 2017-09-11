@@ -10,8 +10,8 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-  <header class="entry-header col-xs-10 col-xs-push-1">
-    <div class="col-xs-12 col-xs-push-12 col-sm-6 col-sm-push-6">
+  <header class="entry-header col-xs-12 col-sm-10 col-sm-push-1">
+    <div class="col-xs-12 col-sm-6 col-sm-push-6">
       <?php
       if ( is_singular() ) :
         the_title( '<h1 class="entry-title">', '</h1>' );
@@ -26,7 +26,7 @@
         <?php
         endif; ?>
     </div>
-    <div class="col-xs-12 col-xs-pull-12 col-sm-6 col-sm-pull-6">
+    <div class="col-xs-12 col-sm-6 col-sm-pull-6">
       <?php the_post_thumbnail(); ?>
     </div>
   </header><!-- .entry-header -->
