@@ -358,7 +358,7 @@ function cnmi_create_school_btns($level_list) {
     echo '<div class="row">';
     foreach ($level_list as $level) {
         if ($level == 'Early') {
-            echo '<div class="col-xs-12"><a href="' . '' . '" class="btn btn-school">Early Intervention Program</a></div>';
+            echo '<div class="col-xs-12"><a href="' . 'http://www.cnmipss.org/school/early-intervention/' . '" class="btn btn-school">Early Intervention Program</a></div>';
         } else {
             $schools = new WP_Query(array(
                 'post_type' => 'school',
