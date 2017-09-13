@@ -10,7 +10,7 @@
 
 .entry-title, .entry-title a, .entry-title a:visited {
     color: $dark-blue;
-    text-align: center;
+    text-align: left;
     
     @include for-xs {
         font-size: 24px;

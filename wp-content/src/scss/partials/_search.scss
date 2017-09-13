@@ -3,7 +3,7 @@
 }
 
 .search-entry-header {
-  
+    @extends .entry-header;
     h2, a, span {
         font-size: $base-font-size + 8px;
         font-weight: $bold;
