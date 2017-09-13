@@ -1,11 +1,18 @@
 .site-main .news-grid-container {
-    //background-color: #eee;
+    background-color: #eee;
     //border: none;
     box-shadow: none;
     
     p {
         margin: auto 0;
     }
+
+    .more-news-links {
+        background: white;
+        padding-top: 5px;
+        margin-top: -5px;
+    }
+        
 }
 
 .site-main .row.news-grid {

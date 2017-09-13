@@ -50,7 +50,7 @@ get_header(); ?>
                     <?php endwhile; ?>
                 </div>
             </div>
-            <div class="row">
+            <div class="row more-news-links">
                 <?php
                 $news_links = new WP_Query(array('posts_per_page' => 3, 'paged' => 2));
                 if ($news_links->have_posts()) { ?>
