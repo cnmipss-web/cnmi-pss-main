@@ -17,14 +17,16 @@ get_header(); ?>
             <?php
             if(have_posts()):
             the_post();?>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-sm-push-1">
-                        <h1 class="page-title">
+                <header class="row page-entry-header">
+                    <div class="col-xs-12">
+                        <h1 class="page-entry-title">
                             <?php the_title(); ?>
                         </h1>
+                    </div>
+                    <div class="col-xs-12 col-sm-10 col-sm-push-1">
                         <?php the_content(); ?>
                     </div>
-                </div>
+                </header>
                 <div class="row">
                     <div id="react-app" class="searchable-table col-xs-12">
                         <div id="floatingCirclesG">
