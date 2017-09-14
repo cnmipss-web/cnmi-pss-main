@@ -34,9 +34,9 @@ php_value post_max_size 25M
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
-RewriteCond %{REQUEST_URI} !=/server-status
 RewriteRule ^index\.php$ - [L]
 RewriteRule ^wp-login$ /wp-login.php [L]
+RewriteCond %{REQUEST_URI} !=/server-status
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
