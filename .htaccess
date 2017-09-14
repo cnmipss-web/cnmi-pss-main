@@ -36,6 +36,7 @@ RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_URI} !=/server-status
 RewriteRule ^index\.php$ - [L]
+RewriteRule ^wp-login$ /wp-login.php [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
