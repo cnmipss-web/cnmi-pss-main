@@ -448,3 +448,15 @@ function cnmi_get_report_tabs() {
     }
     return $tabs;
 }
+
+
+/**
+ * available_formats - sets available text elements in WSYWIG editor and their descriptive names
+ * 
+ */
+
+function available_formats($arr){
+    $arr['block_formats'] = 'Paragraph=p;Section Header (h2)=h2;Subsection Header (h3)=h3;Subsection Header (h4)=h4;Subsection Header (h5)=h5;Subsection Header (h6)=h6';
+    return $arr;
+}
+add_filter('tiny_mce_before_init', 'available_formats');
