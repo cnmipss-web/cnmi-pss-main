@@ -17,7 +17,7 @@ get_header(); ?>
             <header class="search-page-header">
                 <h1 class="page-title"><?php
                                        /* translators: %s: search query. */
-                                       printf( esc_html__( 'Search Results for: %s', 'cnmi-pss' ), get_search_query() );
+                                       printf( esc_html__( 'Author: %s', 'cnmi-pss' ), get_the_author() );
                                        ?></h1>
             </header><!-- .page-header -->
             <div class="container">
@@ -44,7 +44,7 @@ get_header(); ?>
         get_template_part( 'template-parts/content', 'none' );
         endif; ?>
     </main><!-- #main -->
-  </section><!-- #primary -->
+</section><!-- #primary -->
 
 <?php
 get_sidebar();
