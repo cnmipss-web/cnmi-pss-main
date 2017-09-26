@@ -19,6 +19,39 @@
 }
 
 /**
+ * Main Navbar styling for noscript fallback
+ */
+
+.noscript-dropdown {
+    ul {
+        list-style: none;
+        margin-left: 0px;
+        margin-right: 5px;
+    }
+
+    li a {
+        @include for-xs {
+            font-size: $base-font-size - 0px !important;
+        }
+        @include for-sm {
+            font-size: $base-font-size - 5px !important;
+        }
+        @include for-md {
+            font-size: $base-font-size - 2px !important;
+        }
+        @include for-lg {
+            font-size: $base-font-size !important;
+        }
+    }
+
+    noscript > ul > li > a {
+        @include for-phone-only {
+            margin-left: 15px;
+        }
+    }
+}
+
+/**
  * Bootstrap Row Holding Header Image, Help Text & Search Form Above Navbar
  */
 

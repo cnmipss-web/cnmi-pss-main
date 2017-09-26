@@ -45,7 +45,7 @@
               </p>
             </div>
             <div class="header-search col-xs-0 col-sm-6 col-md-4">
-              <?php cnmi_search_form('header'); ?>
+                <?php cnmi_search_form('header'); ?>
             </div><!-- end .search-form -->
           </div>
         </div><!-- .site-branding -->
@@ -66,18 +66,23 @@
               </button>
 
             </div>
-            <div class="collapse navbar-collapse" id="menu-main">
-              <ul role="menu" class="nav navbar-nav">
+            <div class="collapse navbar-collapse in" id="menu-main" aria-expanded="true" >
+              <ul role="menu" class="nav navbar-nav nav-menu">
                 <li role="menuitem">
                     <a href="/news" > PSS News </a>
                 </li>
                 <?php cnmi_header_dropdown('Students & Parents'); ?>
-                <?php /*cnmi_header_dropdown('Parents');*/ ?>
                 <?php cnmi_header_dropdown('Employees'); ?>
                 <?php cnmi_header_dropdown('Community'); ?>
                 <?php cnmi_header_dropdown('District Information'); ?>
                 <?php cnmi_header_dropdown('Public Reports'); ?>
               </ul>
+              <?php /*noscript_header_links('Students & Parents'); */ ?>
+              <?php /*noscript_header_links('Employees'); */ ?>
+              <?php /*noscript_header_links('Community'); */ ?>
+              <?php /*noscript_header_links('District Information'); */ ?>
+              <?php /*noscript_header_links('Public Reports'); */ ?>
+              
             </div><!-- /.navbar-collapse -->
           </div>
         </nav><!-- #site-navigation -->

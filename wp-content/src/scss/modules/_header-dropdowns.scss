@@ -28,7 +28,7 @@ ul.dropdown-menu {
     }
 }
 
-ul.nav-menu {
+#menu-main ul.nav-menu {
     display: flex;
     @include for-xs {
         flex-direction: column;
@@ -40,16 +40,16 @@ ul.nav-menu {
     white-space: nowrap;
     width: 100%;
 
-    @for $i from 1 through 6 {
+    @for $i from 6 through 15 {
         @include for-sm {
-            & > li:nth-child(#{$i}) > ul.dropdown-menu {
-                left: 50% - 25% * $i;
+            & > li.dropdown.open[role='menuitem']:nth-child(#{$i}) > ul.dropdown-menu {
+                left: 50% - 10% * $i;
             }
         }
 
         @include for-md {
-            & > li:nth-child(#{$i}) > ul.dropdown-menu {
-                left: 30% - 15% * $i;
+            & > li.dropdown.open[role='menuitem']:nth-child(#{$i}) > ul.dropdown-menu {
+                left: 30% - 5% * $i;
             }
         }
     }

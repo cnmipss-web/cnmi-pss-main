@@ -173,14 +173,49 @@ function cnmi_header_dropdown($nav_category) {
         'posts_per_page' => '-1'        
     ));
     if ($pages->have_posts()) {
+        echo '<noscript><div class="noscript-dropdown"></noscript>';
         echo '<li role="menuitem" class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' . $nav_category . '<span class="caret"></span></a>
     <ul role="menu" class="dropdown-menu">';
+        while($pages->have_posts()) {
+            $pages->the_post();
+            echo '<li role="menuitem"><a href="' .  get_the_permalink() . '">' . get_the_title() . '</a></li>';
+        }
+        echo '</ul></li>';
+        /* Redo for noscript links */
+        $pages = new WP_Query(array(
+            'post_type' => 'page',
+            'nav' => $nav_category,
+            'orderby' => 'menu_order',
+            'posts_per_page' => '-1'        
+        ));
+        echo '<noscript><ul>';
+        while($pages->have_posts()) {
+            $pages->the_post();
+            echo '<li><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
+        }
+        echo '</ul></div></noscript>';
+    }
+}
+
+
+/**
+ *  noscript_header_links - Generate fallback links if useragent cannot process javascript
+ *
+ * @param {string} $nav_category taxonomy value 
+ */
+function noscript_header_links($nav_category) {
+    $pages = new WP_Query(array(
+        'post_type' => 'page',
+        'nav' => $nav_category,
+        'orderby' => 'menu_order',
+        'posts_per_page' => '-1'        
+    ));
+    if ($pages->have_posts()) {
+        echo '<noscript>TEST</noscript>';
         while($pages->have_posts()):
              $pages->the_post();
-        echo '<li role="menuitem"><a href="' .  get_the_permalink() . '">' . get_the_title() . '</a></li>';
         endwhile;
-        echo '</ul></li>';
     }
 }
 
@@ -190,7 +225,7 @@ function cnmi_header_dropdown($nav_category) {
  * @param  {string} $location location of search bar. Must be either 'header' or 'nav'
  */
 function cnmi_search_form ($location) {
-    echo '<form class="form-inline l-nav-form" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
+    echo '<form role="search" class="form-inline l-nav-form" method="get" id="' . $location . '-search-form" action="' . get_bloginfo("url") . '/">
     <div class="form-group">
       <label for="' . $location . '-search" class="screen-reader-text">Search:</label>
       <input class="form-control" type="search" placeholder="Search" id="' . $location . '-search" name="s"/>
