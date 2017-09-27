@@ -55,7 +55,7 @@ get_header(); ?>
                                 foreach ($tabs as $this_tab) {
                                     if(strlen($this_tab['title']) > 0) {
                                 ?>
-                                    <li role="presentation">
+                                    <li role="presentation" class="active in">
                                         <a href="<?php echo '#' . $this_tab['id']; ?>"
                                            role="tab"
                                            aria-controls="<?php echo $this_tab['id']; ?>"
@@ -73,7 +73,7 @@ get_header(); ?>
                                 foreach ($tabs as $this_tab) {
                                     if (strlen($this_tab['title']) > 0) {
                                 ?>
-                                    <div role="tabpanel" class="tab-pane"
+                                    <div role="tabpanel" class="tab-pane active in"
                                          id="<?php echo $this_tab['id']; ?>">
                                         <?php echo $this_tab['content']; ?>
                                     </div>
@@ -90,11 +90,18 @@ get_header(); ?>
                         </div>
                     </div>
                     <script>
-                     // Set active tab and tabpanel
-                     let firstTab = jQuery('#tablist').children()[0];
-                     jQuery(firstTab).addClass('active').addClass('in');
-                     let firstPane = jQuery(".tab-pane")[0];
-                     jQuery(firstPane).addClass('active').addClass('in');
+                     (function() {
+                         //Clear noscript display of ALL tabs
+                         let allTabs = jQuery('#tablist').children();
+                         let allPanes = jQuery('.tab-pane');
+                         jQuery(allTabs).removeClass('active').removeClass('in');
+                         jQuery(allPanes).removeClass('active').removeClass('in');
+                         // Set active tab and tabpanel
+                         let firstTab = jQuery('#tablist').children()[0];
+                         jQuery(firstTab).addClass('active').addClass('in');
+                         let firstPane = jQuery(".tab-pane")[0];
+                         jQuery(firstPane).addClass('active').addClass('in');
+                     })()
                     </script>
                 </article>
         </div>
