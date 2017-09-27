@@ -112,7 +112,8 @@ get_header(); ?>
                                 Head Start / Early Head Start
                             </a>
                         </li>
-                        <li role="presentation">
+                        <li role="presentation"
+                            class="active">
                             <a
                                 href="#elem-links"
                                 role="tab"
@@ -121,7 +122,8 @@ get_header(); ?>
                                 Elementary Schools
                             </a>
                         </li>
-                        <li role="presentation">
+                        <li role="presentation"
+                            class="active">
                             <a
                                 href="#middle-links"
                                 role="tab"
@@ -130,7 +132,8 @@ get_header(); ?>
                                 Middle Schools
                             </a>
                         </li>
-                        <li role="presentation">
+                        <li role="presentation"
+                            class="active">
                             <a
                                 href="#high-links"
                                 role="tab"
@@ -140,28 +143,41 @@ get_header(); ?>
                             </a>
                         </li>
                     </ul>
-                    <div class="tab-content">
+                    <div class="tab-content" id="school-links-tabs">
                         <div role="tabpanel" class="tab-pane fade in active" id="head-start-links">
                             <?php
                             cnmi_create_school_btns(array('Head Start'));
                             ?>
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="elem-links">
+                        <div role="tabpanel" class="tab-pane fade in active" id="elem-links">
                             <?php
                             cnmi_create_school_btns(array('Elementary School'));
                             ?>
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="middle-links">
+                        <div role="tabpanel" class="tab-pane fade in active" id="middle-links">
                             <?php
                             cnmi_create_school_btns(array('Middle School'));
                             ?>
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="high-links">
+                        <div role="tabpanel" class="tab-pane fade in active" id="high-links">
                             <?php
                             cnmi_create_school_btns(array('Jr Sr High School', 'High School'));
                             ?>
                         </div>
                     </div>
+                    <script>
+                     (function () {
+                         let allTabs = jQuery('#tablist').children();
+                         let allPanes = jQuery('.tab-pane');
+                         jQuery(allTabs).removeClass('active').removeClass('in');
+                         jQuery(allPanes).removeClass('active').removeClass('in');
+                         // Set active tab and tabpanel
+                         let firstTab = jQuery('#tablist').children()[0];
+                         jQuery(firstTab).addClass('active').addClass('in');
+                         let firstPane = jQuery(".tab-pane")[0];
+                         jQuery(firstPane).addClass('active').addClass('in');
+                     })();
+                    </script>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3 text-center">
                     <?php cnmi_create_school_btns(array('Early')); ?>
