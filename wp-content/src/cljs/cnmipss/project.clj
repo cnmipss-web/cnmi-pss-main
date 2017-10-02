@@ -18,7 +18,8 @@
                  [cljs-ajax "0.6.0"]]
 
   :plugins [[lein-figwheel "0.5.11"]
-            [lein-cljsbuild "1.1.5" :exclusions [[org.clojure/clojure]]]]
+            [lein-cljsbuild "1.1.5" :exclusions [[org.clojure/clojure]]]
+            [lein-externs "0.1.6"]]
 
   :source-paths ["src"]
 
@@ -55,6 +56,7 @@
                 :compiler {:output-to "../../../dist/js/compiled/cnmipss.js"
                            :main cnmipss.core
                            :optimizations :advanced
+                           :externs ["externs.js"]
                            :npm-deps {}
                            :language-in :ecmascript5
                            :language-out :ecmascript5}}]}
