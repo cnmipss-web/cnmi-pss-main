@@ -2,7 +2,8 @@
   (:require [cnmipss.handlers.events :as events]
             [cnmipss.validation :as v]
             [re-frame.core :as rf]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [klang.core :refer-macros [info!]]))
 
 (defn search-bar [label]
   [:div#search-box
@@ -17,10 +18,11 @@
 (defn check-validity
   [k id]
   (fn []
+    (info! "Checking validity...")
     (let [existing-errors @(rf/subscribe [:pns-subs-errors])
           [errors values] (events/validate-subscription)
           new-errors (assoc existing-errors k (get errors k))]
-      (println existing-errors errors new-errors)
+      (info! existing-errors errors new-errors)
       (if (and (> (-> (str "#" id) js/jQuery .val .-length) 0)
                (some? existing-errors))
         (rf/dispatch [:pns-subs-errors new-errors])
