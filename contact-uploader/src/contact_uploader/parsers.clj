@@ -2,7 +2,8 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.string :refer [join trim]]
             [contact-uploader.constants :as const]
-            [contact-uploader.util :refer :all]))
+            [contact-uploader.util :refer :all]
+            [contact-uploader.validators :as v]))
 
 (defn telephone
   [tel]
@@ -16,16 +17,23 @@
     (identity ""))) ;; Empty string
 
 (defn personnel
-  [data]
-  (let [[name phone cell alt-tel fax email] data
-        phone-nums [(telephone phone) (telephone cell) (telephone alt-tel)]]
-    {:name name
-     :fax (telephone fax)
-     :email email
-     :tel (->> phone-nums
-               (filter #(and (= (type %) java.lang.String)
-                             (> (count (trim %)) 0)))
-               (join ", "))}))
+  [bldg-list]
+  (let [bldg (first bldg-list)
+        address (first bldg)
+        data (rest bldg-list)]
+    (filter some?
+            (for [[name phone cell alt-tel fax email] data]
+              (let [phone-nums [(telephone phone) (telephone cell) (telephone alt-tel)]]
+                (if (v/valid-email? email)
+                  {:address address
+                   :name name
+                   :fax (telephone fax)
+                   :email email
+                   :tel (->> phone-nums
+                             (filter #(and (= (type %) java.lang.String)
+                                           (> (count (trim %)) 0)))
+                             (join ", "))}
+                  nil))))))
 
 (defn offices
   [data]
@@ -37,10 +45,9 @@
      :tel (nth data 3) ; Some weird data in source, so not trying to parse or correct.
      :fax (telephone (nth data 4))}))
 
-
-
 (defn schools
   [school]
+  (println school)
   {:name (get-in school [0 1])
    :short (get-in school [1 0])
    :address (join "\r\n" [(get-in school [1 1]) (get-in school [2 1]) (get-in school [3 1])])
@@ -48,9 +55,9 @@
    :tel (telephone (get-in school [0 3]))
    :staff (map (fn [row] {:name (get row 2)
                           :tel (->> [(get row 3) (get row 5)]
-                                 (filter #(> (count %) 0))
-                                 (map telephone)
-                                 (join ", "))
+                                    (filter #(> (count %) 0))
+                                    (map telephone)
+                                    (join ", "))
                           :email (get row 6)}) school)})
 
 (defn headstarts
@@ -72,4 +79,7 @@
 
 (defn parser
   [key data]
-  (map (get parser-list key) data))
+  (let [parsed (map (get parser-list key) data)]
+    (if-not (-> parsed first map?)
+      (flatten parsed)
+      parsed)))
