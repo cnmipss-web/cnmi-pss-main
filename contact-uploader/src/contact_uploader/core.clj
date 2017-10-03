@@ -9,6 +9,7 @@
             [contact-uploader.spec :as spec]
             [contact-uploader.util :refer :all]
             [contact-uploader.validators :as v]
+            [contact-uploader.wordpress-api :as wp]
             [clojure.tools.cli :refer [parse-opts]]
             [environ.core :refer [env]]
             [org.httpkit.client :as http])
@@ -17,62 +18,34 @@
   (:gen-class))
 
 ;; Define Global State
-(def auth-token (atom ""))
-(def target-urls (atom {}))
+
 (def allow-new? (atom false))
-
-(defn set-target-urls
-  [key]
-  {:pre [(s/assert keyword? key)]}
-  (reset! target-urls (get const/target-urls key)))
-
-(defn authorize
-  []
-  (let [{:keys [status body error]}
-        @(http/post (str const/wp-host const/token-route)
-                    {:headers {"Content-Type" "application/json"}
-                     :body (json/write-str {:username (env :wp-un)
-                                            :password (env :wp-pw)})})]
-    (if error
-      (throw error)
-      (reset! auth-token (get (json/read-str body) "token")))))
-
 
 (defn reduce-schools
   [school-list next-line]
-  (if (= clojure.lang.PersistentVector (type (first school-list)))
+  (if (-> school-list first vector?)
     (if (re-seq #"\d" (first next-line))
       (conj school-list [next-line])
       (let [curr (conj (last school-list) next-line)]
         (conj (pop school-list) curr)))
     [[next-line]]))
 
-
-(defn set-acf
-  [id fields]
-  (let [headers {"Authorization" (str "Bearer " @auth-token)
-                 "Content-Type" "application/json"}
-        add-fields {:url (str const/wp-host (:acf @target-urls) id)
-                    :method :post
-                    :body (json/write-str {:fields fields})
-                    :headers headers}]
-    (http/request add-fields)))
+(defn reduce-personnel
+  [personnel-list next-line]
+  (if (= "PHONE" (second next-line))
+    (conj personnel-list [next-line])
+    (let [curr (conj (last personnel-list) next-line)]
+      (conj (pop personnel-list) curr))))
 
 (defn create-contact-info
   ([body fields]
    (create-contact-info nil body fields))
   ([id body fields]
-   (let [headers {"Authorization" (str "Bearer " @auth-token)
-                  "Content-Type" "application/json"}
-         create {:url (str const/wp-host (:main @target-urls) (str "/" id))
-                 :method :post
-                 :headers headers
-                 :body body}]
-     (let [{:keys [body error]} @(http/request create)
-           id (get (json/read-str body) "id")]
-       (if error
-         (throw error)
-         (set-acf id fields))))))
+   (let [{:keys [body]} (wp/post id body)
+         {:keys [id code message data]} (json->edn body)]
+     (if (nil? id)
+       (throw (Exception. (str "\nBody: " body "\nStatus: " (:status data) "\nMessage: " message)))
+       (wp/set-acf id fields)))))
 
 (defn create-acf-fields
   [key data]
@@ -124,9 +97,10 @@
 
 (defn post-info
   [key data]
+  ;(println "post-info" key data)
   (let [{name :name} data
         search-name (v/encode-name (subs name 0 (min (count name) 50)))
-        {get-body :body} @(http/get (str const/wp-host (:main @target-urls) "?per_page=50&search=" search-name))
+        {get-body :body} (wp/search search-name)
         contacts (filter #(= (sanitize name) (sanitize (get-in % ["title" "rendered"])))
                          (json/read-str get-body))
         body (json/write-str (create-post-info key data))
@@ -146,15 +120,16 @@
 
 (defn apply-filters
   [key data]
+;  (println "apply-filters")
   (cond
-    (#{:personnel} key) (filter #(v/valid-email? (last %)) data)
+    (#{:personnel} key) (reduce reduce-personnel [] data) ;
     (#{:offices} key) (filter #(and (> (count (trim (nth % 2))) 1)
                                  (> (count (trim (first %))) 0)) data)
     (#{:schools :headstarts} key) (reduce reduce-schools data)))
 
 (defn upload-data
   [key file]
-  (authorize)
+  (wp/authorize)
   (as-> file data
    (csv/read-csv (slurp data))
    (apply-filters key data)
@@ -199,7 +174,7 @@
           (throw (Exception. (str "Arguments must be one of: personnel, schools, offices, headstarts, or all, not " key))))
         (if (= key :all)
           (recur [:personnel :offices :schools :headstarts])
-          (do (set-target-urls key)
+          (do (wp/set-target-urls key)
               (validate-args key file)
               (upload-data key file)
               (if (< 1 (count rem))
