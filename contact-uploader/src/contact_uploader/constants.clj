@@ -20,3 +20,5 @@
                             :acf school-acf}
                   :headstarts {:main school-main
                                :acf school-acf}})
+
+(def default-addr "\nPO Box 501370 CK\nSaipan MP, 96950")
