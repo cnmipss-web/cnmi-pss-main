@@ -4,7 +4,8 @@
             [cnmipss.handlers.api :as handle-api]
             [struct.core :as st]
             [ajax.core :as ajax]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [klang.core :refer-macros [info!]]))
 
 (defn set-search-text [event]
   (let [search (.-value (.getElementById js/document "search-certified"))]
@@ -17,21 +18,20 @@
       (let [{:keys [company person email tel]} @(rf/subscribe [:pns-subs-errors])]
         (cond
           (some? company)
-          (-> "pns-subs-cn" js/document.getElementById .focus)
+          (->> "pns-subs-cn" (.getElementById js/document) .focus)
           (some? person)
-          (-> "pns-subs-cp" js/document.getElementById .focus)
+          (->> "pns-subs-cp" (.getElementById js/document) .focus)
           (some? email)
-          (-> "pns-subs-em" js/document.getElementById .focus)
+          (->> "pns-subs-em" (.getElementById js/document) .focus)
           (some? tel) 
-          (-> "pns-subs-tel" js/document.getElementById .focus))))))
+          (->> "pns-subs-tel" (.getElementById js/document) .focus))))))
 
 (defn validate-subscription
   []
-  (let [jq js/jQuery
-        company (-> "#pns-subs-cn" jq .val)
-        person (-> "#pns-subs-cp" jq .val)
-        email (-> "#pns-subs-em" jq .val)
-        tel (-> "#pns-subs-tel" jq .val)]
+  (let [company (.val (js/jQuery "#pns-subs-cn"))
+        person (.val (js/jQuery "#pns-subs-cp"))
+        email (.val (js/jQuery "#pns-subs-em"))
+        tel (.val (js/jQuery "#pns-subs-tel"))]
     (st/validate {:company company
                   :person person
                   :email email
@@ -44,9 +44,10 @@
 (defn pns-subscription [pns]
   (fn [e]
     (.preventDefault e)
+    (info! "Event: pns-subscription")
     (let [[errors values] (validate-subscription)]
       (rf/dispatch [:pns-subs-errors errors])
-      (if (some? errors)
+      (if (some? errors) 
         (pns-focus-invalid)
         (ajax/ajax-request {:uri "/webtools/api/subscribe-procurement"
                             :method :post
