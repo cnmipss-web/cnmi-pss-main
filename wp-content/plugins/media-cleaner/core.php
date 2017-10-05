@@ -346,7 +346,7 @@ class Meow_WPMC_Core {
 					$galleries_images_wc = get_transient( "wpmc_galleries_images_woocommerce" );
 					if ( empty( $galleries_images_wc ) )
 						$galleries_images_wc = array();
-					$res = $wpdb->get_col( "SELECT maeta_value FROM $wpdb->postmeta WHERE post_id = $post
+					$res = $wpdb->get_col( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $post
 						AND meta_key = '_product_image_gallery'" );
 					foreach ( $res as $values ) {
 						$ids = explode( ',', $values );
@@ -631,7 +631,6 @@ class Meow_WPMC_Core {
 			$attachmentid = $this->wpmc_find_attachment_id_by_file( $issue->path );
 			if ( $attachmentid ) {
 				$this->log( "Issue listed as filesystem but Media {$attachmentid} exists." );
-				error_log( "Media Cleaner: Issue listed as filesystem but Media {$attachmentid} exists." );
 			}
 		}
 

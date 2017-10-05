@@ -11,7 +11,7 @@ class Meow_WPMC_Checkers {
 		$this->core = $core;
 	}
 
-	function has_background_or_header( $file, $mediaId ) {
+	function has_background_or_header( $file, $mediaId = null ) {
 		if ( current_theme_supports( 'custom-header' ) ) {
 			$custom_header = get_custom_header();
 			if ( $custom_header && $custom_header->url ) {
@@ -33,18 +33,20 @@ class Meow_WPMC_Checkers {
 		}
 
 		// Support for Kantan Theme
-		$photography_hero_image = get_theme_mod( 'photography_hero_image' );
-		if ( !empty( $photography_hero_image ) ) {
-			if ( $photography_hero_image == $mediaId ) {
-				$this->core->log( "{$file} found in theme (Photography Hero Image)" );
-				return true;
+		if ( $mediaId ) {
+			$photography_hero_image = get_theme_mod( 'photography_hero_image' );
+			if ( !empty( $photography_hero_image ) ) {
+				if ( $photography_hero_image == $mediaId ) {
+					$this->core->log( "{$file} found in theme (Photography Hero Image)" );
+					return true;
+				}
 			}
-		}
-		$author_profile_picture = get_theme_mod( 'author_profile_picture' );
-		if ( !empty( $author_profile_picture ) ) {
-			if ( $author_profile_picture == $mediaId ) {
-				$this->core->log( "{$file} found in theme (Author Profile Photo)" );
-				return true;
+			$author_profile_picture = get_theme_mod( 'author_profile_picture' );
+			if ( !empty( $author_profile_picture ) ) {
+				if ( $author_profile_picture == $mediaId ) {
+					$this->core->log( "{$file} found in theme (Author Profile Photo)" );
+					return true;
+				}
 			}
 		}
 
@@ -64,7 +66,7 @@ class Meow_WPMC_Checkers {
 		// Galleries in Visual Composer (WPBakery)
 		if ( class_exists( 'Vc_Manager' ) ) {
 			$galleries_images_vc = get_transient( "wpmc_galleries_images_visualcomposer" );
-			if ( in_array( $mediaId, $galleries_images_vc ) ) {
+			if ( is_array( $galleries_images_vc ) && in_array( $mediaId, $galleries_images_vc ) ) {
 				$this->core->log( "Media {$mediaId} found in a Visual Composer gallery" );
 				return true;
 			}
@@ -73,7 +75,7 @@ class Meow_WPMC_Checkers {
 		// Galleries in Fusion Builder (Avada Theme)
 		if ( function_exists( 'fusion_builder_map' ) ) {
 			$galleries_images_fb = get_transient( "wpmc_galleries_images_fusionbuilder" );
-			if ( in_array( $mediaId, $galleries_images_fb ) ) {
+			if ( is_array( $galleries_images_fb ) && in_array( $mediaId, $galleries_images_fb ) ) {
 				$this->core->log( "Media {$mediaId} found in post_content (Fusion Builder)" );
 				return true;
 			}
@@ -82,7 +84,7 @@ class Meow_WPMC_Checkers {
 		// Check in WooCommerce Galleries
 		if ( class_exists( 'WooCommerce' ) ) {
 			$galleries_images_wc = get_transient( "wpmc_galleries_images_woocommerce" );
-			if ( in_array( $mediaId, $galleries_images_wc ) ) {
+			if ( is_array( $galleries_images_wc ) && in_array( $mediaId, $galleries_images_wc ) ) {
 				$this->core->log( "Media {$mediaId} found in a WooCommerce gallery" );
 				return true;
 			}
@@ -90,7 +92,7 @@ class Meow_WPMC_Checkers {
 
 		// Check in standard WP Galleries (URLS)
 		$galleries_images = get_transient( "wpmc_galleries_images" );
-		if ( in_array( $file, $galleries_images ) ) {
+		if ( is_array( $galleries_images ) && in_array( $file, $galleries_images ) ) {
 			$this->core->log( "URL {$file} found in a standard WP Gallery" );
 			return true;
 		}
