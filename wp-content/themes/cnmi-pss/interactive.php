@@ -23,12 +23,14 @@ get_header(); ?>
                             <?php the_title(); ?>
                         </h1>
                     </div>
+                </header>
+                <div class="row">
                     <div class="col-xs-12 col-sm-10 col-sm-push-1">
                         <?php the_content(); ?>
                     </div>
-                </header>
+                </div>
                 <div class="row">
-                    <div id="react-app" class="searchable-table col-xs-12">
+                    <div id="react-app" class="searchable-table">
                         <noscript>
                             <div class="row" ><div class="col-xs-12 col-sm-10 col-sm-push-1" >
                                 <p>This page contains interactive content which requires Javascript to function properly.  Please enable Javascript or switch to using a user agent which is capable of rendering Javascript content.  If you do not have or are unable to use a user agent with Javascript functionality, please contact us using one of the methods listed below to request the information you were seeking.</p>
