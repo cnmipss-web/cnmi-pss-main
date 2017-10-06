@@ -1,19 +1,18 @@
-//Libraries
-//@import 'font-awesome';
-
 // Base: Modules and variables
 @import 'base/variables';
 @import 'base/reset';
+@import 'wp-style';
 @import 'base/breakpoints';
 @import 'base/mixins';
 @import 'base/accessibility';
 
 // Layout
-@import 'layout/header';
-@import 'layout/main';
 @import 'layout/article';
 @import 'layout/footer';
+@import 'layout/header';
+@import 'layout/interactive';
 @import 'layout/login';
+@import 'layout/main';
 
 //Modules
 @import 'modules/buttons';
@@ -23,14 +22,13 @@
 @import 'modules/header-dropdowns';
 @import 'modules/inputs';
 @import 'modules/main-container';
+@import 'modules/misc';
 @import 'modules/mobile-navbar';
 @import 'modules/modals';
 @import 'modules/news-grid';
-//@import 'modules/news-carousel';
 @import 'modules/search-results';
 @import 'modules/tab-panels';
 @import 'modules/tables';
-@import 'modules/misc';
 
 @import 'partials/certification';
 @import 'partials/page';
