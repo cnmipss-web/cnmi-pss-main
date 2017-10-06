@@ -134,7 +134,7 @@
   (let [table @(rf/subscribe [:page-data])]
     (println table)
     (if (> 1 (count table))
-      [:div.row>div.col-xs-12.col-sm-10.col-sm-push-1
+      [:div.col-xs-12.col-sm-10.col-sm-push-1
        [:p "There are no open job vacancies at this time.  Please continue checking this page for updates, or contact CNMI PSS HRO for more information."]]
       [:div
        [forms/search-bar "Search Job Vacancies"]
