@@ -1,0 +1,93 @@
+.site-main>.jumbotron {
+    background: inherit !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    padding: 0px;
+    z-index: -100;
+    height: 100%;
+
+    @include container-width;
+
+    img {
+        @include for-xs {
+            height: 56.25vw;
+            width: 100%;
+        }
+        @include for-sm {
+            height: $sm-width * 9/16;
+            width: $sm-width;                              
+        }
+        @include for-md {
+            height: $md-width * 9/16;
+            width: $md-width;
+        }
+        @include for-lg {
+            height: $lg-width * 9/16;
+            width: $lg-width;
+        }
+    }
+    #carousel-inner>div.item.active>a:focus {
+        outline: $alt-outline !important;
+        outline-offset: 0px;
+    }
+
+    .carousel,
+    .carousel-control.right,
+    .carousel-control.left {
+        background-image: none;
+        color: white;
+
+        @include for-xs {
+            height: 100%;
+        }
+        @include for-sm {
+            height: auto;
+        }
+    }
+
+    .carousel-control.right,
+    .carousel-control.left {
+        opacity: 1;
+        
+        @include for-sm {
+            margin: 20% 0;
+        }
+    }
+
+    .carousel-indicators {
+        @include for-xs {
+            bottom: -20px;
+        }
+        @include for-sm {
+            bottom: -15px;
+        }
+    }
+
+    h2.carousel-img-title {
+        background-color: transparentize(black, 0.33);
+        color: white;
+        position: relative;
+        text-align: left !important;
+        z-index: 100;
+
+        font-weight: 400 !important;
+        @include for-xs {
+            font-size: 16px;
+            padding-left: 50px;
+            top: 50px;
+            white-space: pre-wrap;
+        }
+
+        @include for-sm {
+            font-size: 24px;
+            padding-left: 100px;
+            top: 75px;
+        }
+
+        @include for-lg {
+            font-size: 24px;
+            padding-left: 150px;
+            top: 100px;
+        }
+    }
+}

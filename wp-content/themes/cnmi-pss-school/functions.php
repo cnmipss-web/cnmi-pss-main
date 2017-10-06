@@ -20,9 +20,9 @@ if ( ! function_exists( 'cnmi_pss_school_page_setup' ) ) :
 		 * Make theme available for translation.
 		 * Translations can be filed in the /languages/ directory.
 		 * If you're building a theme based on CNMI PSS School Page, use a find and replace
-		 * to change 'cnmi-pss-school-page' to the name of your theme in all the template files.
+		 * to change 'cnmi-pss-school' to the name of your theme in all the template files.
 		 */
-		load_theme_textdomain( 'cnmi-pss-school-page', get_template_directory() . '/languages' );
+		load_theme_textdomain( 'cnmi-pss-school', get_template_directory() . '/languages' );
 
 		// Add default posts and comments RSS feed links to head.
 		add_theme_support( 'automatic-feed-links' );
@@ -44,7 +44,7 @@ if ( ! function_exists( 'cnmi_pss_school_page_setup' ) ) :
 
 		// This theme uses wp_nav_menu() in one location.
 		register_nav_menus( array(
-			'menu-1' => esc_html__( 'Primary', 'cnmi-pss-school-page' ),
+			'menu-1' => esc_html__( 'Primary', 'cnmi-pss-school' ),
 		) );
 
 		/*
@@ -102,9 +102,9 @@ add_action( 'after_setup_theme', 'cnmi_pss_school_page_content_width', 0 );
  */
 function cnmi_pss_school_page_widgets_init() {
 	register_sidebar( array(
-		'name'          => esc_html__( 'Sidebar', 'cnmi-pss-school-page' ),
+		'name'          => esc_html__( 'Sidebar', 'cnmi-pss-school' ),
 		'id'            => 'sidebar-1',
-		'description'   => esc_html__( 'Add widgets here.', 'cnmi-pss-school-page' ),
+		'description'   => esc_html__( 'Add widgets here.', 'cnmi-pss-school' ),
 		'before_widget' => '<section id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</section>',
 		'before_title'  => '<h2 class="widget-title">',
@@ -117,11 +117,11 @@ add_action( 'widgets_init', 'cnmi_pss_school_page_widgets_init' );
  * Enqueue scripts and styles.
  */
 function cnmi_pss_school_page_scripts() {
-	wp_enqueue_style( 'cnmi-pss-school-page-style', get_stylesheet_uri() );
+	wp_enqueue_style( 'cnmi-pss-school-style', get_stylesheet_uri() );
 
-	wp_enqueue_script( 'cnmi-pss-school-page-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
+	wp_enqueue_script( 'cnmi-pss-school-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
 
-	wp_enqueue_script( 'cnmi-pss-school-page-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
+	wp_enqueue_script( 'cnmi-pss-school-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );

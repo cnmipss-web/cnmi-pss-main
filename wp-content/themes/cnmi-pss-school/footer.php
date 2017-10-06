@@ -15,14 +15,14 @@
 
 	<footer id="colophon" class="site-footer">
 		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'cnmi-pss-school-page' ) ); ?>"><?php
+			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'cnmi-pss-school' ) ); ?>"><?php
 				/* translators: %s: CMS name, i.e. WordPress. */
-				printf( esc_html__( 'Proudly powered by %s', 'cnmi-pss-school-page' ), 'WordPress' );
+				printf( esc_html__( 'Proudly powered by %s', 'cnmi-pss-school' ), 'WordPress' );
 			?></a>
 			<span class="sep"> | </span>
 			<?php
 				/* translators: 1: Theme name, 2: Theme author. */
-				printf( esc_html__( 'Theme: %1$s by %2$s.', 'cnmi-pss-school-page' ), 'cnmi-pss-school-page', '<a href="http://underscores.me/">Underscores.me</a>' );
+				printf( esc_html__( 'Theme: %1$s by %2$s.', 'cnmi-pss-school' ), 'cnmi-pss-school', '<a href="http://underscores.me/">Underscores.me</a>' );
 			?>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
