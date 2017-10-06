@@ -29,113 +29,106 @@ const sass = require('gulp-sass');
 const cleanCss = require('gulp-clean-css');
 const autoprefixer = require('gulp-autoprefixer');
 
-
-const webpack = require('webpack');
-const webpackStream = require('webpack-stream');
-// const WEBPACK_DEV = require('./webpack.config.dev.js');
-// const WEBPACK_PROD = require('./webpack.config.production.js');
-
-// File Paths
-const CLIENT = './wp-content/src/js/';
-const CLJS = './wp-content/src/cljs/dev-resources/public/js/';
-const DIST = './wp-content/dist/';
-const JS_BUNDLE = 'bundle.js';
-const STYLES = './wp-content/src/scss/';
-
-// SCSS fonts
-const FONTS = {
-  in: [
-    CLIENT + './wp-content/src/static/fonts/*.*',
-    'node_modules/font-awesome/fonts/*.*',
-    'node_modules/bootstrap-sass/assets/fonts/bootstrap/*.*',
-    'src/slick-1.6.0/slick/fonts/*.*',
-  ],
-  out: DIST + 'css/fonts/',
-};
-
-const SCSS = {
-  in: STYLES,
-  out: DIST + 'css/',
-  watch: STYLES + '**/*.scss',
+const REGISTERED_TASKS = [];
+const WP_THEMES = [{
+  name: 'cnmi-pss-district-website',
+  devTask: 'cnmi-pss-district-website-style',
+  prodTask: 'cnmi-pss-district-website-prod-style',
+  src: './wp-content/themes/cnmi-pss/scss/style.scss',
+  dist: './wp-content/themes/cnmi-pss/',
+  prefixOpts: {
+    browsers: [
+      "> 1%",
+      "last 2 versions",
+      "iOS 8.1"
+    ],
+  },
   sassOpts: {
     outputStyle: 'compressed',
     precison: 3,
     errLogToConsole: true,
-    includePaths: [
-      'node_modules/bootstrap-sass/assets/stylesheets/',
-      'node_modules/font-awesome/css',
-      STYLES + 'base/',
-      STYLES + 'components/',
+    includePaths: [],
+  },
+}, {
+  name: 'cnmi-pss-school-website',
+  devTask: 'cnmi-pss-school-website-style',
+  prodTask: 'cnmi-pss-school-website-prod-style',
+  src: './wp-content/themes/cnmi-pss-school/scss/style.scss',
+  dist: './wp-content/themes/cnmi-pss-school/',
+  prefixOpts: {
+    browsers: [
+      "> 1%",
+      "last 2 versions",
+      "iOS 8.1"
     ],
   },
-};
+  sassOpts: {
+    outputStyle: 'compressed',
+    precison: 3,
+    errLogToConsole: true,
+    includePaths: [],
+  },
+}]
 
-gulp.task('fonts', () => {
-  return gulp
-    .src(FONTS. in)
-    .pipe(gulp.dest(FONTS.out));
-});
+WP_THEMES.forEach(compileStyle);
+WP_THEMES.forEach(compileProductionStyle);
 
-// Styles
-gulp.task('styles', () => {
-  const prefixOpts = {
-    browsers: [
-      "> 1%",
-      "last 2 versions",
-      "iOS 8.1"
-    ],
-  };
-  return gulp
-    .src(SCSS. in + 'main.scss')
-    .pipe(sourcemaps.init())
-    .pipe(sass(SCSS.sassOpts))
-    .pipe(autoprefixer(prefixOpts))
-    .pipe(cleanCss())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(SCSS.out))
-    .pipe(livereload());
-});
+const DEV_TASKS = WP_THEMES.map(style => style.devTask);
+const PROD_TASKS = WP_THEMES.map(style => style.prodTask)
 
-// Production Styles 
-gulp.task('prod-styles', () => {
-  const prefixOpts = {
-    browsers: [
-      "> 1%",
-      "last 2 versions",
-      "iOS 8.1"
-    ],
-  };
-  return gulp
-    .src(SCSS. in + 'main.scss')
-    .pipe(sass(SCSS.sassOpts))
-    .pipe(autoprefixer(prefixOpts))
-    .pipe(cleanCss())
-    .pipe(gulp.dest(SCSS.out))
-    .pipe(livereload());
-});
+gulp.task('default', DEV_TASKS);
+gulp.task('production', PROD_TASKS);
 
-// Scripts
-gulp.task('dist-cljs', () => {
-  return gulp
-    .src('./wp-content/src/cljs/cnmipss/resources/public/js/compiled/**/*')
-    .pipe(gulp.dest('js/compiled/'))
-    .pipe(livereload());
-});
-
-gulp.task('default', [
-  'fonts', 'styles',
-], () => {});
-
-gulp.task('reload', () => {
-  return gulp.src(CLJS + 'theme.js').pipe(livereload());
-});
-
-gulp.task('watch', [
-  'styles',
-], () => {
+gulp.task('watch', DEV_TASKS, () => {
   livereload.listen();
-  gulp.watch(SCSS.in + '**/*.scss', ['styles'])
-  // gulp.watch(CLJS + '**/*\.js.map', ['reload']);
-  // gulp.watch(CLIENT + '/**/*.js',  ['webpack-dev']);
-  // gulp.watch(CLJS + '*.js', ['webpack-dev']);
+  WP_THEMES.forEach((style) => {
+    gulp.watch(style.src.substring(0, style.src.lastIndexOf('/')) + '/**/*.scss', [style.devTask]);
+  });
 });
+
+/**
+ * Register a gulp task to compile the given style with development settings.
+ * 
+ * @param {Object} style Object specifying properties of the style 
+ * @param {string} style.name Name of the style
+ * @param {string} style.src Src directorty the SASS files
+ * @param {string} style.dist Output directory of the compiled CSS file
+ * @param {Object} style.sassOpts SASS compilation options for this style
+ * @param {Object} style.prefixOpts autoprefixes options for this style
+ */
+function compileStyle(style) {
+  gulp.task(style.devTask, () => {
+    return gulp
+      .src(style.src)
+      .pipe(sourcemaps.init())
+      .pipe(sass(style.sassOpts))
+      .pipe(autoprefixer(style.prefixOpts))
+      .pipe(cleanCss())
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest(style.dist))
+      .pipe(livereload());
+  });
+}
+
+
+/**
+ * Register a gulp taks to compile the given style with production settings
+ * 
+ * @param {Object} style Object specifying properties of the style 
+ * @param {string} style.name Name of the style
+ * @param {string} style.src Src directorty the SASS files
+ * @param {string} style.dist Output directory of the compiled CSS file
+ * @param {Object} style.sassOpts SASS compilation options for this style
+ * @param {Object} style.prefixOpts autoprefixes options for this style
+ */
+function compileProductionStyle(style) {
+  gulp.task(style.prodTask, () => {
+    return gulp
+      .src(style.src)
+      .pipe(sass(style.sassOpts))
+      .pipe(autoprefixer(style.prefixOpts))
+      .pipe(cleanCss())
+      .pipe(gulp.dest(style.dist))
+      .pipe(livereload());
+  });
+}
