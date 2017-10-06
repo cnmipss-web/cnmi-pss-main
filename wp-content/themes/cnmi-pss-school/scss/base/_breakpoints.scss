@@ -2,6 +2,10 @@
  * Breakpoints Based on Bootstrap v3
  */
 
+@mixin for-all-sizes {
+    @content;
+}
+
 @mixin for-phone-only {
     // Bootstrap Size: xs
     @media (max-width: $phone-screen - 1) {
@@ -43,48 +47,31 @@
     }
 }
 
-@mixin for-xs {
-    @content;
-}
 
-@mixin for-sm {
-    @media (min-width: $phone-screen) {
-        @content;
-    }
-}
-
-@mixin for-md {
-    @media (min-width: $tblt-port) {
-        @content;
-    }
-}
-
-@mixin for-lg {
-    @media (min-width: $desktop) {
-        @content;
-    }
-}
+/* 
+ * Hidden column classes based on Bootstrap syntax
+ */
 
 .col-xs-0 {
-    @include for-xs {
+    @include for-all-sizes {
         display: none;
     }
 }
 
 .col-sm-0 {
-    @include for-sm {
+    @include for-phone-only {
         display: none;
     }
 }
 
 .col-md-0 {
-    @include for-md {
+    @include for-tablet-portrait-up {
         display: none;
     }
 }
 
 .col-lg-0 {
-    @include for-lg {
+    @include for-desktop-up {
         display: none;
     }
 }

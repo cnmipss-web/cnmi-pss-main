@@ -1,20 +1,18 @@
 @mixin custom-transition($transition, $function, $delay) {
-  transition-delay:$delay;
+  transition-delay: $delay;
   transition-timing-function: $function;
   transition: $transition;
 }
 
-@mixin container-width {
-  @include for-xs {
-    min-width: 100vw;
-  }
-  @include for-sm {
+@mixin use-container-width {
+  min-width: 100vw;
+  @include for-phone-up {
     min-width: $sm-width;
   }
-  @include for-md {
+  @include for-tablet-portrait-up {
     min-width: $md-width;
   }
-  @include for-lg {
+  @include for-desktop-up {
     min-width: $lg-width;
   }
 }
