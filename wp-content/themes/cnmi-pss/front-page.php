@@ -143,28 +143,9 @@ get_header(); ?>
                             </a>
                         </li>
                     </ul>
-                    <div class="tab-content" id="school-links-tabs">
-                        <div role="tabpanel" class="tab-pane fade in active" id="head-start-links">
-                            <?php
-                            cnmi_create_school_btns(array('Head Start'));
-                            ?>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade in active" id="elem-links">
-                            <?php
-                            cnmi_create_school_btns(array('Elementary School'));
-                            ?>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade in active" id="middle-links">
-                            <?php
-                            cnmi_create_school_btns(array('Middle School'));
-                            ?>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade in active" id="high-links">
-                            <?php
-                            cnmi_create_school_btns(array('Jr Sr High School', 'High School'));
-                            ?>
-                        </div>
-                    </div>
+                    
+                    <?php school_btn_tabs() ?>
+                    
                     <script>
                      (function () {
                          let allTabs = jQuery('#tablist').children();

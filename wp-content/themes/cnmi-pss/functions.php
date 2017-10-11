@@ -381,8 +381,28 @@ if (! function_exists('sort_query_posts_by'))
     }
 }
 
+
+/* 
+ * Generate Bootstrap tab panels to hold links to all schools in the district.
+ */
+function school_btn_tabs() {
+    $school_btns = array( 
+        array(array('Head Start'), 'head-start-links') ,
+        array(array('Elementary School'), 'elem-links'), 
+        array(array('Middle School'), 'middle-links'),
+        array( array('Jr Sr High School','High School'), 'high-links'));
+    
+    echo '<div class="tab-content" id="school-links-tabs">';
+    foreach ($school_btns as $btns) {
+        echo '<div role="tabpanel" class="tab-pane fade in active" id=' . $btns[1] . '>';
+        cnmi_create_school_btns($btns[0]);
+        echo '</div>';
+    }
+    echo '</div>';
+}
+
 /**
- * cnmi_create_school_btns - Helper function to generate markup for school link buttons
+ * Helper function to generate markup for individual school link buttons
  *
  * @param  {string} $level Which level of school to create buttons for.  Options:
  *                            -Elementary School
