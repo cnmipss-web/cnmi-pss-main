@@ -384,6 +384,8 @@ if (! function_exists('sort_query_posts_by'))
 
 /* 
  * Generate Bootstrap tab panels to hold links to all schools in the district.
+ *  @param
+ *  @returns
  */
 function school_btn_tabs() {
     $school_btns = array( 
@@ -391,7 +393,48 @@ function school_btn_tabs() {
         array(array('Elementary School'), 'elem-links'), 
         array(array('Middle School'), 'middle-links'),
         array( array('Jr Sr High School','High School'), 'high-links'));
-    
+    echo ' <ul class="nav nav-tabs" role="tablist" id="tablist">
+    <li role="presentation"
+        class="active">
+        <a
+            href="#head-start-links"
+            role="tab"
+            aria-controls="head-start-links"
+            data-toggle="tab">
+            Head Start / Early Head Start
+        </a>
+    </li>
+    <li role="presentation"
+        class="active">
+        <a
+            href="#elem-links"
+            role="tab"
+            aria-controls="elem-links"
+            data-toggle="tab">
+            Elementary Schools
+        </a>
+    </li>
+    <li role="presentation"
+        class="active">
+        <a
+            href="#middle-links"
+            role="tab"
+            aria-controls="middle-links"
+            data-toggle="tab">
+            Middle Schools
+        </a>
+    </li>
+    <li role="presentation"
+        class="active">
+        <a
+            href="#high-links"
+            role="tab"
+            aria-controls="high-links"
+            data-toggle="tab">
+            High Schools
+        </a>
+    </li>
+</ul>';
     echo '<div class="tab-content" id="school-links-tabs">';
     foreach ($school_btns as $btns) {
         echo '<div role="tabpanel" class="tab-pane fade in active" id=' . $btns[1] . '>';

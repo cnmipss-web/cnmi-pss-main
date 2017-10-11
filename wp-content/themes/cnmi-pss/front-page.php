@@ -101,63 +101,21 @@ get_header(); ?>
                     <h2 class="section-title">Our Schools</h2>
                 </div>
                 <div class="col-xs-12">
-                    <ul class="nav nav-tabs" role="tablist" id="tablist">
-                        <li role="presentation"
-                            class="active">
-                            <a
-                                href="#head-start-links"
-                                role="tab"
-                                aria-controls="head-start-links"
-                                data-toggle="tab">
-                                Head Start / Early Head Start
-                            </a>
-                        </li>
-                        <li role="presentation"
-                            class="active">
-                            <a
-                                href="#elem-links"
-                                role="tab"
-                                aria-controls="elem-links"
-                                data-toggle="tab">
-                                Elementary Schools
-                            </a>
-                        </li>
-                        <li role="presentation"
-                            class="active">
-                            <a
-                                href="#middle-links"
-                                role="tab"
-                                aria-controls="middle-links"
-                                data-toggle="tab">
-                                Middle Schools
-                            </a>
-                        </li>
-                        <li role="presentation"
-                            class="active">
-                            <a
-                                href="#high-links"
-                                role="tab"
-                                aria-controls="high-links"
-                                data-toggle="tab">
-                                High Schools
-                            </a>
-                        </li>
-                    </ul>
                     
                     <?php school_btn_tabs() ?>
                     
                     <script>
-                     (function () {
-                         let allTabs = jQuery('#tablist').children();
-                         let allPanes = jQuery('.tab-pane');
+                     (function (tablistSelector, tabpaneSelector) {
+                         let allTabs = jQuery(tablistSelector).children();
+                         let allPanes = jQuery(tabpaneSelector);
                          jQuery(allTabs).removeClass('active').removeClass('in');
                          jQuery(allPanes).removeClass('active').removeClass('in');
                          // Set active tab and tabpanel
-                         let firstTab = jQuery('#tablist').children()[0];
+                         let firstTab = jQuery(tablistSelector).children()[0];
                          jQuery(firstTab).addClass('active').addClass('in');
-                         let firstPane = jQuery(".tab-pane")[0];
+                         let firstPane = jQuery(tabpaneSelector)[0];
                          jQuery(firstPane).addClass('active').addClass('in');
-                     })();
+                     })('#tablist', '.tab-pane');
                     </script>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3 text-center">
