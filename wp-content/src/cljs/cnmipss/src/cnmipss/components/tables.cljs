@@ -132,11 +132,15 @@
 
 (defn jva-table [state]
   (let [table @(rf/subscribe [:page-data])]
-    [:div
-     [forms/search-bar "Search Job Vacancies"]
-     [jva-list (-> table js->clj clojure.walk/keywordize-keys 
-                    (filter-by :announce_no :position :location)
-                    sort-jvas)]]))
+    (println table)
+    (if (> 1 (count table))
+      [:div.row>div.col-xs-12.col-sm-10.col-sm-push-1
+       [:p "There are no open job vacancies at this time.  Please continue checking this page for updates, or contact CNMI PSS HRO for more information."]]
+      [:div
+       [forms/search-bar "Search Job Vacancies"]
+       [jva-list (-> table js->clj clojure.walk/keywordize-keys 
+                     (filter-by :announce_no :position :location)
+                     sort-jvas)]])))
 
 (defn expired?
   "Determine if a pns-announcement has been closed for more than 48 hours"
@@ -192,7 +196,10 @@
   (let [table (-> @(rf/subscribe [:page-data]) js->clj clojure.walk/keywordize-keys)
         rfps (filter #(= "rfp" (:type %)) (:pnsa table))
         ifbs (filter #(= "ifb" (:type %)) (:pnsa table))]
-    [:div
-     [modals/pns-modal]
-     [pns-announcement-table :rfps rfps]
-     [pns-announcement-table :ifbs ifbs]]))
+    (if (> 1 (count table))
+      [:div.row>div.col-xs-12.col-sm-10.col-sm-push-1 {:style {:padding "0px"}}
+       [:p "There are no open Requests for Proposals or Invitations for Bids at this time.  Please continue checking this page for updates, or contact CNMI PSS Procurement & Supply for more information."]]
+      [:div
+       [modals/pns-modal]
+       [pns-announcement-table :rfps rfps]
+       [pns-announcement-table :ifbs ifbs]])))
