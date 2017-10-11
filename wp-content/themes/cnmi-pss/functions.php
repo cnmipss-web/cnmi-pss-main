@@ -196,6 +196,7 @@ function cnmi_header_dropdown($nav_category) {
         }
         echo '</ul></div></noscript>';
     }
+    wp_reset_postdata();
 }
 
 
@@ -217,6 +218,7 @@ function noscript_header_links($nav_category) {
              $pages->the_post();
         endwhile;
     }
+    wp_reset_postdata();
 }
 
 /**
