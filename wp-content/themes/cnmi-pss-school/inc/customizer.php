@@ -25,6 +25,27 @@ function cnmi_pss_school_page_customize_register( $wp_customize ) {
 			'render_callback' => 'cnmi_pss_school_page_customize_partial_blogdescription',
 		) );
 	}
+
+	$wp_customize->add_setting( 'first_school_color' , array(
+		'default'   => '#000000',
+		'transport' => 'refresh',
+	));
+	$wp_customize->add_setting( 'second_school_color' , array(
+		'default'   => '#000000',
+		'transport' => 'refresh',
+	));
+
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'primary_color', array(
+		'label'      => __( 'School Color - Primary', 'cnmi-pss-school' ),
+		'section'    => 'colors',
+		'settings'   => 'first_school_color',
+	)));
+
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'secondary_color', array(
+		'label'      => __( 'School Color - Secondary', 'cnmi-pss-school' ),
+		'section'    => 'colors',
+		'settings'   => 'second_school_color',
+	)));
 }
 add_action( 'customize_register', 'cnmi_pss_school_page_customize_register' );
 
