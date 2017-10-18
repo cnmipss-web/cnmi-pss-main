@@ -19,14 +19,15 @@
     <link rel="stylesheet" id="webfonts-css" href="//fonts.googleapis.com/css?family=Roboto%3A300%2C400%2C400italic%2C500%2C500italic%2C700%2C700italic&amp;ver=694b2c0e61cf50a3db658b64c7530031" type="text/css" media="all">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="/wp-content/dist/css/main.css" />
     <!-- <script src="https://cdn.accesslint.com/accesslint-1.1.2.js"></script> -->
     <?php wp_head(); ?>
   </head>
 
   <body <?php body_class(); ?>>
     <div id="page" class="site">
-      <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e('Skip to content', 'cnmi-pss'); ?></a>
+      <a class="skip-link screen-reader-text" href="#content">
+        <?php esc_html_e('Skip to content', 'cnmi-pss'); ?>
+      </a>
 
       <header id="masthead" class="site-header" role="banner">
         <div class="site-branding container">

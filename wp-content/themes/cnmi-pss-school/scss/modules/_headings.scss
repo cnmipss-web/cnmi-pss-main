@@ -1,0 +1,11 @@
+h1, h2, h3, h4, h5, h6 {
+    font-family: $title-font-family;
+    font-weight: $title-font-weight;
+    $title-font-line-height: 2;
+}
+
+@for $i from 1 to 6 {
+    h#{$i} {
+        font-size: $title-font-size - ($i - 1) * $title-font-interval;
+    }
+}

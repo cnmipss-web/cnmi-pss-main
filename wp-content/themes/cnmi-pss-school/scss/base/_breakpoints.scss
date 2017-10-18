@@ -1,0 +1,71 @@
+/**
+ * Breakpoints Based on Bootstrap v3
+ */
+
+@mixin for-all {
+    // Bootstrap Size: xs
+    @content;
+}
+
+@mixin for-sm-up {
+    // Boostrap Size: sm
+    @media (max-width: $sm-screen) {
+        @content;
+    }
+}
+
+@mixin for-md-up {
+    // Bootstrap Size: md
+    @media (min-width: $md-screen) {
+        @content;
+    }
+}
+
+@mixin for-lg-up {
+    // Bootstrap Size: lg
+    @media (min-width: $lg-screen) {
+        @content;
+    }
+}
+
+@mixin for-xlg-up {
+    // Bootstrap Size: xlg
+    @media (min-width: $xlg-screen) {
+        @content;
+    }
+}
+
+
+/* 
+ * Hidden column classes based on Bootstrap syntax
+ */
+
+.col-xs-0 {
+    @include for-all{
+        display: none;
+    }
+}
+
+.col-sm-0 {
+    @include for-sm-up {
+        display: none;
+    }
+}
+
+.col-md-0 {
+    @include for-md-up {
+        display: none;
+    }
+}
+
+.col-lg-0 {
+    @include for-lg-up {
+        display: none;
+    }
+}
+
+.col-xlg-0 {
+    @include for-xlg-up {
+        display: none;
+    }
+}

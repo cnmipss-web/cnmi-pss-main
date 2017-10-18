@@ -56,6 +56,7 @@
  */
 
 .site-branding>.row {
+
     @include for-xs {
         padding-bottom: 10px;
     }

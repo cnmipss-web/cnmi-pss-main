@@ -25,7 +25,7 @@
             (for [[name phone cell alt-tel fax email] data]
               (let [phone-nums [(telephone phone) (telephone cell) (telephone alt-tel)]]
                 (if (v/valid-email? email)
-                  {:address address
+                  {:address (str address const/default-addr)
                    :name name
                    :fax (telephone fax)
                    :email email
@@ -47,7 +47,6 @@
 
 (defn schools
   [school]
-  (println school)
   {:name (get-in school [0 1])
    :short (get-in school [1 0])
    :address (join "\r\n" [(get-in school [1 1]) (get-in school [2 1]) (get-in school [3 1])])

@@ -1,0 +1,10 @@
+/* 
+ * Print styling
+ */
+
+@media print {
+    #site-navigation,
+    .site-branding {
+        display: none;
+    }
+}
