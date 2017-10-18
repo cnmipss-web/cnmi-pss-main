@@ -5,14 +5,19 @@
 }
 
 @mixin use-container-width {
-  min-width: 100vw;
-  @include for-phone-up {
-    min-width: $sm-width;
+  @include for-all {
+    min-width: 100vw;
   }
-  @include for-tablet-portrait-up {
-    min-width: $md-width;
+  @include for-sm-up {
+    min-width: $sm-container-width;
   }
-  @include for-desktop-up {
-    min-width: $lg-width;
+  @include for-md-up {
+    min-width: $md-container-width;
+  }
+  @include for-lg-up {
+    min-width: $lg-container-width;
+  }
+  @include for-xlg-up {
+    min-width: $xlg-container-width;
   }
 }
