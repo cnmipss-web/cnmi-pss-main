@@ -46,5 +46,14 @@
       (throw (Exception. (str "Error creating ACF Fields for " opts body))))))
 
 (defn search
+  "Search wp for query term via REST API"
   [query]
   @(http/get (str const/wp-host (:main @target-urls) "?per_page=50&search=" query)))
+
+(defn existing
+  "Pull existing wp data entries of the specified type"
+  [key]
+  (cond
+    (#{:personnel} key) nil
+    (#{:offices} key) nil
+    (#{:schools :headstarts} key) nil))

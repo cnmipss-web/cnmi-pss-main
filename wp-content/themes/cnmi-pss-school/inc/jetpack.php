@@ -28,7 +28,7 @@ function cnmi_pss_school_page_jetpack_setup() {
 	// Add theme support for Content Options.
 	add_theme_support( 'jetpack-content-options', array(
 		'post-details' => array(
-			'stylesheet' => 'cnmi-pss-school-page-style',
+			'stylesheet' => 'cnmi-pss-school-style',
 			'date'       => '.posted-on',
 			'categories' => '.cat-links',
 			'tags'       => '.tags-links',

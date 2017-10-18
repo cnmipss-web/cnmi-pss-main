@@ -60,7 +60,7 @@
     },
     {
       "label": "CNMI PSS Single Page",
-      "url": "http://localhost.test/a-third-test",
+      "url": "http://localhost.test/blog/cnmi-pss-website-redesigned-for-accessibility",
       "hideSelectors": [],
       "removeSelectors": [],
       "selectorExpansion": true,

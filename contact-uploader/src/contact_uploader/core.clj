@@ -20,10 +20,12 @@
   (:gen-class))
 
 (def allow-new? (atom false))
+(def delete-outdated? (atom false))
 
 (defn post-info
   [key data]
-  (let [{name :name} data
+  (let [existing-data (wp/existing key)
+        {name :name} data
         search-name (v/encode-name (subs name 0 (min (count name) 50)))
         {get-body :body} (wp/search search-name)
         contacts (filter #(= (sanitize name) (sanitize (get-in % ["title" "rendered"])))
@@ -42,7 +44,6 @@
           (create/contact-info body fields)
           (throw (Exception. "No new entries unless specified with :new")))))
     (identity data)))
-
 
 (defn upload-data
   [key file]
@@ -75,15 +76,21 @@
   clojure.lang.Keyword
   (parse-arg [arg] arg))
 
+(defn global-settings
+  [args]
+  (if (some #{:new} args)
+    (reset! allow-new? true))
+  (if (some #{:delete-old} args)
+    (reset! delete-outdated? true)))
+
 (defn -main
   "Process CSV file and create WP Contact Info & School Posts from data"
   [& args]
   {:pre [(s/assert seq? args)
          (s/assert (s/every keyword?) args)]}
   (let [args (map parse-arg args)]
-    (if (some #{:new} args)
-      (reset! allow-new? true))
-    (loop [as (filter #(not (= :new %)) args)]
+    (global-settings args)
+    (loop [as (filter #(not= :new %) args)]
       (let [key (first as)
             file (-> key (name) (str ".csv"))
             rem (rest as)]
