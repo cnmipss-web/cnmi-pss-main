@@ -31,18 +31,6 @@
   	</div>    
 </div><!-- #content -->
 
-<footer id="colophon" class="site-footer" role="contentinfo">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>Contact District Office</h2>
-                <div class="footer-center">
-                    <?php cnmi_contact_info('district-office'); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
     <!-- #content -->
 
     <footer id="colophon" class="site-footer" role="contentinfo">
