@@ -42,7 +42,7 @@ RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
 RewriteCond %{REQUEST_URI} !=/server-status
 RewriteCond %{REQUEST_FILENAME} !-f [OR]
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^axe-report\.html$ - [L]
+RewriteRule ^axe-report(.*)(\.html)?$ - [L]
 RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
 RewriteRule ^(.*\.php)$ $1 [L]
 RewriteRule . /index.php [L]
