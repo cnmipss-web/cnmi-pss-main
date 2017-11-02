@@ -11,33 +11,26 @@
 
 // Continued from #content
 ?>
-    <div class="footer-notice">
-        <div class="container">
-            <div class="row notice">
-                <div class="col-xs-12">
-                    <h2 class="section-title">Notice to Persons with Disabilities</h2>
-                </div>
-                <div class="col-xs-12 col-sm-10 col-sm-push-1">
-                    <p class="section-text">
-                        THE CNMI PSS’ current website content and functionality is not accessible to people with disabilities including but not limited
-                        to those who are blind, have low-vision, those with disabilities affecting fine motor control, or
-                        by those who are deaf. As such, these barriers deny persons with disabilities access to programs,
-                        services, and activities, offered on the website and may impede CNMI PSS’ communications with persons
-                        with disabilities.
-                    </p>
-                    <p class="section-text">
-                        Anyone facing a barrier to access to the CNMI PSS’ website content and functionality can contact Associate Commissioner Glenn
-                        Muna at (670) 783-8683 or glenn.muna@cnmipss.org or his office at (670) 664-3820 and the requested
-                        functionality and or content will be made accessible and or available to you within 24 hours of your
-                        request. If you would like to file a formal grievance against the CNMI PSS pursuant to the requirements
-                        of Section 504 and Title II, you may submit such grievance to the Legal Counsel Office Attorneys:
-                        Adam Hardwicke (670) 783-8966 adam.hardwicke@cnmipss.org or Tiberius Mocanu (670) 287-8427 tiberius.mocanu@cnmipss.org.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+	<div class="footer-notice">
+    	<div class="container">
+          	<div class="row notice">
+              	<div class="col-xs-12">
+                  	<h2 class="section-title">Notice to Persons with Disabilities</h2>
+                	<p class="section-text">
+                  		The CNMI Public School System is committed to providing equal access to educational and professional opportunities to all members of our community.  In accordance with the CNMI Public School System’s obligations under Title II of the Americans with Disabilities Act and Section 504 of the Rehabilitation Act, the CNMI PSS District Website has been re-designed to conform to WCAG 2.0 Level AA and WAI-ARIA 1.0 accessibility guidelines.  The changes to the website include improved compatibility with assistive technology, easier keyboard navigation, and the consistent use of text equivalents for audio/visual content, among other changes.
+                  	</p>
+                	<p class="section-text">
+                    	If you have questions, comments, or concerns regarding the accessibility or usability of any part of the CNMI Public School System website or the websites of any individual public schools or public school programs in the CNMI, please contact the CNMI PSS Webmaster, Tyler Collins, via email at webmaster@cnmipss.org or by telephone at the CNMI PSS Office of Administrative Services (670) 664-3820. 
+                	</p>
+                	<p class="section-text">
+                    	If you would like to file a formal grievance against the CNMI PSS pursuant to the requirements of Section 504 and Title II, you may submit such grievance to the Legal Counsel Office Attorney Tiberius Mocanu by telephone (670) 287-8427 or email tiberius.mocanu@cnmipss.org.
+                	</p>
+              	</div>
+          	</div>
+      	</div>
+  	</div>    
+</div><!-- #content -->
+
     <!-- #content -->
 
     <footer id="colophon" class="site-footer" role="contentinfo">

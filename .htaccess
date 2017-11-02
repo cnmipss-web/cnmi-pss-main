@@ -38,10 +38,12 @@ RewriteRule ^index\.php$ - [L]
 RewriteRule ^wp-login$ /wp-login.php [L]
 # add a trailing slash to /wp-admin
 RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
+
 RewriteCond %{REQUEST_URI} !=/server-status
 RewriteCond %{REQUEST_FILENAME} !-f [OR]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^/webtools - [L]
+RewriteRule ^axe-report(.*)(\.html)?$ - [L]
 RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
 RewriteRule ^(.*\.php)$ $1 [L]
 RewriteRule . /index.php [L]

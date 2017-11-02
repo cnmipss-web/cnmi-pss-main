@@ -239,7 +239,7 @@ class core_google_apps_login {
 			<?php 
 			} else {
 			?>
-//				loginform.prepend("<h3 class='galogin-or'><?php esc_html_e( 'or' , 'google-apps-login'); ?></h3>");
+				loginform.prepend("<h3 class='galogin-or'><?php esc_html_e( 'or' , 'google-apps-login'); ?></h3>");
 			<?php } ?>
 			
 			if (poweredby) {
@@ -257,7 +257,7 @@ class core_google_apps_login {
 	}
 	
 	protected function get_login_button_text() {
-		$login_button_text = __('Login with your CNMI PSS Email', 'google-apps-login');
+		$login_button_text = __('Login with Google', 'google-apps-login');
 		return apply_filters('gal_login_button_text', $login_button_text);
 	}
 	
@@ -425,7 +425,7 @@ class core_google_apps_login {
 		return $this->_final_redirect;
 	}
 	
-	public function ga_login_redirect($redirect_to, $request_from, $user) {
+	public function ga_login_redirect($redirect_to, $request_from='', $user=null) {
 		if ($user && !is_wp_error($user)) {
 			$final_redirect = $this->getFinalRedirect();
 			if ($final_redirect !== '') {
