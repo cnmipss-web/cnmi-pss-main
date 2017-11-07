@@ -105,6 +105,9 @@ class Meow_WPMC_Checkers {
 		if ( !get_option( 'wpmc_postmeta', true ) )
 			return false;
 
+		// There is a META called 'gallery' with something like  '5342, 8392, 5832'
+		// By what is it created?
+
 		global $wpdb;
 		$uploads = wp_upload_dir();
 		$parsedURL = parse_url( $uploads['baseurl'] );
