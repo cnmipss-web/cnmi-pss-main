@@ -155,7 +155,6 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 			<?php
 				echo $this->display_title( "Media Cleaner" );
 			?>
-			<p>This plugin will help you cleaning your WordPress install.</p>
 			<div class="meow-section meow-group">
 				<div class="meow-box meow-col meow-span_2_of_2">
 					<h3>How to use</h3>

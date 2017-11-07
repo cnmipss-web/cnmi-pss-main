@@ -3,7 +3,7 @@ Contributors: TigrouMeow
 Tags: management, admin, file, files, images, image, media, library, upload, clean, cleaning
 Requires at least: 4.2
 Tested up to: 4.8
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 
 Clean your Media Library and Uploads directory. It has an internal trash and recovery features. Please read the description.
 
@@ -11,7 +11,7 @@ Clean your Media Library and Uploads directory. It has an internal trash and rec
 
 Clean your Media Library from the media which aren't used in any of your posts, gallery and so on. It features an internal trash, moving the files in there temporarily for you to make sure the files aren't actually in used; once checked, you can trash them permanently. **Before using this plugin, make sure you have a proper backup of your files and database. This is the most important step on the usage of this plugin as you can't trust any file deletion tools.** The Pro version of this plugin brings also scanning to the /uploads folder and will detect which files aren't registered in the Media Library, not used in your content and so on. Retina images are also detected and supported, shortcodes, HTML in sidebars and of course your posts, pages and all post types.
 
-**This tool is a knife. I do my best to make this knife a perfect one. However, this is still a knife, and in the hands of somebody who doesn't know how to use it, it might end badly. Don't use it if you don't have any backup, or if you don't know what it does.**
+**This tool is a knife. I do my best to make this knife a perfect one. However, this is still a knife, and in the hands of somebody who doesn't know how to use it, it might end badly. Don't use it if you don't have any backup, or if you don't know what it does. For backup, you can use such a plugin as [UpdraftPlus](https://updraftplus.com/?afref=460).**
 
 **PAGE BUILDER**. I am adding support for page builders little by little. Each page builder requires a particular code in the Media Cleaner. As for now, Visual Composer by WPBakery is supported.
 
@@ -19,7 +19,7 @@ Clean your Media Library from the media which aren't used in any of your posts, 
 
 **DASHBOARD**. Those file will be shown in a specific dashboard. At this point, it will be up to you to delete them. Files detected as un-used are added to a specific dashboard where you can choose to trash them. They will be then moved to a trash internal to the plugin. After more testing, you can trash them definitely.
 
-**FREE / PRO**. The Free version of the plugin works with the media available in your Media Library. The Pro version adds file scanning to your physical /uploads directory.
+**FREE / PRO**. The Free version of the plugin works with the media available in your Media Library. The Pro version adds scanning to your physical /uploads directory.
 
 **AGAIN, BE CAREFUL**. Again, this plugin deletes files so... be careful! Backup is not only important, it is **necessary**. Don't use this plugin if you don't understand how WordPress works. This is a knife, you need to understand what it does and how before using it.
 
@@ -49,6 +49,9 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 4.2.4 =
+* Fix: Could not empty trash if Media was already removed.
 
 = 4.2.3 =
 * Fix: Meta search issue.
