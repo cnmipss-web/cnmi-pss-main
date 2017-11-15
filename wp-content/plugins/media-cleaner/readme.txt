@@ -2,8 +2,8 @@
 Contributors: TigrouMeow
 Tags: management, admin, file, files, images, image, media, library, upload, clean, cleaning
 Requires at least: 4.2
-Tested up to: 4.8
-Stable tag: 4.2.4
+Tested up to: 4.9
+Stable tag: 4.2.5
 
 Clean your Media Library and Uploads directory. It has an internal trash and recovery features. Please read the description.
 
@@ -50,7 +50,8 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 
 == Changelog ==
 
-= 4.2.4 =
+= 4.2.5 =
+* Update: Support for WP 4.9.
 * Fix: Could not empty trash if Media was already removed.
 
 = 4.2.3 =

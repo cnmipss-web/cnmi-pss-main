@@ -4,12 +4,13 @@ class Meow_WPMC_Core {
 
 	public $checkers = null;
 	public $admin = null;
-
 	public $last_analysis = null;
 	public $last_analysis_ids = null;
+	public $transient_life = 604800; // 7 days
 
 	public function __construct( $admin ) {
 		$this->admin = $admin;
+		$this->transient_life = 60 * 60 * 24 * 7; // 7 days
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 		add_action( 'admin_print_scripts', array( $this, 'admin_inline_js' ) );
@@ -254,7 +255,7 @@ class Meow_WPMC_Core {
 				array_walk( $res[0], array( $this, "wpmc_clean_url_direct" ) );
 				$widgets_images = array_merge( $widgets_images, $res[0] );
 			}
-			set_transient( "wpmc_widgets_images", $widgets_images, 60 * 60 * 2 );
+			set_transient( "wpmc_widgets_images", $widgets_images, $this->transient_life );
 			$found['wpmc_widgets_images'] = $widgets_images;
 
 
@@ -276,7 +277,7 @@ class Meow_WPMC_Core {
 					if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
 						$posts_images_vc = array_merge( $posts_images_vc, $res[1] );
 					}
-					set_transient( "wpmc_posts_images_visualcomposer", $posts_images_vc, 60 * 60 * 2 );
+					set_transient( "wpmc_posts_images_visualcomposer", $posts_images_vc, $this->transient_life );
 					$found['wpmc_posts_images_visualcomposer'] = $posts_images_vc;
 				}
 
@@ -288,12 +289,12 @@ class Meow_WPMC_Core {
 				$posts_images_urls = get_transient( "wpmc_posts_images_urls" );
 				if ( empty( $posts_images_urls ) )
 					$posts_images_urls = array();
-				preg_match_all( "/https?:\/\/[^\/\s]+\/\S+\.(jpg|png|gif)/", $html, $res );
+				preg_match_all( "/https?:\/\/[^\/\s]+\/\S+\.(jpg|jpeg|tiff|png|gif)/", $html, $res );
 				if ( !empty( $res ) && isset( $res[0] ) && count( $res[0] ) > 0 ) {
 					array_walk( $res[0], array( $this, "wpmc_clean_url_direct" ) );
 					$posts_images_urls = array_merge( $posts_images_urls, $res[0] );
 				}
-				set_transient( "wpmc_posts_images_urls", $posts_images_urls, 60 * 60 * 2 );
+				set_transient( "wpmc_posts_images_urls", $posts_images_urls, $this->transient_life );
 				$found['wpmc_posts_images_urls'] = $posts_images_urls;
 
 				// Check for images IDs through classes in in posts
@@ -303,7 +304,7 @@ class Meow_WPMC_Core {
 				preg_match_all( "/wp-image-([0-9]+)/", $html, $res );
 				if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 )
 					$posts_images_ids = array_merge( $posts_images_ids, $res[1] );
-				set_transient( "wpmc_posts_images_ids", $posts_images_ids, 60 * 60 * 2 );
+				set_transient( "wpmc_posts_images_ids", $posts_images_ids, $this->transient_life );
 				$found['wpmc_posts_images_ids'] = $posts_images_ids;
 			}
 
@@ -321,7 +322,7 @@ class Meow_WPMC_Core {
 							$galleries_images_vc = array_merge( $galleries_images_vc, $ids );
 						}
 					}
-					set_transient( "wpmc_galleries_images_visualcomposer", $galleries_images_vc, 60 * 60 * 2 );
+					set_transient( "wpmc_galleries_images_visualcomposer", $galleries_images_vc, $this->transient_life );
 					$found['wpmc_galleries_images_visualcomposer'] = $galleries_images_vc;
 				}
 
@@ -337,7 +338,7 @@ class Meow_WPMC_Core {
 							$galleries_images_fb = array_merge( $galleries_images_fb, $ids );
 						}
 					}
-					set_transient( "wpmc_galleries_images_fusionbuilder", $galleries_images_fb, 60 * 60 * 2 );
+					set_transient( "wpmc_galleries_images_fusionbuilder", $galleries_images_fb, $this->transient_life );
 					$found['wpmc_galleries_images_fusionbuilder'] = $galleries_images_fb;
 				}
 
@@ -352,7 +353,7 @@ class Meow_WPMC_Core {
 						$ids = explode( ',', $values );
 						$galleries_images_wc = array_merge( $galleries_images_wc, $ids );
 					}
-					set_transient( "wpmc_galleries_images_woocommerce", $galleries_images_wc, 60 * 60 * 2 );
+					set_transient( "wpmc_galleries_images_woocommerce", $galleries_images_wc, $this->transient_life );
 					$found['wpmc_galleries_images_woocommerce'] = $galleries_images_wc;
 				}
 
@@ -366,7 +367,7 @@ class Meow_WPMC_Core {
 						array_push( $galleries_images, $this->wpmc_clean_url( $image ) );
 					}
 				}
-				set_transient( "wpmc_galleries_images", $galleries_images, 60 * 60 * 2 );
+				set_transient( "wpmc_galleries_images", $galleries_images, $this->transient_life );
 				$found['wpmc_galleries_images'] = $galleries_images;
 			}
 		}
@@ -389,14 +390,14 @@ class Meow_WPMC_Core {
 			$found['galleries_images_fb'] = is_array( $galleries_images_fb ) ? array_unique( $galleries_images_fb ) : array();
 			$found['galleries_images_wc'] = is_array( $galleries_images_wc ) ? array_unique( $galleries_images_wc ) : array();
 			$found['widgets_images'] = is_array( $widgets_images ) ? array_unique( $widgets_images ) : array();
-			set_transient( "wpmc_posts_images_urls", $found['posts_images_urls'], 60 * 60 * 2 );
-			set_transient( "wpmc_posts_images_ids", $found['posts_images_ids'], 60 * 60 * 2 );
-			set_transient( "wpmc_posts_images_visualcomposer", $found['posts_images_vc'], 60 * 60 * 2 );
-			set_transient( "wpmc_galleries_images_visualcomposer", $found['galleries_images_vc'], 60 * 60 * 2 );
-			set_transient( "wpmc_galleries_images_fusionbuilder", $found['galleries_images_fb'], 60 * 60 * 2 );
-			set_transient( "wpmc_galleries_images_woocommerce", $found['galleries_images_wc'], 60 * 60 * 2 );
-			set_transient( "wpmc_galleries_images", $found['galleries_images'], 60 * 60 * 2 );
-			set_transient( "wpmc_widgets_images", $found['widgets_images'], 60 * 60 * 2 );
+			set_transient( "wpmc_posts_images_urls", $found['posts_images_urls'], $this->transient_life );
+			set_transient( "wpmc_posts_images_ids", $found['posts_images_ids'], $this->transient_life );
+			set_transient( "wpmc_posts_images_visualcomposer", $found['posts_images_vc'], $this->transient_life );
+			set_transient( "wpmc_galleries_images_visualcomposer", $found['galleries_images_vc'], $this->transient_life );
+			set_transient( "wpmc_galleries_images_fusionbuilder", $found['galleries_images_fb'], $this->transient_life );
+			set_transient( "wpmc_galleries_images_woocommerce", $found['galleries_images_wc'], $this->transient_life );
+			set_transient( "wpmc_galleries_images", $found['galleries_images'], $this->transient_life );
+			set_transient( "wpmc_widgets_images", $found['widgets_images'], $this->transient_life );
 		}
 		if ( $finished && get_option( 'wpmc_debuglogs', false ) ) {
 			$this->log( print_r( $found, true ) );
@@ -556,7 +557,7 @@ class Meow_WPMC_Core {
 				}
 			}
 			if ( !wp_untrash_post( $issue->postId ) ) {
-				die( "Failed to untrash Media {$issue->postId}." );
+				error_log( "Cleaner: Failed to Untrash Post {$issue->postId} (but deleted it from Cleaner DB)." );
 			}
 			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 0 WHERE id = %d", $id ) );
 			return true;

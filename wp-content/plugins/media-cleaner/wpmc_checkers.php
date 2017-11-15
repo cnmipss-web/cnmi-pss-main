@@ -159,7 +159,7 @@ class Meow_WPMC_Checkers {
 			if ( !empty( $mediaId ) ) {
 				// Search through the CSS class
 				$posts_images_ids = get_transient( "wpmc_posts_images_ids" );
-				if ( in_array( $mediaId, $posts_images_ids ) ) {
+				if ( is_array( $posts_images_ids ) && in_array( $mediaId, $posts_images_ids ) ) {
 					$this->core->log( "Media {$mediaId} found in content (Posts Images IDs)" );
 					return true;
 				}
@@ -167,7 +167,7 @@ class Meow_WPMC_Checkers {
 				// Posts in Visual Composer (WPBakery)
 				if ( class_exists( 'Vc_Manager' ) ) {
 					$posts_images_vc = get_transient( "wpmc_posts_images_visualcomposer" );
-					if ( in_array( $mediaId, $posts_images_vc ) ) {
+					if ( is_array( $posts_images_vc ) && in_array( $mediaId, $posts_images_vc ) ) {
 						$this->core->log( "Media {$mediaId} found in content (Visual Composer)" );
 						return true;
 					}
@@ -176,7 +176,7 @@ class Meow_WPMC_Checkers {
 
 			// Search through the filename
 			$posts_images_urls = get_transient( "wpmc_posts_images_urls" );
-			if ( in_array( $url, $posts_images_urls ) ) {
+			if ( is_array( $posts_images_urls ) && in_array( $url, $posts_images_urls ) ) {
 				$this->core->log( "URL {$url} found in content (Posts Images URLs)" );
 				return true;
 			}
@@ -185,7 +185,7 @@ class Meow_WPMC_Checkers {
 		// Search in widgets
 		if ( get_option( 'wpmc_widgets', false ) ) {
 			$widgets_images = get_transient( "wpmc_widgets_images" );
-			if ( in_array( $url, $widgets_images ) ) {
+			if ( is_array( $widgets_images ) && in_array( $url, $widgets_images ) ) {
 				$this->core->log( "URL {$url} found in widgets (Widgets Images)" );
 				$this->core->last_analysis = "WIDGET";
 				return true;
