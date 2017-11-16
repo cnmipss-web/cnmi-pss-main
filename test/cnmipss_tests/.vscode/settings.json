@@ -1,0 +1,5 @@
+{
+    "python.unitTest.unittestEnabled": true,
+    "python.venvPath": "~/.virtualenvs",
+    "python.pythonPath": "~/.virtualenvs/cnmipss_tests/bin/python"
+}
