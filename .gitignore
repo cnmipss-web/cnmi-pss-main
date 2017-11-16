@@ -49,3 +49,4 @@ wp-content/wflogs
 __pycache__
 *.pyc
 .cache
+*.jl
