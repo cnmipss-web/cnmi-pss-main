@@ -48,3 +48,4 @@ axe-report.*
 wp-content/wflogs
 __pycache__
 *.pyc
+.cache
