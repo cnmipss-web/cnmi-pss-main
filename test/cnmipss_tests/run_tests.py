@@ -38,7 +38,7 @@ def main():
         email.attach(MIMEText(message, 'plain'))
 
         regex = re.compile('not\\s*ok\\s*\\d', re.MULTILINE)
-        if regex.findall(results) is not None:
+        if regex.findall(results) != []:
             email['Subject'] = 'FAILING Functional Tests for CNMIPSS.ORG ' + \
                 str(datetime.date.today())
         else:
