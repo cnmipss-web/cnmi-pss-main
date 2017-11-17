@@ -23,8 +23,10 @@ class NewsPage(unittest.TestCase):
         articles = self.browser.find_elements_by_css_selector('article')
 
         self.assertEqual('News – CNMI PSS District Site', title)
+        # Should only be one h1
         self.assertEqual(1, len(header1))
-        self.assertEqual(len(articles), len(header2))
+        # Add two because there are two extra h2 in page footer
+        self.assertEqual(len(articles) + 2, len(header2))
 
     def test_news_images(self):
         imgs = self.browser.find_elements_by_css_selector('img')
