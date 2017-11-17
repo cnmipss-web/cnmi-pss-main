@@ -11,7 +11,8 @@ class HomePageTests(unittest.TestCase):
     def setUpClass(cls):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        cls.browser = webdriver.Chrome(chrome_options=chrome_options)        cls.browser.get('http://cnmipss.org')
+        cls.browser = webdriver.Chrome(chrome_options=chrome_options)
+        cls.browser.get('http://cnmipss.org')
 
     @classmethod
     def tearDownClass(cls):
