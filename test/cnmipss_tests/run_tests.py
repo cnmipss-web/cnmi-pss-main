@@ -5,6 +5,7 @@
 import os
 import datetime
 import smtplib
+import re
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from string import Template
@@ -14,7 +15,7 @@ import pytest
 
 def main():
     "Run pytest and email results to webmaster@cnmipss.org"
-    pytest.main("--tap-combined")
+    # pytest.main("--tap-combined")
 
     # Email Results
     email_template = Template(
@@ -27,8 +28,6 @@ def main():
     email = MIMEMultipart()
     email['From'] = 'no-reply@cnmipss.org'
     email['To'] = 'webmaster@cnmipss.org'
-    email['Subject'] = 'Functional Test Results for CNMIPSS.ORG ' + \
-        str(datetime.date.today())
 
     with open('testresults.tap',
               mode='r',
@@ -38,7 +37,14 @@ def main():
             RESULTS=results)
         email.attach(MIMEText(message, 'plain'))
 
-    sender.send_message(email)
+        regex = re.compile('not\\s*ok\\s*\\d', re.MULTILINE)
+        if regex.findall(results) is not None:
+            email['Subject'] = 'FAILING Functional Tests for CNMIPSS.ORG ' + \
+                str(datetime.date.today())
+        else:
+            email['Subject'] = 'PASSING Functional Tests for CNMIPSS.ORG ' + \
+                str(datetime.date.today())
+        sender.send_message(email)
 
 
 if __name__ == '__main__':
