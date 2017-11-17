@@ -1,15 +1,16 @@
-import unittest
-import scrapy
+"""
+    Test for invalid URLs in-use on cnmipss.org
+"""
+
 import json
-from urllib.parse import urljoin
-from scrapy.crawler import CrawlerProcess
+import unittest
 from scrapy.utils.project import get_project_settings
-from crawler.spiders.links_spider import LinkSpider
 
 SETTINGS = get_project_settings()
 
 
 class BrokenLinks(unittest.TestCase):
+    "Test for broken links on all pages of cnmipss.org"
 
     def setUp(self):
         self.broken_links = []
@@ -31,6 +32,7 @@ class BrokenLinks(unittest.TestCase):
 
 
 class ImageSources(unittest.TestCase):
+    "Test for images with bad source URLs on all pages of cnmipss.org"
 
     def setUp(self):
         self.bad_image_sources = []
