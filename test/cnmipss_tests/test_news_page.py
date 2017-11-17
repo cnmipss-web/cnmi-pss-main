@@ -1,5 +1,6 @@
 import unittest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import requests
 
 
@@ -8,7 +9,9 @@ class NewsPage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = webdriver.Chrome()
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        cls.browser = webdriver.Chrome(chrome_options=chrome_options)
         cls.browser.get('http://cnmipss.org/news')
 
     @classmethod
