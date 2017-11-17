@@ -1,10 +1,10 @@
 import scrapy
-from scrapy.contrib.linkextractors import LinkExtractor
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 from scrapy.utils.sitemap import Sitemap
-from crawler.items import LinkItem
-
 from urllib.request import urlopen
+
+from crawler.items import LinkItem
 
 # Follows urls on target domain and saves url, status, and referrer.
 #
@@ -17,6 +17,12 @@ from urllib.request import urlopen
 
 class LinkSpider(CrawlSpider):
     name = "links"
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'crawler.pipelines.DuplicateLinksPipeline': 250,
+            'crawler.pipelines.JsonWriterPipeline': 500,
+        }
+    }
 
     # urllib2 is sync however we're only using these methods once to initialize the crawler.
     @staticmethod
@@ -60,7 +66,6 @@ class LinkSpider(CrawlSpider):
         self._compile_rules()
 
         start_urls = ['http://cnmipss.org']
-        print('First url: ', start_urls[0])
 
         for url in start_urls:
             yield scrapy.Request(url, dont_filter=True)

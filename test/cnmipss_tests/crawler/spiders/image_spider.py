@@ -1,10 +1,11 @@
 import scrapy
-from scrapy.contrib.linkextractors import LinkExtractor
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 from crawler.items import ImagesItem
 from bs4 import BeautifulSoup
 
 from urllib.request import urlopen
+import requests
 
 # Follows urls on target domain and saves url, status, and referrer.
 #
@@ -17,6 +18,13 @@ from urllib.request import urlopen
 
 class ImageSpider(CrawlSpider):
     name = "images"
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'crawler.pipelines.DuplicateImagesPipeline': 250,
+            'crawler.pipelines.CheckImageStatusPipeline': 375,
+            'crawler.pipelines.JsonWriterPipeline': 500,
+        }
+    }
 
     # urllib2 is sync however we're only using these methods once to initialize the crawler.
     @staticmethod
@@ -46,7 +54,6 @@ class ImageSpider(CrawlSpider):
         self._compile_rules()
 
         start_urls = ['http://cnmipss.org']
-        print('First url: ', start_urls[0])
 
         for url in start_urls:
             yield scrapy.Request(url, dont_filter=True)
@@ -61,9 +68,8 @@ class ImageSpider(CrawlSpider):
 
     # rule callback
     def parse_images(self, response):
-        print('Parsing:', response.url)
-        images_item = ImagesItem()
         soup = BeautifulSoup(response.body, 'html.parser')
-        images_item.source = [img.get('src') for img in soup.find_all('img')]
-        print(images_item, soup.find_all('img'))
+        images = soup.find_all(name='img')
+        images_item = ImagesItem()
+        images_item['sources'] = [img.get('src') for img in images]
         yield images_item
