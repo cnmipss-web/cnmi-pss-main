@@ -32,7 +32,6 @@ class DuplicateImagesPipeline(object):
         if drop:
             raise DropItem('No new image sources found: %s' % item)
         else:
-            print('New sources:', new_sources)
             return item
 
 
