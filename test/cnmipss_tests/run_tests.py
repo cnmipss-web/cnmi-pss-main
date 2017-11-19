@@ -15,7 +15,7 @@ import pytest
 
 def main():
     "Run pytest and email results to webmaster@cnmipss.org"
-    pytest.main("--tap-combined")
+    pytest.main(args=["--tap-combined"])
 
     # Email Results
     email_template = Template(
