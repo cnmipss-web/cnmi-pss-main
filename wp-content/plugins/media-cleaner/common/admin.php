@@ -191,9 +191,13 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 			add_settings_field( 'meowapps_hide_meowapps', "Main Menu",
 				array( $this, 'meowapps_hide_dashboard_callback' ),
 				'meowapps_common_settings-menu', 'meowapps_common_settings' );
+			add_settings_field( 'meowapps_force_sslverify', "SSL Verify",
+				array( $this, 'meowapps_force_sslverify_callback' ),
+				'meowapps_common_settings-menu', 'meowapps_common_settings' );
 			add_settings_field( 'meowapps_hide_ads', "Ads",
 				array( $this, 'meowapps_hide_ads_callback' ),
 				'meowapps_common_settings-menu', 'meowapps_common_settings' );
+			register_setting( 'meowapps_common_settings', 'force_sslverify' );
 			register_setting( 'meowapps_common_settings', 'meowapps_hide_meowapps' );
 			register_setting( 'meowapps_common_settings', 'meowapps_hide_ads' );
 		}
@@ -210,7 +214,15 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 			$value = get_option( 'meowapps_hide_meowapps', null );
 			$html = '<input type="checkbox" id="meowapps_hide_meowapps" name="meowapps_hide_meowapps" value="1" ' .
 				checked( 1, get_option( 'meowapps_hide_meowapps' ), false ) . '/>';
-	    $html .= __( '<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a nicer an faster WordPress admin UI. An option will be added in Settings > General to display it again.</small>', 'meowapps' );
+	    $html .= __( '<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a cleaner admin. This option will be reset if a new Meow Apps plugin is installed. <b>Once activated, an option will be added in your General settings to display it again.</b></small>', 'meowapps' );
+	    echo $html;
+		}
+
+		function meowapps_force_sslverify_callback() {
+			$value = get_option( 'force_sslverify', null );
+			$html = '<input type="checkbox" id="force_sslverify" name="force_sslverify" value="1" ' .
+				checked( 1, get_option( 'force_sslverify' ), false ) . '/>';
+	    $html .= __( '<label>Force</label><br /><small>Updates and licenses checks are usually made without checking SSL certificates and it is actually fine this way. But if you are intransigent when it comes to SSL matters, this option will force it.</small>', 'meowapps' );
 	    echo $html;
 		}
 

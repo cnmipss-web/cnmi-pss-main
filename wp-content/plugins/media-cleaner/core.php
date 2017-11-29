@@ -6,11 +6,14 @@ class Meow_WPMC_Core {
 	public $admin = null;
 	public $last_analysis = null;
 	public $last_analysis_ids = null;
-	public $transient_life = 604800; // 7 days
+	private $transient_life = 604800; // 7 days
+	private $regex_file = '/[A-Za-z0-9-_,\s]+[.]{1}(MIMETYPES)/';
+	private $metakeys = array( '%gallery%', '%ids%' );
 
 	public function __construct( $admin ) {
 		$this->admin = $admin;
 		$this->transient_life = 60 * 60 * 24 * 7; // 7 days
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 		add_action( 'admin_print_scripts', array( $this, 'admin_inline_js' ) );
@@ -33,6 +36,13 @@ class Meow_WPMC_Core {
 		$this->checkers = new Meow_WPMC_Checkers( $this );
 	}
 
+	function admin_init() {
+		//$types = get_allowed_mime_types();
+		//$types = implode( '|', array_keys( $types ) );
+		$types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|pdf|xls|xlsx|doc|docx|tiff|mp3|mp4";
+		$this->regex_file  = str_replace( "MIMETYPES", $types, $this->regex_file );
+ 	}
+
 	/*******************************************************************************
 	 * METABOX FOR USAGE
 	 ******************************************************************************/
@@ -52,22 +62,37 @@ class Meow_WPMC_Core {
 		$this->log( "Success " . $success . "\n" );
 		if ( $success ) {
 			if ( $this->last_analysis == "CONTENT" ) {
-				echo "Found in the content.";
+				echo "Found in content.";
+			}
+			else if ( $this->last_analysis == "CONTENT (ID)" ) {
+				echo "Found in content (as an ID).";
+			}
+			else if ( $this->last_analysis == "CONTENT (URL)" ) {
+				echo "Found in content (as an URL).";
 			}
 			else if ( $this->last_analysis == "THEME" ) {
-				echo "Found in the theme.";
+				echo "Found in theme.";
+			}
+			else if ( $this->last_analysis == "VISUAL COMPOSER" ) {
+				echo "Found in Visual Composer.";
 			}
 			else if ( $this->last_analysis == "GALLERY" ) {
-				echo "Found in a gallery.";
+				echo "Found in gallery.";
 			}
 			else if ( $this->last_analysis == "META" ) {
 				echo "Found in meta.";
+			}
+			else if ( $this->last_analysis == "META (ID)" ) {
+				echo "Found in meta (as an ID).";
+			}
+			else if ( $this->last_analysis == "META (URL)" ) {
+				echo "Found in meta (as an URL).";
 			}
 			else if ( $this->last_analysis == "WIDGET" ) {
 				echo "Found in widget.";
 			}
 			else {
-				echo "Used: " . $this->last_analysis;
+				echo $this->last_analysis;
 			}
 		}
 		else {
@@ -195,14 +220,126 @@ class Meow_WPMC_Core {
 		die;
 	}
 
+	function array_to_ids_or_urls( &$meta, &$ids, &$urls ) {
+		foreach ( $meta as $k => $m ) {
+			if ( is_numeric( $m ) ) {
+				// Probably a Media ID
+				if ( $m > 0 )
+					array_push( $ids, $m );
+			}
+			else if ( is_array( $m ) ) {
+				// If it's an array with a width, probably that the index is the Media ID
+				if ( isset( $m['width'] ) && is_numeric( $k ) ) {
+					if ( $k > 0 )
+						array_push( $ids, $k );
+				}
+			}
+			else if ( !empty( $m ) ) {
+				// If it's a string, maybe it's a file (with an extension)
+				if ( preg_match($this->regex_file, $m ) )
+					array_push( $urls, $m );
+			}
+		}
+	}
+
+	function get_images_from_widgets( &$ids, &$urls ) {
+		global $wp_registered_widgets;
+		$syswidgets = $wp_registered_widgets;
+		$active_widgets = get_option( 'sidebars_widgets' );
+		$shortcode_support = get_option( 'wpmc_shortcode', false );
+		foreach ( $active_widgets as $sidebar_name => $widgets ) {
+			if ( $sidebar_name != 'wp_inactive_widgets' && !empty( $widgets ) && is_array( $widgets ) ) {
+				$i = 0;
+				foreach ( $widgets as $key => $widget ) {
+					$widget_class = $syswidgets[$widget]['callback'][0]->option_name;
+					$instance_id = $syswidgets[$widget]['params'][0]['number'];
+					$widget_data = get_option( $widget_class );
+					// error_log( "INSTANCE $key ($instance_id)" );
+					// error_log( print_r( $widget_data, 1 ) );
+					if ( !empty( $widget_data[$instance_id]['text'] ) ) {
+						$html = $shortcode_support ? do_shortcode( $widget_data[$instance_id]['text'] ) : $widget_data[$instance_id]['text'];
+						$urls = array_merge( $urls, $this->get_urls_from_html( $html ) );
+					}
+					if ( !empty( $widget_data[$instance_id]['attachment_id'] ) ) {
+						$id = $widget_data[$instance_id]['attachment_id'];
+						array_push( $ids, $id );
+					}
+					if ( !empty( $widget_data[$instance_id]['url'] ) ) {
+						$url = $this->wpmc_clean_url( $widget_data[$instance_id]['url'] );
+						array_push( $urls, $url );
+					}
+					if ( !empty( $widget_data[$instance_id]['ids'] ) ) {
+						$newIds = $widget_data[$instance_id]['ids'];
+						$ids = array_merge( $ids, $newIds );
+					}
+					$i++;
+				}
+			}
+		}
+	}
+
+	function get_urls_from_html( $html ) {
+		if ( empty( $html ) )
+			return array();
+		libxml_use_internal_errors( false );
+		$dom = new DOMDocument();
+		@$dom->loadHTML( $html );
+		$imgs = $dom->getElementsByTagName( 'img' );
+		$results = array();
+		foreach ( $imgs as $img ) {
+			$src = $this->wpmc_clean_url( $img->getAttribute('src') );
+    	array_push( $results, $src );
+		}
+		return $results;
+	}
+
+	function get_images_from_themes( &$ids, &$urls ) {
+		global $wpdb;
+
+		// PARSE OPTIONS
+		// $metas = $wpdb->get_col( "SELECT option_value FROM $wpdb->options WHERE option_name LIKE 'theme_mods_%'" );
+		// foreach ( $metas as $meta ) {
+		// 	$decoded = @unserialize( $meta );
+		// 	if ( is_array( $decoded ) ) {
+		// 		error_log( print_r( $decoded, 1 ) );
+		// 		$this->array_to_ids_or_urls( $decoded, $postmeta_images_ids, $postmeta_images_urls );
+		// 		continue;
+		// 	}
+		// }
+
+		// USE CURRENT THEME AND WP API
+		$ch = get_custom_header();
+		if ( !empty( $ch ) && !empty( $ch->url ) ) {
+			array_push( $ids, $ch->attachment_id );
+			array_push( $urls, $this->wpmc_clean_url( $ch->url ) );
+		}
+		$cl = get_custom_logo();
+		if ( !empty( $cl ) ) {
+			$urls = array_merge( $this->get_urls_from_html( $cl ), $urls );
+		}
+		$cd = get_background_image();
+		if ( !empty( $cd ) ) {
+			array_push( $urls, $this->wpmc_clean_url( $cd ) );
+		}
+		$photography_hero_image = get_theme_mod( 'photography_hero_image' );
+		if ( !empty( $photography_hero_image ) ) {
+			array_push( $ids, $photography_hero_image );
+		}
+		$author_profile_picture = get_theme_mod( 'author_profile_picture' );
+		if ( !empty( $author_profile_picture ) ) {
+			array_push( $ids, $author_profile_picture );
+		}
+	}
+
 	function wp_ajax_wpmc_prepare_do() {
 		$limit = isset( $_POST['limit'] ) ? $_POST['limit'] : 0;
 		$limitsize = get_option( 'wpmc_posts_buffer', 10 );
 		if ( empty( $limit ) )
 			$this->wpmc_reset_issues();
+		$check_postmeta = get_option( 'wpmc_postmeta', false );
 		$check_posts = get_option( 'wpmc_posts', false );
 		$check_galleries = get_option( 'wpmc_galleries', false );
-		if ( !$check_galleries && !$check_posts ) {
+		if ( !$check_galleries && !$check_posts && !$check_postmeta ) {
 			echo json_encode( array(
 				'results' => array(),
 				'success' => true,
@@ -217,6 +354,9 @@ class Meow_WPMC_Core {
 			WHERE p.post_status != 'inherit'
 			AND p.post_status != 'trash'
 			AND p.post_type != 'attachment'
+			AND p.post_type != 'shop_order'
+			AND p.post_type != 'shop_order_refund'
+			AND p.post_type != 'nav_menu_item'
 			AND p.post_type != 'revision'
 			LIMIT %d, %d", $limit, $limitsize
 			)
@@ -225,46 +365,80 @@ class Meow_WPMC_Core {
 		$found = array();
 		$shortcode_support = get_option( 'wpmc_shortcode', false );
 
-		// Analyze Widgets
-		if ( get_option( 'wpmc_widgets', false ) && empty( $limit ) ) {
-			$widgets_content = "";
-			global $wp_registered_widgets;
-			$syswidgets = $wp_registered_widgets;
-			$active_widgets = get_option( 'sidebars_widgets' );
-			// Contatenation of the widgets
-			foreach ( $active_widgets as $sidebar_name => $widgets ) {
-				if ( $sidebar_name != 'wp_inactive_widgets' && !empty( $widgets ) && is_array( $widgets ) ) {
-					$i = 0;
-					foreach ( $widgets as $widget ) {
-						$widget_class = $syswidgets[$widget]['callback'][0]->option_name;
-						$instance_id = $syswidgets[$widget]['params'][0]['number'];
-						$widget_data = get_option($widget_class);
-						if ( !empty( $widget_data[$instance_id]['text'] ) ) {
-							if ( $shortcode_support )
-								$widgets_content .= do_shortcode( $widget_data[$instance_id]['text'] );
-							else
-								$widgets_content .= $widget_data[$instance_id]['text'];
-						}
-						$i++;
-					}
-				}
-			}
-			$widgets_images = array();
-			preg_match_all( "/https?:\/\/[^\/\s]+\/\S+\.(jpg|png|gif)/", $widgets_content, $res );
-			if ( !empty( $res ) && isset( $res[0] ) && count( $res[0] ) > 0 ) {
-				array_walk( $res[0], array( $this, "wpmc_clean_url_direct" ) );
-				$widgets_images = array_merge( $widgets_images, $res[0] );
-			}
-			set_transient( "wpmc_widgets_images", $widgets_images, $this->transient_life );
-			$found['wpmc_widgets_images'] = $widgets_images;
-
-
+		if ( empty( $limit ) ) {
+			$theme_ids = array();
+			$theme_urls = array();
+			$this->get_images_from_themes( $theme_ids, $theme_urls );
+			set_transient( "wpmc_theme_ids", $theme_ids, $this->transient_life );
+			set_transient( "wpmc_theme_urls", $theme_urls, $this->transient_life );
+			$found['wpmc_theme_ids'] = $theme_ids;
+			$found['wpmc_theme_urls'] = $theme_urls;
 		}
+
+		// Analyze Widgets (only on start)
+		if ( get_option( 'wpmc_widgets', false ) && empty( $limit ) ) {
+			$widgets_ids = array();
+			$widgets_urls = array();
+			$this->get_images_from_widgets( $widgets_ids, $widgets_urls );
+			set_transient( "wpmc_widgets_ids", $widgets_ids, $this->transient_life );
+			set_transient( "wpmc_widgets_urls", $widgets_urls, $this->transient_life );
+			$found['wpmc_widgets_ids'] = $widgets_ids;
+			$found['wpmc_widgets_urls'] = $widgets_urls;
+		}
+
+		// Prepare likes for SQL
+		$like = "";
+		foreach ( $this->metakeys as $metakey )
+			$like .= "OR meta_key LIKE '$metakey' ";
 
 		// Analyze Posts
 		foreach ( $posts as $post ) {
 
 			$html = get_post_field( 'post_content', $post );
+
+			if ( $check_postmeta ) {
+				global $wpdb;
+				$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta
+					WHERE post_id = %d
+					AND meta_key = '_thumbnail_id' $like", $post )
+				);
+				if ( count( $metas ) > 0 ) {
+					$postmeta_images_ids = get_transient( "wpmc_postmeta_images_ids" );
+					if ( empty( $postmeta_images_ids ) )
+						$postmeta_images_ids = array();
+					$postmeta_images_urls = get_transient( "wpmc_postmeta_images_urls" );
+					if ( empty( $postmeta_images_urls ) )
+						$postmeta_images_urls = array();
+
+					foreach ( $metas as $meta ) {
+						// Just a number, let's assume it's a Media ID
+						if ( is_numeric( $meta ) ) {
+							//error_log( "META NUMERIC: " . $meta );
+							if ( $meta > 0 )
+								array_push( $postmeta_images_ids, $meta );
+							continue;
+						}
+						$decoded = @unserialize( $meta );
+						if ( is_array( $decoded ) ) {
+							// error_log( "META DECODED" );
+							// error_log( print_r( $decoded, 1 ) );
+							$this->array_to_ids_or_urls( $decoded, $postmeta_images_ids, $postmeta_images_urls );
+							continue;
+						}
+						$exploded = explode( ',', $meta );
+						if ( is_array( $exploded ) ) {
+							// error_log( "META EXPLODED" );
+							// error_log( print_r( $exploded, 1 ) );
+							$this->array_to_ids_or_urls( $exploded, $postmeta_images_ids, $postmeta_images_urls );
+							continue;
+						}
+					}
+					set_transient( "wpmc_postmeta_images_ids", $postmeta_images_ids, $this->transient_life );
+					$found['wpmc_postmeta_images_ids'] = $postmeta_images_ids;
+					set_transient( "wpmc_postmeta_images_urls", $postmeta_images_urls, $this->transient_life );
+					$found['wpmc_postmeta_images_urls'] = $postmeta_images_urls;
+				}
+			}
 
 			if ( $check_posts ) {
 
@@ -289,11 +463,9 @@ class Meow_WPMC_Core {
 				$posts_images_urls = get_transient( "wpmc_posts_images_urls" );
 				if ( empty( $posts_images_urls ) )
 					$posts_images_urls = array();
-				preg_match_all( "/https?:\/\/[^\/\s]+\/\S+\.(jpg|jpeg|tiff|png|gif)/", $html, $res );
-				if ( !empty( $res ) && isset( $res[0] ) && count( $res[0] ) > 0 ) {
-					array_walk( $res[0], array( $this, "wpmc_clean_url_direct" ) );
-					$posts_images_urls = array_merge( $posts_images_urls, $res[0] );
-				}
+
+				$new_urls = $this->get_urls_from_html( $html );
+				$posts_images_urls = array_merge( $posts_images_urls, $new_urls );
 				set_transient( "wpmc_posts_images_urls", $posts_images_urls, $this->transient_life );
 				$found['wpmc_posts_images_urls'] = $posts_images_urls;
 
@@ -374,30 +546,56 @@ class Meow_WPMC_Core {
 		$finished = count( $posts ) < $limitsize;
 		if ( $finished ) {
 			$found = array();
+
+			$theme_urls = get_transient( "wpmc_theme_urls" );
+			$theme_ids = get_transient( "wpmc_theme_ids" );
+			$widgets_urls = get_transient( "wpmc_widgets_urls" );
+			$widgets_ids = get_transient( "wpmc_widgets_ids" );
 			$posts_images_urls = get_transient( "wpmc_posts_images_urls" );
 			$posts_images_ids = get_transient( "wpmc_posts_images_ids" );
+			$postmeta_images_urls = get_transient( "wpmc_postmeta_images_urls" );
+			$postmeta_images_ids = get_transient( "wpmc_postmeta_images_ids" );
 			$posts_images_vc = get_transient( "wpmc_posts_images_visualcomposer" );
 			$galleries_images = get_transient( "wpmc_galleries_images" );
 			$galleries_images_vc = get_transient( "wpmc_galleries_images_visualcomposer" );
 			$galleries_images_fb = get_transient( "wpmc_galleries_images_fusionbuilder" );
 			$galleries_images_wc = get_transient( "wpmc_galleries_images_woocommerce" );
-			$widgets_images = get_transient( "wpmc_widgets_images" );
+
+			$found['theme_urls'] = is_array( $theme_urls ) ? array_unique( $theme_urls ) : array();
+			$found['theme_ids'] = is_array( $theme_ids ) ? array_unique( $theme_ids ) : array();
+			$found['widgets_urls'] = is_array( $widgets_urls ) ? array_unique( $widgets_urls ) : array();
+			$found['widgets_ids'] = is_array( $widgets_ids ) ? array_unique( $widgets_ids ) : array();
 			$found['posts_images_urls'] = is_array( $posts_images_urls ) ? array_unique( $posts_images_urls ) : array();
 			$found['posts_images_ids'] = is_array( $posts_images_ids ) ? array_unique( $posts_images_ids ) : array();
+			$found['postmeta_images_urls'] = is_array( $postmeta_images_urls ) ? array_unique( $postmeta_images_urls ) : array();
+			$found['postmeta_images_ids'] = is_array( $postmeta_images_ids ) ? array_unique( $postmeta_images_ids ) : array();
 			$found['posts_images_vc'] = is_array( $posts_images_vc ) ? array_unique( $posts_images_vc ) : array();
 			$found['galleries_images'] = is_array( $galleries_images ) ? array_unique( $galleries_images ) : array();
 			$found['galleries_images_vc'] = is_array( $galleries_images_vc ) ? array_unique( $galleries_images_vc ) : array();
 			$found['galleries_images_fb'] = is_array( $galleries_images_fb ) ? array_unique( $galleries_images_fb ) : array();
 			$found['galleries_images_wc'] = is_array( $galleries_images_wc ) ? array_unique( $galleries_images_wc ) : array();
-			$found['widgets_images'] = is_array( $widgets_images ) ? array_unique( $widgets_images ) : array();
+
+			// For safety, remove the resolutions...
+			// That will match more files, especially the sizes created before, used before, but not part of the
+			// media metadata anymore.
+			array_walk( $found['theme_urls'], array( $this, 'clean_url_from_resolution' ) );
+			array_walk( $found['widgets_urls'], array( $this, 'clean_url_from_resolution' ) );
+			array_walk( $found['posts_images_urls'], array( $this, 'clean_url_from_resolution' ) );
+			array_walk( $found['postmeta_images_urls'], array( $this, 'clean_url_from_resolution' ) );
+
+			set_transient( "wpmc_theme_urls", $found['theme_urls'], $this->transient_life );
+			set_transient( "wpmc_theme_ids", $found['theme_ids'], $this->transient_life );
+			set_transient( "wpmc_widgets_urls", $found['widgets_urls'], $this->transient_life );
+			set_transient( "wpmc_widgets_ids", $found['widgets_ids'], $this->transient_life );
 			set_transient( "wpmc_posts_images_urls", $found['posts_images_urls'], $this->transient_life );
 			set_transient( "wpmc_posts_images_ids", $found['posts_images_ids'], $this->transient_life );
+			set_transient( "wpmc_postmeta_images_urls", $found['postmeta_images_urls'], $this->transient_life );
+			set_transient( "wpmc_postmeta_images_ids", $found['postmeta_images_ids'], $this->transient_life );
 			set_transient( "wpmc_posts_images_visualcomposer", $found['posts_images_vc'], $this->transient_life );
 			set_transient( "wpmc_galleries_images_visualcomposer", $found['galleries_images_vc'], $this->transient_life );
 			set_transient( "wpmc_galleries_images_fusionbuilder", $found['galleries_images_fb'], $this->transient_life );
 			set_transient( "wpmc_galleries_images_woocommerce", $found['galleries_images_wc'], $this->transient_life );
 			set_transient( "wpmc_galleries_images", $found['galleries_images'], $this->transient_life );
-			set_transient( "wpmc_widgets_images", $found['widgets_images'], $this->transient_life );
 		}
 		if ( $finished && get_option( 'wpmc_debuglogs', false ) ) {
 			$this->log( print_r( $found, true ) );
@@ -599,7 +797,11 @@ class Meow_WPMC_Core {
 	function wpmc_ignore( $id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "wpmcleaner";
-		$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET ignored = 1 WHERE id = %d", $id ) );
+		$has = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table_name WHERE id = %d AND ignored = 1", $id ) );
+		if ( $has > 0 )
+			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET ignored = 0 WHERE id = %d", $id ) );
+		else
+			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET ignored = 1 WHERE id = %d", $id ) );
 		return true;
 	}
 
@@ -765,8 +967,10 @@ class Meow_WPMC_Core {
 		return $sizes;
 	}
 
-	function wpmc_clean_url_direct( &$url ) {
-		$url = $this->wpmc_clean_url( $url );
+	function clean_url_from_resolution( &$url ) {
+		$pattern = '/[_-]\d+x\d+(?=\.[a-z]{3,4}$)/';
+		$url = preg_replace( $pattern, '', $url );
+		return $url;
 	}
 
 	// From a url to the shortened and cleaned url (for example '2013/02/file.png')
@@ -818,23 +1022,14 @@ class Meow_WPMC_Core {
 				$this->last_analysis = "IGNORED";
 				return true;
 			}
-			if ( $this->checkers->has_background_or_header( $mainfile, $attachmentId ) ) {
-				$this->last_analysis = "THEME";
+			if ( $this->checkers->has_background_or_header( $mainfile, $attachmentId ) )
 				return true;
-			}
-			if ( $this->checkers->has_content( $mainfile, $attachmentId ) ) {
-				if ( empty( $this->last_analysis ) )
-					$this->last_analysis = "CONTENT";
+			if ( $this->checkers->has_content( $mainfile, $attachmentId ) )
 				return true;
-			}
-			if ( $this->checkers->check_in_gallery( $mainfile, $attachmentId ) ) {
-				$this->last_analysis = "GALLERY";
+			if ( $this->checkers->check_in_gallery( $mainfile, $attachmentId ) )
 				return true;
-			}
-			if ( $this->checkers->has_meta( $mainfile, $attachmentId ) ) {
-				$this->last_analysis = "META";
+			if ( $this->checkers->has_meta( $mainfile, $attachmentId ) )
 				return true;
-			}
 
 			// If images, check the other files as well
 			$countfiles = 0;
@@ -853,23 +1048,14 @@ class Meow_WPMC_Core {
 						$this->log( "Checking Media #{$attachmentId}: {$file}" );
 
 						// ANALYSIS
-						if ( $this->checkers->has_content( $file, $attachmentId ) ) {
-							$this->last_analysis = "CONTENT";
+						if ( $this->checkers->has_content( $file, $attachmentId ) )
 							return true;
-						}
-						if ( $this->checkers->check_in_gallery( $file, $attachmentId ) ) {
-							$this->last_analysis = "GALLERY";
+						if ( $this->checkers->check_in_gallery( $file, $attachmentId ) )
 							return true;
-						}
-						if ( $this->checkers->has_background_or_header( $file, $attachmentId ) ) {
-							$this->last_analysis = "THEME";
+						if ( $this->checkers->has_background_or_header( $file, $attachmentId ) )
 							return true;
-						}
-						if ( $this->checkers->has_meta( $file, $attachmentId ) ) {
-							$this->last_analysis = "META";
+						if ( $this->checkers->has_meta( $file, $attachmentId ) )
 							return true;
-						}
-
 					}
 				}
 			}
@@ -904,14 +1090,19 @@ class Meow_WPMC_Core {
 		if ( file_exists( plugin_dir_path( __FILE__ ) . '/media-cleaner.log' ) ) {
 			file_put_contents( plugin_dir_path( __FILE__ ) . '/media-cleaner.log', '' );
 		}
+		delete_transient( "wpmc_theme_ids" );
+		delete_transient( "wpmc_theme_urls" );
+		delete_transient( "wpmc_widgets_ids" );
+		delete_transient( "wpmc_widgets_urls" );
 		delete_transient( "wpmc_posts_images_urls" );
 		delete_transient( "wpmc_posts_images_ids" );
+		delete_transient( "wpmc_postmeta_images_urls" );
+		delete_transient( "wpmc_postmeta_images_ids" );
 		delete_transient( "wpmc_posts_images_visualcomposer" );
 		delete_transient( "wpmc_galleries_images_visualcomposer" );
 		delete_transient( "wpmc_galleries_images_fusionbuilder" );
 		delete_transient( "wpmc_galleries_images_woocommerce" );
 		delete_transient( "wpmc_galleries_images" );
-		delete_transient( "wpmc_widgets_images" );
 	}
 
 	/**
@@ -957,11 +1148,14 @@ class Meow_WPMC_Core {
 		$table_name = $wpdb->prefix . "wpmcleaner";
 		$res = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE postId = %d", $post->ID ) );
 		if ( !empty( $res ) && isset( $actions['delete'] ) )
-			$actions['delete'] = "<a href='?page=media-cleaner&view=deleted'>Delete with Media Cleaner</a>";
+			$actions['delete'] = "<a href='?page=media-cleaner&view=deleted'>" .
+				__( 'Delete with Media Cleaner', 'media-cleaner' ) . "</a>";
 		if ( !empty( $res ) && isset( $actions['trash'] ) )
-			$actions['trash'] = "<a href='?page=media-cleaner'>Trash with Media Cleaner</a>";
+			$actions['trash'] = "<a href='?page=media-cleaner'>" .
+				__( 'Trash with Media Cleaner', 'media-cleaner' ) . "</a>";
 		if ( !empty( $res ) && isset( $actions['untrash'] ) ) {
-			$actions['untrash'] = "<a href='?page=media-cleaner&view=deleted'>Restore with Media Cleaner</a>";
+			$actions['untrash'] = "<a href='?page=media-cleaner&view=deleted'>" .
+				__( 'Restore with Media Cleaner', 'media-cleaner' ) . "</a>";
 		}
 		return $actions;
 	}
@@ -1059,7 +1253,13 @@ class Meow_WPMC_Core {
 				<?php } ?>
 
 				<!-- IGNORE SELECTED -->
-				<a id='wpmc_ignore' onclick='wpmc_ignore()' class='button' style='float: left; margin-left: 5px;'><span style="top: 3px; position: relative; left: -5px;" class="dashicons dashicons-yes"></span><?php _e("Ignore", 'media-cleaner'); ?></a>
+				<a id='wpmc_ignore' onclick='wpmc_ignore()' class='button' style='float: left; margin-left: 5px;'><span style="top: 3px; position: relative; left: -5px;" class="dashicons dashicons-yes"></span><?php
+					if ( $view == 'ignored' )
+						_e( "Mark as Issue", 'media-cleaner' );
+					else
+						_e( "Ignore", 'media-cleaner' );
+				?>
+				</a>
 
 				<!-- RESET -->
 				<?php if ( $view != 'deleted' ) { ?>
@@ -1102,7 +1302,7 @@ class Meow_WPMC_Core {
 					}
 
 					if ( !MEDIA_TRASH ) {
-						_e( "<div class='notice notice-warning'><p>The trash for the Media Library is disabled. Any media removed by the plugin will be <b>permanently deleted</b>. To enable it, modify your wp-config.php file and add this line (preferably at the top):<br /><b>define( 'MEDIA_TRASH', true );</b></p></div>" );
+						_e( "<div class='notice notice-warning'><p>The trash for the Media Library is disabled. Any media removed by the plugin will be <b>permanently deleted</b>. To enable it, modify your wp-config.php file and add this line (preferably at the top):<br /><b>define( 'MEDIA_TRASH', true );</b></p></div>", 'media-cleaner' );
 					}
 
 					if ( !$this->admin->is_registered() ) {
@@ -1111,19 +1311,19 @@ class Meow_WPMC_Core {
 						echo "</p></div>";
 					}
 
-					$anychecks = get_option( 'wpmc_posts', true ) || get_option(' wpmc_galleries', false ) ||
-						get_option(' wpmc_postmeta', true );
+					$anychecks = get_option( 'wpmc_posts', false ) || get_option( 'wpmc_galleries', false ) ||
+						get_option( 'wpmc_postmeta', false );
 					$check_library = get_option(' wpmc_media_library', false );
 
 					if ( $method == 'media' ) {
 						if ( !$anychecks )
-							_e( "<div class='error'><p>Media Cleaner will analyze your Media Library. There is however <b>nothing marked to be check</b> in the Settings.</p></div>", 'media-cleaner' );
+							_e( "<div class='error'><p>Media Cleaner will analyze your Media Library. However, There is <b>NOTHING MARKED TO BE CHECKED</b> in the Settings. If you scan now, everything will be detected as NOT in used.</p></div>", 'media-cleaner' );
 						else
 							_e( "<div class='notice notice-success'><p>Media Cleaner will analyze your Media Library.</p></div>", 'media-cleaner' );
 					}
 					else if ( $method == 'files' ) {
 						if ( !$anychecks && !$check_library )
-							_e( "<div class='error'><p>Media Cleaner will analyze your Filesystem. There is however <b>nothing marked to be check</b> in the Settings.</p></div>", 'media-cleaner' );
+							_e( "<div class='error'><p>Media Cleaner will analyze your Filesystem. However, There is <b>NOTHING MARKED TO BE CHECKED</b> in the Settings. If you scan now, everything will be detected as NOT in used.</p></div>", 'media-cleaner' );
 						else
 							_e( "<div class='notice notice-success'><p>Media Cleaner will analyze your Filesystem.</p></div>", 'media-cleaner' );
 					}

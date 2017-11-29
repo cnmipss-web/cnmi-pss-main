@@ -3,7 +3,7 @@ Contributors: TigrouMeow
 Tags: management, admin, file, files, images, image, media, library, upload, clean, cleaning
 Requires at least: 4.2
 Tested up to: 4.9
-Stable tag: 4.2.5
+Stable tag: 4.4.2
 
 Clean your Media Library and Uploads directory. It has an internal trash and recovery features. Please read the description.
 
@@ -49,6 +49,16 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 4.4.2 =
+* Fix: Too many files were detected as used if WooCommerce was installed.
+
+= 4.4.0 =
+* Info: This is a MAJOR UPDATE both in term of optimization and detection. Keep my motivation up and give a good review to the plugin here: https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post. That helps me a lot.
+* Update: Meta Data analysis is now cached, so much faster.
+* Update: URL detections became a bit more safer.
+* Update: Detect the images used by the themes more than before.
+* Fix: Images in widgets weren't detected in many cases.
 
 = 4.2.5 =
 * Update: Support for WP 4.9.
