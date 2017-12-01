@@ -47,7 +47,7 @@
     (re-seq #"(?i)Elem" name) ["51"]
     (re-seq #"(?i)Middle" name) ["50"]
     (re-seq #"(?i)jr" name) ["53"]
-    (re-seq #"(?i)High" name) ["52"]
+    (re-seq #"(?i)(High|Da'ok)" name) ["52"]
     :else nil))
 
 (defn post
