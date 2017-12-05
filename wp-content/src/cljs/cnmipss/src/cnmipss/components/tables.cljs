@@ -160,10 +160,12 @@
      [:td.col-xs-2 [:p.text-center [:em "Closed"]]]
      [:td.col-xs-2
       [buttons/link-file (:file_link row) "Full Announcement"]
-      [:br]
+      (.log js/console (:spec_link row))
+      (if (not-empty (:spec_link row))
+        [buttons/link-file (:spec_link row) "Specifications"])
       [buttons/get-addendums row]
      [:button.btn.btn-primary.table-link.full-width
-      {:on-click (fn []
+      {:on-click (fn [] 
                    (rf/dispatch [:pns-subscribe row])
                    (rf/dispatch [:subscription-error nil])
                    (js/setTimeout #(-> "#pns-modal-label" js/jQuery .focus) 500))
@@ -174,21 +176,27 @@
 (defn pns-announcement-table
   [k data]
   (let [th-props {:scope "col"}]
-    [:table.col-xs-12.lookup-list
-     [:caption (case k
-                 :rfps "Requests for Proposals"
-                 :ifbs "Invitations for Bids")]
-     [:thead
-      [:tr.row.jva-list-row
-       [:th.col-xs-1.text-center th-props "Number"]
-       [:th.col-xs-1.text-center th-props "Open Date"]
-       [:th.col-xs-1.text-center th-props "Close Date"]
-       [:th.col-xs-3.text-center th-props "Title"]
-       [:th.col-xs-4.text-center th-props "Description"]
-       [:th.col-xs-2.text-center th-props "Links"]]]
-     [:tbody
-      (for [row data]
-        ^{:key (str "pns-" (:id row))} [pns-announcement-row (assoc row :status true)])]]))
+    (if (not-empty data)
+      [:table.col-xs-12.lookup-list
+       [:caption [:h2 (case k
+                        :rfps "Requests for Proposals"
+                        :ifbs "Invitations for Bids")]]
+       [:thead
+        [:tr.row.jva-list-row
+         [:th.col-xs-1.text-center th-props "Number"]
+         [:th.col-xs-1.text-center th-props "Open Date"]
+         [:th.col-xs-1.text-center th-props "Close Date"]
+         [:th.col-xs-3.text-center th-props "Title"]
+         [:th.col-xs-4.text-center th-props "Description"]
+         [:th.col-xs-2.text-center th-props "Links"]]]
+       [:tbody
+        (for [row data]
+          ^{:key (str "pns-" (:id row))} [pns-announcement-row (assoc row :status true)])]]
+      [:div.col-xs-10.col-xs-push-1.lookup-list
+       [:h2 (case k
+              :rfps "There Are No Currently Open Requests for Proposals"
+              :ifbs "There Are No Currently Open Invitations for Bids")]
+       [:br]])))
  
 
 (defn procurement-tables
