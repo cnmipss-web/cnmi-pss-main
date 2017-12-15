@@ -5,6 +5,8 @@ php_value post_max_size 25M
 	  ExpiresActive On
 	  ExpiresDefault "access plus 1 month"
 	  ExpiresByType application/javascript "access plus 1 week"
+      ExpiresByType text/javascript "access plus 1 week"
+      ExpiresByType application/json "access plus 1 day"
 </IfModule>
 
 
@@ -28,7 +30,7 @@ php_value post_max_size 25M
     RewriteRule .* - [E=W3TC_ENC:_gzip]
     RewriteCond %{HTTP_COOKIE} w3tc_preview [NC]
     RewriteRule .* - [E=W3TC_PREVIEW:_preview]
-    RewriteCond %{REQUEST_METHOD} != POST
+    RewriteCond %{REQUEST_METHOD} !=POST
     RewriteCond %{QUERY_STRING} =""
     RewriteCond %{REQUEST_URI} \/$
     RewriteCond %{HTTP_COOKIE} !(comment_author|wp\-postpass|w3tc_logged_out|wordpress_logged_in|wptouch_switch_toggle) [NC]
@@ -46,10 +48,9 @@ RewriteRule ^wp-login$ /wp-login.php [L]
 # add a trailing slash to /wp-admin
 RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
 
-RewriteCond %{REQUEST_URI} != /server-status
+RewriteCond %{REQUEST_URI} !=/server-status
 RewriteCond %{REQUEST_FILENAME} !-f [OR]
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^/webtools - [L]
 RewriteRule ^axe-report(.*)(\.html)?$ - [L]
 RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
 RewriteRule ^(.*\.php)$ $1 [L]
