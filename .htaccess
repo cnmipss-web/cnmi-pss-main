@@ -5,7 +5,6 @@ php_value post_max_size 25M
 	  ExpiresActive On
 	  ExpiresDefault "access plus 1 month"
 	  ExpiresByType application/javascript "access plus 1 week"
-      ExpiresByType application/json "access plus 1 minute"
 </IfModule>
 
 
