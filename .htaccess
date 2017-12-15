@@ -2,7 +2,7 @@ php_value upload_max_filesize 25M
 php_value post_max_size 25M
 	  
 <IfModule mod_expires.c>
-	  ExpiresActive On
+	  ExpiresActive Off
 	  ExpiresDefault "access plus 1 month"
 	  ExpiresByType application/javascript "access plus 1 week"
       ExpiresByType application/json "access plus 1 minute"
