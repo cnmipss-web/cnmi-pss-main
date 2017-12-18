@@ -39,7 +39,7 @@ class Meow_WPMC_Core {
 	function admin_init() {
 		//$types = get_allowed_mime_types();
 		//$types = implode( '|', array_keys( $types ) );
-		$types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|pdf|xls|xlsx|doc|docx|tiff|mp3|mp4";
+		$types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|pdf|xls|xlsx|doc|docx|tiff|mp3|mp4|wav|lua";
 		$this->regex_file  = str_replace( "MIMETYPES", $types, $this->regex_file );
  	}
 
@@ -59,7 +59,7 @@ class Meow_WPMC_Core {
 		}
 		$this->log( "Media Edit > Checking Media #{$post->ID}" );
 		$success = $this->wpmc_check_media( $post->ID );
-		$this->log( "Success " . $success . "\n" );
+		$this->log( "Success $success\n" );
 		if ( $success ) {
 			if ( $this->last_analysis == "CONTENT" ) {
 				echo "Found in content.";
@@ -87,6 +87,12 @@ class Meow_WPMC_Core {
 			}
 			else if ( $this->last_analysis == "META (URL)" ) {
 				echo "Found in meta (as an URL).";
+			}
+			else if ( $this->last_analysis == "META ACF (ID)" ) {
+				echo "Found in ACF meta (as an ID).";
+			}
+			else if ( $this->last_analysis == "META ACF (URL)" ) {
+				echo "Found in ACF meta (as an URL).";
 			}
 			else if ( $this->last_analysis == "WIDGET" ) {
 				echo "Found in widget.";
@@ -169,12 +175,14 @@ class Meow_WPMC_Core {
 		foreach ( $data as $piece ) {
 			if ( $type == 'file' ) {
 				$this->log( "Check File: {$piece}" );
-				$success += ( apply_filters( 'wpmc_check_file', true, $piece ) ? 1 : 0 );
-				$this->log( "Success " . $success . "\n" );
+				$result = ( apply_filters( 'wpmc_check_file', true, $piece ) ? 1 : 0 );
+				$this->log( "Success " . $result . "\n" );
+				$success += $result;
 			} elseif ( $type == 'media' ) {
 				$this->log( "Checking Media #{$piece}" );
-				$success += ( $this->wpmc_check_media( $piece ) ? 1 : 0 );
-				$this->log( "Success " . $success . "\n" );
+				$result = ( $this->wpmc_check_media( $piece ) ? 1 : 0 );
+				$this->log( "Success " . $result . "\n" );
+				$success += $result;
 			}
 		}
 		ob_end_clean();
@@ -284,12 +292,43 @@ class Meow_WPMC_Core {
 		libxml_use_internal_errors( false );
 		$dom = new DOMDocument();
 		@$dom->loadHTML( $html );
+
+		// Images, src
 		$imgs = $dom->getElementsByTagName( 'img' );
 		$results = array();
 		foreach ( $imgs as $img ) {
 			$src = $this->wpmc_clean_url( $img->getAttribute('src') );
     	array_push( $results, $src );
 		}
+
+		// Links, href
+		$urls = $dom->getElementsByTagName( 'a' );
+		foreach ( $urls as $url ) {
+			$src = $this->wpmc_clean_url( $url->getAttribute('href') );
+    	array_push( $results, $src );
+		}
+
+		// Single Image in Divi (Elegant Themes)
+		if ( function_exists( '_et_core_find_latest' ) ) {
+			preg_match_all( "/src=\"((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\"/", $html, $res );
+			if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
+				foreach ( $res[1] as $url ) {
+					if ( !preg_match('/(elegantthemesimages\.com)|(elegantthemes\.com)/', $url ) )
+						array_push( $results, $this->wpmc_clean_url( $url ) );
+				}
+			}
+		}
+
+		if ( get_option( 'wpmc_background', false ) ) {
+			preg_match_all( "/url\(\"?((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\"?\)/", $html, $res );
+			error_log( print_r( $res, 1 ) );
+			if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
+				foreach ( $res[1] as $url ) {
+					array_push( $results, $this->wpmc_clean_url( $url ) );
+				}
+			}
+		}
+
 		return $results;
 	}
 
@@ -310,8 +349,10 @@ class Meow_WPMC_Core {
 		// USE CURRENT THEME AND WP API
 		$ch = get_custom_header();
 		if ( !empty( $ch ) && !empty( $ch->url ) ) {
-			array_push( $ids, $ch->attachment_id );
 			array_push( $urls, $this->wpmc_clean_url( $ch->url ) );
+		}
+		if ( !empty( $ch ) && !empty( $ch->attachment_id ) ) {
+			array_push( $ids, $ch->attachment_id );
 		}
 		$cl = get_custom_logo();
 		if ( !empty( $cl ) ) {
@@ -398,6 +439,8 @@ class Meow_WPMC_Core {
 
 			if ( $check_postmeta ) {
 				global $wpdb;
+
+				// Detect values in the general (known, based on %like%) Meta Keys
 				$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta
 					WHERE post_id = %d
 					AND meta_key = '_thumbnail_id' $like", $post )
@@ -438,6 +481,35 @@ class Meow_WPMC_Core {
 					set_transient( "wpmc_postmeta_images_urls", $postmeta_images_urls, $this->transient_life );
 					$found['wpmc_postmeta_images_urls'] = $postmeta_images_urls;
 				}
+
+				// Advanced Custom Fields
+				if ( class_exists( 'acf' ) ) {
+					$postmeta_images_acf_ids = get_transient( "wpmc_postmeta_images_acf_ids" );
+					if ( empty( $postmeta_images_acf_ids ) )
+						$postmeta_images_acf_ids = array();
+					$postmeta_images_acf_urls = get_transient( "wpmc_postmeta_images_acf_urls" );
+					if ( empty( $postmeta_images_acf_urls ) )
+						$postmeta_images_acf_urls = array();
+					$fields = get_field_objects( $post );
+					if ( is_array( $fields ) ) {
+						foreach ( $fields as $field ) {
+							if ( $field['type'] == 'image' && $field['save_format'] == 'object' ) {
+								array_push( $postmeta_images_acf_ids, $field['value']['id'] );
+								array_push( $postmeta_images_acf_urls, $this->wpmc_clean_url( $field['value']['url'] ) );
+							}
+							if ( $field['type'] == 'image' && $field['save_format'] == 'id' ) {
+								array_push( $postmeta_images_acf_ids, $field['value'] );
+							}
+							if ( $field['type'] == 'image' && $field['save_format'] == 'url' ) {
+								array_push( $postmeta_images_acf_urls, $this->wpmc_clean_url( $field['value'] ) );
+							}
+						}
+						set_transient( "wpmc_postmeta_images_acf_ids", $postmeta_images_acf_ids, $this->transient_life );
+						$found['wpmc_postmeta_images_acf_ids'] = $postmeta_images_acf_ids;
+						set_transient( "wpmc_postmeta_images_acf_urls", $postmeta_images_acf_urls, $this->transient_life );
+						$found['wpmc_postmeta_images_acf_urls'] = $postmeta_images_acf_urls;
+					}
+				}
 			}
 
 			if ( $check_posts ) {
@@ -449,7 +521,9 @@ class Meow_WPMC_Core {
 						$posts_images_vc = array();
 					preg_match_all( "/image=\"([0-9]+)\"/", $html, $res );
 					if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
-						$posts_images_vc = array_merge( $posts_images_vc, $res[1] );
+						foreach ( $res[1] as $url ) {
+							array_push( $posts_images_vc, $this->wpmc_clean_url( $url ) );
+						}
 					}
 					set_transient( "wpmc_posts_images_visualcomposer", $posts_images_vc, $this->transient_life );
 					$found['wpmc_posts_images_visualcomposer'] = $posts_images_vc;
@@ -481,6 +555,22 @@ class Meow_WPMC_Core {
 			}
 
 			if ( $check_galleries ) {
+
+				// Galleries in Divi (Elegant Themes)
+				if ( function_exists( '_et_core_find_latest' ) ) {
+					$galleries_images_et = get_transient( "wpmc_galleries_images_divi" );
+					if ( empty( $galleries_images_et ) )
+						$galleries_images_et = array();
+					preg_match_all( "/gallery_ids=\"([0-9,]+)/", $html, $res );
+					if ( !empty( $res ) && isset( $res[1] ) ) {
+						foreach ( $res[1] as $r ) {
+							$ids = explode( ',', $r );
+							$galleries_images_et = array_merge( $galleries_images_et, $ids );
+						}
+					}
+					set_transient( "wpmc_galleries_images_divi", $galleries_images_et, $this->transient_life );
+					$found['wpmc_galleries_images_divi'] = $galleries_images_et;
+				}
 
 				// Galleries in Visual Composer (WPBakery)
 				if ( class_exists( 'Vc_Manager' ) ) {
@@ -555,11 +645,14 @@ class Meow_WPMC_Core {
 			$posts_images_ids = get_transient( "wpmc_posts_images_ids" );
 			$postmeta_images_urls = get_transient( "wpmc_postmeta_images_urls" );
 			$postmeta_images_ids = get_transient( "wpmc_postmeta_images_ids" );
+			$postmeta_images_acf_urls = get_transient( "wpmc_postmeta_images_acf_urls" );
+			$postmeta_images_acf_ids = get_transient( "wpmc_postmeta_images_acf_ids" );
 			$posts_images_vc = get_transient( "wpmc_posts_images_visualcomposer" );
 			$galleries_images = get_transient( "wpmc_galleries_images" );
 			$galleries_images_vc = get_transient( "wpmc_galleries_images_visualcomposer" );
 			$galleries_images_fb = get_transient( "wpmc_galleries_images_fusionbuilder" );
 			$galleries_images_wc = get_transient( "wpmc_galleries_images_woocommerce" );
+			$galleries_images_et = get_transient( "wpmc_galleries_images_divi" );
 
 			$found['theme_urls'] = is_array( $theme_urls ) ? array_unique( $theme_urls ) : array();
 			$found['theme_ids'] = is_array( $theme_ids ) ? array_unique( $theme_ids ) : array();
@@ -569,11 +662,14 @@ class Meow_WPMC_Core {
 			$found['posts_images_ids'] = is_array( $posts_images_ids ) ? array_unique( $posts_images_ids ) : array();
 			$found['postmeta_images_urls'] = is_array( $postmeta_images_urls ) ? array_unique( $postmeta_images_urls ) : array();
 			$found['postmeta_images_ids'] = is_array( $postmeta_images_ids ) ? array_unique( $postmeta_images_ids ) : array();
+			$found['postmeta_images_acf_urls'] = is_array( $postmeta_images_acf_urls ) ? array_unique( $postmeta_images_acf_urls ) : array();
+			$found['postmeta_images_acf_ids'] = is_array( $postmeta_images_acf_ids ) ? array_unique( $postmeta_images_acf_ids ) : array();
 			$found['posts_images_vc'] = is_array( $posts_images_vc ) ? array_unique( $posts_images_vc ) : array();
 			$found['galleries_images'] = is_array( $galleries_images ) ? array_unique( $galleries_images ) : array();
 			$found['galleries_images_vc'] = is_array( $galleries_images_vc ) ? array_unique( $galleries_images_vc ) : array();
 			$found['galleries_images_fb'] = is_array( $galleries_images_fb ) ? array_unique( $galleries_images_fb ) : array();
 			$found['galleries_images_wc'] = is_array( $galleries_images_wc ) ? array_unique( $galleries_images_wc ) : array();
+			$found['galleries_images_et'] = is_array( $galleries_images_et ) ? array_unique( $galleries_images_et ) : array();
 
 			// For safety, remove the resolutions...
 			// That will match more files, especially the sizes created before, used before, but not part of the
@@ -582,6 +678,7 @@ class Meow_WPMC_Core {
 			array_walk( $found['widgets_urls'], array( $this, 'clean_url_from_resolution' ) );
 			array_walk( $found['posts_images_urls'], array( $this, 'clean_url_from_resolution' ) );
 			array_walk( $found['postmeta_images_urls'], array( $this, 'clean_url_from_resolution' ) );
+			array_walk( $found['postmeta_images_acf_urls'], array( $this, 'clean_url_from_resolution' ) );
 
 			set_transient( "wpmc_theme_urls", $found['theme_urls'], $this->transient_life );
 			set_transient( "wpmc_theme_ids", $found['theme_ids'], $this->transient_life );
@@ -591,10 +688,13 @@ class Meow_WPMC_Core {
 			set_transient( "wpmc_posts_images_ids", $found['posts_images_ids'], $this->transient_life );
 			set_transient( "wpmc_postmeta_images_urls", $found['postmeta_images_urls'], $this->transient_life );
 			set_transient( "wpmc_postmeta_images_ids", $found['postmeta_images_ids'], $this->transient_life );
+			set_transient( "wpmc_postmeta_images_acf_urls", $found['postmeta_images_acf_urls'], $this->transient_life );
+			set_transient( "wpmc_postmeta_images_acf_ids", $found['postmeta_images_acf_ids'], $this->transient_life );
 			set_transient( "wpmc_posts_images_visualcomposer", $found['posts_images_vc'], $this->transient_life );
 			set_transient( "wpmc_galleries_images_visualcomposer", $found['galleries_images_vc'], $this->transient_life );
 			set_transient( "wpmc_galleries_images_fusionbuilder", $found['galleries_images_fb'], $this->transient_life );
 			set_transient( "wpmc_galleries_images_woocommerce", $found['galleries_images_wc'], $this->transient_life );
+			set_transient( "wpmc_galleries_images_divi", $found['galleries_images_et'], $this->transient_life );
 			set_transient( "wpmc_galleries_images", $found['galleries_images'], $this->transient_life );
 		}
 		if ( $finished && get_option( 'wpmc_debuglogs', false ) ) {
@@ -991,6 +1091,7 @@ class Meow_WPMC_Core {
 		$upload_folder = wp_upload_dir();
 		$basedir = $upload_folder['basedir'];
 		$file = str_replace( $basedir, '', $fullpath );
+		$file = str_replace( "./", "", $file );
 		$file = trim( $file,  "/" );
 		return $file;
 	}
@@ -1060,6 +1161,7 @@ class Meow_WPMC_Core {
 				}
 			}
 		} else {
+			$this->log( "File {$fullpath} does not exist." );
 			$issue = 'ORPHAN_MEDIA';
 		}
 
@@ -1098,10 +1200,13 @@ class Meow_WPMC_Core {
 		delete_transient( "wpmc_posts_images_ids" );
 		delete_transient( "wpmc_postmeta_images_urls" );
 		delete_transient( "wpmc_postmeta_images_ids" );
+		delete_transient( "wpmc_postmeta_images_acf_urls" );
+		delete_transient( "wpmc_postmeta_images_acf_ids" );
 		delete_transient( "wpmc_posts_images_visualcomposer" );
 		delete_transient( "wpmc_galleries_images_visualcomposer" );
 		delete_transient( "wpmc_galleries_images_fusionbuilder" );
 		delete_transient( "wpmc_galleries_images_woocommerce" );
+		delete_transient( "wpmc_galleries_images_divi" );
 		delete_transient( "wpmc_galleries_images" );
 	}
 
@@ -1279,7 +1384,7 @@ class Meow_WPMC_Core {
 						<input type="search" name="s" style="width: 120px;" value="<?php echo $s ? $s : ""; ?>">
 						<input type="hidden" name="page" value="media-cleaner">
 						<input type="hidden" name="view" value="<?php echo $view; ?>">
-						<input type="hidden" name="paged" value="<?php echo $paged; ?>">
+						<input type="hidden" name="paged" value="1">
 						<input type="submit" class="button" value="<?php _e( 'Search', 'media-cleaner' ) ?>"><span style='border-right: #A2A2A2 solid 1px; margin-left: 5px; margin-right: 3px;'>&nbsp;</span>
 					</p>
 				</form>

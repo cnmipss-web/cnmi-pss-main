@@ -63,16 +63,15 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 			add_settings_field( 'wpmc_widgets', "Widgets",
 				array( $this, 'admin_widgets_callback' ),
 				'wpmc_settings-menu', 'wpmc_settings' );
-
-			if ( get_option( 'wpmc_posts', true ) ) {
-				add_settings_field( 'wpmc_shortcode', "Shortcodes<br />(Pro)",
-					array( $this, 'admin_shortcode_callback' ),
-					'wpmc_settings-menu', 'wpmc_settings' );
-			}
+			add_settings_field( 'wpmc_shortcode', "Shortcodes<br />(Pro)",
+				array( $this, 'admin_shortcode_callback' ),
+				'wpmc_settings-menu', 'wpmc_settings' );
+			add_settings_field( 'wpmc_background', "Background CSS<br />(Pro)",
+				array( $this, 'admin_background_callback' ),
+				'wpmc_settings-menu', 'wpmc_settings' );
 			add_settings_field( 'wpmc_utf8', "UTF-8",
 				array( $this, 'admin_utf8_callback' ),
 				'wpmc_settings-menu', 'wpmc_settings' );
-
 			add_settings_field( 'wpmc_debuglogs', "Logs",
 				array( $this, 'admin_debuglogs_callback' ),
 				'wpmc_settings-menu', 'wpmc_settings', array( "Enable" ) );
@@ -105,6 +104,7 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 		register_setting( 'wpmc_settings', 'wpmc_method' );
 		register_setting( 'wpmc_settings', 'wpmc_posts' );
 		register_setting( 'wpmc_settings', 'wpmc_shortcode' );
+		register_setting( 'wpmc_settings', 'wpmc_background' );
 		register_setting( 'wpmc_settings', 'wpmc_galleries' );
 		register_setting( 'wpmc_settings', 'wpmc_widgets' );
 		register_setting( 'wpmc_settings', 'wpmc_media_library' );
@@ -262,6 +262,14 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 		$html = '<input ' . disabled( $this->is_registered(), false, false ) . ' type="checkbox" id="wpmc_shortcode" name="wpmc_shortcode" value="1" ' .
 			checked( 1, get_option( 'wpmc_shortcode' ), false ) . '/>';
     $html .= '<label>Resolve</label><br /><small>The shortcodes you are using in your <b>posts</b> and/or <b>widgets</b> (depending on your options) will be resolved and analyzed. You don\'t need to have this option enabled for the WP Gallery (as it is covered by the Galleries option).</small>';
+    echo $html;
+  }
+
+	function admin_background_callback( $args ) {
+    $value = get_option( 'wpmc_background', null );
+		$html = '<input ' . disabled( $this->is_registered(), false, false ) . ' type="checkbox" id="wpmc_background" name="wpmc_background" value="1" ' .
+			checked( 1, get_option( 'wpmc_background' ), false ) . '/>';
+    $html .= '<label>Analyze</label><br /><small>When parsing HTML, the CSS inline background will also be analyzed. A few page builders are using this.</small>';
     echo $html;
   }
 

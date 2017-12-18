@@ -5,6 +5,8 @@ php_value post_max_size 25M
 	  ExpiresActive On
 	  ExpiresDefault "access plus 1 month"
 	  ExpiresByType application/javascript "access plus 1 week"
+      ExpiresByType text/javascript "access plus 1 week"
+      ExpiresByType application/json "access plus 1 day"
 </IfModule>
 
 
@@ -49,7 +51,6 @@ RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
 RewriteCond %{REQUEST_URI} !=/server-status
 RewriteCond %{REQUEST_FILENAME} !-f [OR]
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^/webtools - [L]
 RewriteRule ^axe-report(.*)(\.html)?$ - [L]
 RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
 RewriteRule ^(.*\.php)$ $1 [L]

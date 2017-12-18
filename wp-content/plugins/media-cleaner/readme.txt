@@ -3,23 +3,25 @@ Contributors: TigrouMeow
 Tags: management, admin, file, files, images, image, media, library, upload, clean, cleaning
 Requires at least: 4.2
 Tested up to: 4.9
-Stable tag: 4.4.2
+Stable tag: 4.4.7
 
 Clean your Media Library and Uploads directory. It has an internal trash and recovery features. Please read the description.
 
 == Description ==
 
-Clean your Media Library from the media which aren't used in any of your posts, gallery and so on. It features an internal trash, moving the files in there temporarily for you to make sure the files aren't actually in used; once checked, you can trash them permanently. **Before using this plugin, make sure you have a proper backup of your files and database. This is the most important step on the usage of this plugin as you can't trust any file deletion tools.** The Pro version of this plugin brings also scanning to the /uploads folder and will detect which files aren't registered in the Media Library, not used in your content and so on. Retina images are also detected and supported, shortcodes, HTML in sidebars and of course your posts, pages and all post types.
+Clean your Media Library from the media which aren't used in any of your posts, gallery and so on. It features an internal trash, moving the files in there temporarily for you to make sure the files aren't actually in used; once checked, you can trash them permanently. **Before using this plugin, make sure you have a proper backup of your files and database. This is the most important step on the usage of this plugin as you can't trust any file deletion tools.** The Pro version of this plugin brings scanning to the /uploads folder and will detect which files aren't registered in the Media Library, not used in your content and so on. Retina images are also detected and supported, shortcodes, HTML in sidebars and of course your posts, pages and all post types.
+
+A tutorial is available on the official website, here: [Media Cleaner](https://meowapps.com/media-cleaner).
 
 **This tool is a knife. I do my best to make this knife a perfect one. However, this is still a knife, and in the hands of somebody who doesn't know how to use it, it might end badly. Don't use it if you don't have any backup, or if you don't know what it does. For backup, you can use such a plugin as [UpdraftPlus](https://updraftplus.com/?afref=460).**
 
-**PAGE BUILDER**. I am adding support for page builders little by little. Each page builder requires a particular code in the Media Cleaner. As for now, Visual Composer by WPBakery is supported.
+**COMPATIBILITY**. I am adding support for page builders and specific plugins little by little. Currently, I have been working with ACF, Divi (Elegant Themes), Fusion Builder (Avada), WooCommerce, Visual Composer (WPBakery), Beaver Builder, and Gutenberg.
 
-**UNIQUE PLUGIN**. Such a plugin is difficult to create and to maintain. If you understand WordPress, you probably know why. This plugin tries its best to help you. Get used to it and you will get awesome results. This is the only plugin to propose those functions and even a dashboard to cleanup your WordPress install from unused files.
+**SPECIAL PLUGIN**. Such a plugin is difficult to create and to maintain. If you understand WordPress, you probably know why. This plugin does its best to help you. Learn how to use it and you will get awesome results.
 
-**DASHBOARD**. Those file will be shown in a specific dashboard. At this point, it will be up to you to delete them. Files detected as un-used are added to a specific dashboard where you can choose to trash them. They will be then moved to a trash internal to the plugin. After more testing, you can trash them definitely.
+**DASHBOARD**. The files detected as not used will be listed in a specific dashboard. At this point, it will be up to you to delete them. They will be then moved to a trash internal to the plugin. After more testing, you can trash them permanently.
 
-**FREE / PRO**. The Free version of the plugin works with the media available in your Media Library. The Pro version adds scanning to your physical /uploads directory.
+**FREE / PRO**. The Free version of the plugin analyzes the medias available in your Media Library. [Media Cleaner Pro](https://meowapps.com/media-cleaner) can also scan your physical /uploads directory, and match it against the Media Library.
 
 **AGAIN, BE CAREFUL**. Again, this plugin deletes files so... be careful! Backup is not only important, it is **necessary**. Don't use this plugin if you don't understand how WordPress works. This is a knife, you need to understand what it does and how before using it.
 
@@ -49,6 +51,20 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 4.4.7 =
+* Fix: Divi Single Image wasn't always properly detected.
+* Add: Option for CSS background.
+* Update: Code cleaning, slighlty faster now.
+* Info: This plugin is hard work, don't hesitate to review it :) Thank you.
+
+= 4.4.6 =
+* Update: Support for ACF (Image Field as Object, URL and ID).
+* Info: This plugin is hard work, don't hesitate to review it :) Thank you.
+
+= 4.4.4 =
+* Update: Check DIVI Galleries and Single Images in Beaver Builder.
+* Update: Support for files which aren't images and links (href's).
 
 = 4.4.2 =
 * Fix: Too many files were detected as used if WooCommerce was installed.
