@@ -75,6 +75,16 @@ class Meow_WPMC_Checkers {
 				}
 			}
 
+			// Check in Divi
+			if ( function_exists( '_et_core_find_latest' ) ) {
+				$galleries_images_et = get_transient( "wpmc_galleries_images_divi" );
+				if ( is_array( $galleries_images_et ) && in_array( $mediaId, $galleries_images_et ) ) {
+					$this->core->log( "Media {$mediaId} found in a Divi gallery" );
+					$this->core->last_analysis = "GALLERY";
+					return true;
+				}
+			}
+
 		}
 
 		/***************************************************************************
@@ -104,15 +114,34 @@ class Meow_WPMC_Checkers {
 			return true;
 		}
 
+		if ( class_exists( 'acf' ) ) {
+			$postmeta_images_acf_ids = get_transient( "wpmc_postmeta_images_acf_ids" );
+			if ( is_array( $postmeta_images_acf_ids ) && in_array( $mediaId, $postmeta_images_acf_ids ) ) {
+				$this->core->log( "Media {$mediaId} found in content (Post Meta ACF IDs)" );
+				$this->core->last_analysis = "META ACF (ID)";
+				return true;
+			}
+		}
+
 		$file = $this->core->wpmc_clean_uploaded_filename( $file );
 		$pinfo = pathinfo( $file );
 		$url = $pinfo['dirname'] . '/' . $pinfo['filename'] .
 			( isset( $pinfo['extension'] ) ? ( '.' . $pinfo['extension'] ) : '' );
+
 		$postmeta_images_urls = get_transient( "wpmc_postmeta_images_urls" );
 		if ( is_array( $postmeta_images_urls ) && in_array( $url, $postmeta_images_urls ) ) {
 			$this->core->log( "URL {$url} found in content (Post Meta URLs)" );
 			$this->core->last_analysis = "META (URL)";
 			return true;
+		}
+
+		if ( class_exists( 'acf' ) ) {
+			$postmeta_images_acf_urls = get_transient( "wpmc_postmeta_images_acf_urls" );
+			if ( is_array( $postmeta_images_acf_urls ) && in_array( $url, $postmeta_images_acf_urls ) ) {
+				$this->core->log( "URL {$url} found in content (Post Meta ACF URLs)" );
+				$this->core->last_analysis = "META ACF (URL)";
+				return true;
+			}
 		}
 
 		return false;
@@ -125,9 +154,12 @@ class Meow_WPMC_Checkers {
 		$this->core->last_analysis_ids = null;
 		$shortcode_support = get_option( 'wpmc_shortcode', false );
 		$file = $this->core->wpmc_clean_uploaded_filename( $file );
-		$pinfo = pathinfo( $file );
-		$url = $pinfo['dirname'] . '/' . $pinfo['filename'] .
-			( isset( $pinfo['extension'] ) ? ( '.' . $pinfo['extension'] ) : '' );
+
+		// I think that was making sense before, but now now.
+		// $pinfo = pathinfo( $file );
+		// $url = $pinfo['dirname'] . '/' . $pinfo['filename'] .
+		// 	( isset( $pinfo['extension'] ) ? ( '.' . $pinfo['extension'] ) : '' );
+		$url = $file;
 
 		// Check in Posts Content
 		if ( get_option( 'wpmc_posts', true ) ) {
