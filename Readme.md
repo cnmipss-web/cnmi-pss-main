@@ -13,11 +13,12 @@ The repository's root directory contains the full WordPress Installation.
 Updates should be applied to a local testing server and committed to the repository before being pushed to the production server.  Updates should never be applied directly to the production server as doing so will cause the production server and repository to diverge.  This will cause problems when pushing new development work to production at a later date.  The process should be done as follows:
 
 1. Download the newest WordPress version from the [wordpress download page](https://wordpress.org/download/).
-2. Check that repository is on the hotfix branch.  Security updates should be applied to the hotfix branch and merged onto dev branches after being merged to master.
+2. Check that repository is on the hotfix branch.  If not, switch to and update the hotfix branch by running `git checkout hotfix && git merge master`.  Security updates should be applied to the hotfix branch and merged back onto master after testing.
 2. Unzip the new Wordpress version over the repository using `unzip wordpress_file.zip -d /path/to/local/repository`.
 4. Assuming that functional tests all still pass, commit the changes using `git commit -am 'New Wordpress version X.X.X'`.
 3. Run functional tests against the test site using `pytest` (see below for more info).  If functional tests fail, address failing tests before merging updates to master.  Commit any fixes required.
-4. When all functional tests are passing, merge hotfix branch onto the master branch: `git checkout master && git merge hotfix`.
+4. When all functional tests are passing, run BackstopJS for visual regression testing by running `backstop test`.
+5. If all backstop tests pass, or if visual changes are acceptable, merge hotfix branch onto the master branch: `git checkout master && git merge hotfix`.
 5. Push updates to production with `git push production`.
 6. Push updates to origin with `git push origin`.
 7. Merge updates onto development branch: `git checkout development && git merge master`
@@ -83,3 +84,4 @@ Functional tests test various aspects of the website's functionality.  They can 
 
 ### CSS Testing w/ BackstopJS
 
+Visual regression testing of CSS changes is performed using [BackstopJS](https://github.com/garris/BackstopJS).  Backstop should be run any time changes are made to SCSS files or PHP files.  If visual changes are found, they should be checked to ensure that only intended changes have occurred.
