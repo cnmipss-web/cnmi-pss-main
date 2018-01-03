@@ -70,8 +70,8 @@ const WP_THEMES = [{
   },
 }]
 
-WP_THEMES.forEach(compileStyle);
-WP_THEMES.forEach(compileProductionStyle);
+WP_THEMES.forEach(createDevTask);
+WP_THEMES.forEach(createProdTask);
 
 const DEV_TASKS = WP_THEMES.map(style => style.devTask);
 const PROD_TASKS = WP_THEMES.map(style => style.prodTask)
@@ -96,7 +96,7 @@ gulp.task('watch', DEV_TASKS, () => {
  * @param {Object} style.sassOpts SASS compilation options for this style
  * @param {Object} style.prefixOpts autoprefixes options for this style
  */
-function compileStyle(style) {
+function createDevTask(style) {
   gulp.task(style.devTask, () => {
     return gulp
       .src(style.src)
@@ -121,7 +121,7 @@ function compileStyle(style) {
  * @param {Object} style.sassOpts SASS compilation options for this style
  * @param {Object} style.prefixOpts autoprefixes options for this style
  */
-function compileProductionStyle(style) {
+function createProdTask(style) {
   gulp.task(style.prodTask, () => {
     return gulp
       .src(style.src)
