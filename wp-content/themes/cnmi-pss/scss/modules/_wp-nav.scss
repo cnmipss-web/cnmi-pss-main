@@ -1,0 +1,17 @@
+.posts-navigation {
+    text-align: center;
+    .nav-previous,
+    .nav-next {
+        background-color: $dark-blue;
+        border-radius: 0px;
+        a {
+            @include custom-transition(color 0.3s, ease, 0s);
+            color: white;
+            font-weight: bold;
+            &:hover,
+            &:focus {
+                color: $light-gold;
+            }
+        }
+    }
+}

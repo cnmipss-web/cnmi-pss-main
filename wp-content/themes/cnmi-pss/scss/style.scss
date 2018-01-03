@@ -7,13 +7,13 @@
 @import 'base/accessibility';
 
 // Layout
-@import 'layout/article';
 @import 'layout/footer';
 @import 'layout/header';
 @import 'layout/interactive';
 @import 'layout/login';
 @import 'layout/main';
 @import 'layout/print';
+
 
 //Modules
 @import 'modules/buttons';
@@ -30,6 +30,8 @@
 @import 'modules/search-results';
 @import 'modules/tab-panels';
 @import 'modules/tables';
+@import 'modules/wp-entry';
+@import 'modules/wp-nav';
 
 @import 'partials/certification';
 @import 'partials/page';

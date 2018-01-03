@@ -18,6 +18,7 @@
     height: 34px;
 }
 
+
 /**
  * Main Navbar styling for noscript fallback
  */
@@ -28,7 +29,6 @@
         margin-left: 0px;
         margin-right: 5px;
     }
-
     li a {
         @include for-xs {
             font-size: $base-font-size - 0px !important;
@@ -43,20 +43,19 @@
             font-size: $base-font-size !important;
         }
     }
-
-    noscript > ul > li > a {
+    noscript>ul>li>a {
         @include for-phone-only {
             margin-left: 15px;
         }
     }
 }
 
+
 /**
  * Bootstrap Row Holding Header Image, Help Text & Search Form Above Navbar
  */
 
 .site-branding>.row {
-
     @include for-xs {
         padding-bottom: 10px;
     }
@@ -86,6 +85,7 @@
         justify-content: center;
     }
 }
+
 
 /**
  * Mobile: Navbar Header w/ Search Form
@@ -122,7 +122,6 @@
     width: 50vw;
     min-width: 150px;
     max-width: 500px;
-
     &:focus {
         box-shadow: none;
         -webkit-box-shadow: none;
@@ -133,6 +132,7 @@
     max-width: 75px;
     margin-left: 5px;
 }
+
 
 /**
  * Mobile: Hamburger Toggle Button for Header Links

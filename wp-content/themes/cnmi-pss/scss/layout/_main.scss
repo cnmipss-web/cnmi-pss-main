@@ -22,12 +22,10 @@
     @include for-lg {
         min-height: calc(100vh - 322px);
     }
-
     .item img {
         @include container-width;
     }
 }
-
 
 .desc_ {
     margin: 10% 10%;
