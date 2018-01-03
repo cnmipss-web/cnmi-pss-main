@@ -12,17 +12,17 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 
 	function admin_notices() {
 
-		$mediasBuffer = get_option( 'wpmc_medias_buffer', 500 );
-		$postsBuffer = get_option( 'wpmc_posts_buffer', 10 );
-		$analysisBuffer = get_option( 'wpmc_analysis_buffer', 5 );
+		$mediasBuffer = get_option( 'wpmc_medias_buffer', 50 );
+		$postsBuffer = get_option( 'wpmc_posts_buffer', 5 );
+		$analysisBuffer = get_option( 'wpmc_analysis_buffer', 10 );
 		$delay = get_option( 'wpmc_delay', 100 );
 
 		if ( !is_numeric( $mediasBuffer ) || $mediasBuffer < 1 )
-			update_option( 'wpmc_medias_buffer', 500 );
+			update_option( 'wpmc_medias_buffer', 50 );
 		if ( !is_numeric( $postsBuffer ) || $postsBuffer < 1 )
-			update_option( 'wpmc_posts_buffer', 10 );
+			update_option( 'wpmc_posts_buffer', 5 );
 		if ( !is_numeric( $analysisBuffer ) || $analysisBuffer < 1 )
-			update_option( 'wpmc_analysis_buffer', 5 );
+			update_option( 'wpmc_analysis_buffer', 10 );
 		if ( !is_numeric( $delay ) )
 			update_option( 'wpmc_delay', 100 );
 
@@ -69,9 +69,6 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 			add_settings_field( 'wpmc_background', "Background CSS<br />(Pro)",
 				array( $this, 'admin_background_callback' ),
 				'wpmc_settings-menu', 'wpmc_settings' );
-			add_settings_field( 'wpmc_utf8', "UTF-8",
-				array( $this, 'admin_utf8_callback' ),
-				'wpmc_settings-menu', 'wpmc_settings' );
 			add_settings_field( 'wpmc_debuglogs', "Logs",
 				array( $this, 'admin_debuglogs_callback' ),
 				'wpmc_settings-menu', 'wpmc_settings', array( "Enable" ) );
@@ -109,7 +106,6 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 		register_setting( 'wpmc_settings', 'wpmc_widgets' );
 		register_setting( 'wpmc_settings', 'wpmc_media_library' );
 		register_setting( 'wpmc_settings', 'wpmc_postmeta' );
-		register_setting( 'wpmc_settings', 'wpmc_utf8' );
 		register_setting( 'wpmc_settings', 'wpmc_debuglogs' );
 
 		register_setting( 'wpmc_ui_settings', 'wpmc_hide_thumbnails' );
@@ -122,21 +118,21 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 	}
 
 	function admin_medias_buffer_callback( $args ) {
-    $value = get_option( 'wpmc_medias_buffer', 500 );
+    $value = get_option( 'wpmc_medias_buffer', 50 );
     $html = '<input type="number" style="width: 100%;" id="wpmc_medias_buffer" name="wpmc_medias_buffer" value="' . $value . '" />';
     $html .= '<br /><span class="description">The number of medias to read in one time during the preparation phase. This is fast, so the value should be between 50 and 1000.</label>';
     echo $html;
   }
 
 	function admin_posts_buffer_callback( $args ) {
-    $value = get_option( 'wpmc_posts_buffer', 10 );
+    $value = get_option( 'wpmc_posts_buffer', 5 );
     $html = '<input type="number" style="width: 100%;" id="wpmc_posts_buffer" name="wpmc_posts_buffer" value="' . $value . '" />';
     $html .= '<br /><span class="description">The number of posts to read in one time during the preparation phase. This takes a bit of time in case galleries are being used. Recommended value is between 5 and 20.</label>';
     echo $html;
   }
 
 	function admin_analysis_buffer_callback( $args ) {
-    $value = get_option( 'wpmc_analysis_buffer', 5 );
+    $value = get_option( 'wpmc_analysis_buffer', 10 );
     $html = '<input type="number" style="width: 100%;" id="wpmc_analysis_buffer" name="wpmc_analysis_buffer" value="' . $value . '" />';
     $html .= '<br /><span class="description">The number of medias or files to analyse in one time. It is the main part of the process and it depends on the scanning options. Recommended value is 5 but can be more on a powerful server, or 1 if your server is not powerful or your WordPress very bloated.</label>';
     echo $html;
@@ -145,7 +141,7 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 	function admin_delay_callback( $args ) {
     $value = get_option( 'wpmc_delay', 100 );
     $html = '<input type="number" style="width: 100%;" id="wpmc_delay" name="wpmc_delay" value="' . $value . '" />';
-    $html .= '<br /><span class="description">This is a delay Media Cleaner will wait between each request. The process is intensive so this gives the server time to relax a little (hosting services sometimes require this). Recommended value is actually 0, 100 (ms) is for safety, some servers require 2000 or 5000 (2 or 5 seconds).</label>';
+    $html .= '<br /><span class="description">This is a delay Media Cleaner will wait between each request. The process is intensive so this gives the server time to relax a little (hosting services sometimes require this). Recommended value is actually 0, 100 (ms) is for safety, some servers require 2000 or 500 (2 or 5 seconds).</label>';
     echo $html;
   }
 
@@ -270,14 +266,6 @@ class Meow_WPMC_Admin extends MeowApps_Admin {
 		$html = '<input ' . disabled( $this->is_registered(), false, false ) . ' type="checkbox" id="wpmc_background" name="wpmc_background" value="1" ' .
 			checked( 1, get_option( 'wpmc_background' ), false ) . '/>';
     $html .= '<label>Analyze</label><br /><small>When parsing HTML, the CSS inline background will also be analyzed. A few page builders are using this.</small>';
-    echo $html;
-  }
-
-	function admin_utf8_callback( $args ) {
-    $value = get_option( 'wpmc_utf8', null );
-		$html = '<input type="checkbox" id="wpmc_utf8" name="wpmc_utf8" value="1" ' .
-			checked( 1, get_option( 'wpmc_utf8' ), false ) . '/>';
-    $html .= __( '<label>Do not skip UTF-8 filenames</label><br /><small>PHP does not always work well with UTF-8 on all systems. If the scanning suddenly stops, this might be the cause.</small>', 'media-cleaner' );
     echo $html;
   }
 

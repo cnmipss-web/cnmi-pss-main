@@ -58,7 +58,7 @@ class Meow_WPMC_Core {
 			return;
 		}
 		$this->log( "Media Edit > Checking Media #{$post->ID}" );
-		$success = $this->wpmc_check_media( $post->ID );
+		$success = $this->wpmc_check_media( $post->ID, true );
 		$this->log( "Success $success\n" );
 		if ( $success ) {
 			if ( $this->last_analysis == "CONTENT" ) {
@@ -319,9 +319,20 @@ class Meow_WPMC_Core {
 			}
 		}
 
+		// Background Image in Divi (Elegant Themes)
+		if ( function_exists( '_et_core_find_latest' ) ) {
+			preg_match_all( "/background_image=\"((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\"/", $html, $res );
+			if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
+				foreach ( $res[1] as $url ) {
+					if ( !preg_match('/(elegantthemesimages\.com)|(elegantthemes\.com)/', $url ) )
+						array_push( $results, $this->wpmc_clean_url( $url ) );
+				}
+			}
+		}
+
 		if ( get_option( 'wpmc_background', false ) ) {
-			preg_match_all( "/url\(\"?((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\"?\)/", $html, $res );
-			error_log( print_r( $res, 1 ) );
+			preg_match_all( "/url\(\'?\"?((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\'?\"?\)/", $html, $res );
+			//error_log( print_r( $res, 1 ) );
 			if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
 				foreach ( $res[1] as $url ) {
 					array_push( $results, $this->wpmc_clean_url( $url ) );
@@ -374,7 +385,7 @@ class Meow_WPMC_Core {
 
 	function wp_ajax_wpmc_prepare_do() {
 		$limit = isset( $_POST['limit'] ) ? $_POST['limit'] : 0;
-		$limitsize = get_option( 'wpmc_posts_buffer', 10 );
+		$limitsize = get_option( 'wpmc_posts_buffer', 5 );
 		if ( empty( $limit ) )
 			$this->wpmc_reset_issues();
 		$check_postmeta = get_option( 'wpmc_postmeta', false );
@@ -391,14 +402,19 @@ class Meow_WPMC_Core {
 		}
 
 		global $wpdb;
+		// Maybe we could avoid to check more post_types.
+		// SELECT post_type, COUNT(*) FROM `wp_posts` GROUP BY post_type
 		$posts = $wpdb->get_col( $wpdb->prepare( "SELECT p.ID FROM $wpdb->posts p
 			WHERE p.post_status != 'inherit'
 			AND p.post_status != 'trash'
 			AND p.post_type != 'attachment'
+			AND p.post_type NOT LIKE '%acf-%'
+			AND p.post_type NOT LIKE '%edd_%'
 			AND p.post_type != 'shop_order'
 			AND p.post_type != 'shop_order_refund'
 			AND p.post_type != 'nav_menu_item'
 			AND p.post_type != 'revision'
+			AND p.post_type != 'auto-draft'
 			LIMIT %d, %d", $limit, $limitsize
 			)
 		);
@@ -416,7 +432,7 @@ class Meow_WPMC_Core {
 			$found['wpmc_theme_urls'] = $theme_urls;
 		}
 
-		// Analyze Widgets (only on start)
+		// Only on Start: Analyze Widgets
 		if ( get_option( 'wpmc_widgets', false ) && empty( $limit ) ) {
 			$widgets_ids = array();
 			$widgets_urls = array();
@@ -425,6 +441,25 @@ class Meow_WPMC_Core {
 			set_transient( "wpmc_widgets_urls", $widgets_urls, $this->transient_life );
 			$found['wpmc_widgets_ids'] = $widgets_ids;
 			$found['wpmc_widgets_urls'] = $widgets_urls;
+		}
+
+		// Only on Start: Analyze WooCommerce Categories Images
+		if ( class_exists( 'WooCommerce' ) && empty( $limit ) ) {
+			$metas = $wpdb->get_col( "SELECT meta_value
+				FROM $wpdb->termmeta
+				WHERE meta_key LIKE '%thumbnail_id%'"
+			);
+			print_r( $metas, 1 );
+			if ( count( $metas ) > 0 ) {
+				$postmeta_images_ids = get_transient( "wpmc_postmeta_images_ids" );
+				if ( empty( $postmeta_images_ids ) )
+					$postmeta_images_ids = array();
+				foreach ( $metas as $meta )
+					if ( is_numeric( $meta ) && $meta > 0 )
+						array_push( $postmeta_images_ids, $meta );
+				set_transient( "wpmc_postmeta_images_ids", $postmeta_images_ids, $this->transient_life );
+				$found['wpmc_postmeta_images_ids'] = $postmeta_images_ids;
+			}
 		}
 
 		// Prepare likes for SQL
@@ -438,7 +473,6 @@ class Meow_WPMC_Core {
 			$html = get_post_field( 'post_content', $post );
 
 			if ( $check_postmeta ) {
-				global $wpdb;
 
 				// Detect values in the general (known, based on %like%) Meta Keys
 				$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta
@@ -493,15 +527,27 @@ class Meow_WPMC_Core {
 					$fields = get_field_objects( $post );
 					if ( is_array( $fields ) ) {
 						foreach ( $fields as $field ) {
-							if ( $field['type'] == 'image' && $field['save_format'] == 'object' ) {
+
+							$format = "";
+							if ( isset( $field['return_format'] ) )
+								$format = $field['return_format'];
+							else if ( isset( $field['save_format'] ) )
+								$format = $field['save_format'];
+
+							if ( $field['type'] == 'image' && ( $format == 'array' || $format == 'object' ) ) {
 								array_push( $postmeta_images_acf_ids, $field['value']['id'] );
 								array_push( $postmeta_images_acf_urls, $this->wpmc_clean_url( $field['value']['url'] ) );
 							}
-							if ( $field['type'] == 'image' && $field['save_format'] == 'id' ) {
+							else if ( $field['type'] == 'image' && $format == 'id' ) {
 								array_push( $postmeta_images_acf_ids, $field['value'] );
 							}
-							if ( $field['type'] == 'image' && $field['save_format'] == 'url' ) {
+							else if ( $field['type'] == 'image' && $format == 'url' ) {
 								array_push( $postmeta_images_acf_urls, $this->wpmc_clean_url( $field['value'] ) );
+							}
+							else if ( $field['type'] == 'gallery' && !empty( $field['value'] ) ) {
+								foreach ( $field['value'] as $media ) {
+									array_push( $postmeta_images_acf_ids, $media['id'] );
+								}
 							}
 						}
 						set_transient( "wpmc_postmeta_images_acf_ids", $postmeta_images_acf_ids, $this->transient_life );
@@ -533,13 +579,20 @@ class Meow_WPMC_Core {
 				if ( $shortcode_support )
 					$html = do_shortcode( $html );
 
-				// Check for images urls in posts
+				// Check for images urls in posts (and in the excerpt if WooCommerce is used, as
+				// WooCommerce stores the Product Short Description in there.
 				$posts_images_urls = get_transient( "wpmc_posts_images_urls" );
 				if ( empty( $posts_images_urls ) )
 					$posts_images_urls = array();
-
 				$new_urls = $this->get_urls_from_html( $html );
 				$posts_images_urls = array_merge( $posts_images_urls, $new_urls );
+				if ( class_exists( 'WooCommerce' ) ) {
+					$excerpt = get_post_field( 'post_excerpt', $post );
+					$new_urls = $this->get_urls_from_html( $excerpt );
+					$posts_images_urls = array_merge( $posts_images_urls, $new_urls );
+					set_transient( "wpmc_posts_images_urls", $posts_images_urls, $this->transient_life );
+					$found['wpmc_posts_images_urls'] = $posts_images_urls;
+				}
 				set_transient( "wpmc_posts_images_urls", $posts_images_urls, $this->transient_life );
 				$found['wpmc_posts_images_urls'] = $posts_images_urls;
 
@@ -728,7 +781,7 @@ class Meow_WPMC_Core {
 			$method = 'media';
 		$path = isset( $_POST['path'] ) ? $_POST['path'] : null;
 		$limit = isset( $_POST['limit'] ) ? $_POST['limit'] : 0;
-		$limitsize = get_option( 'wpmc_medias_buffer', 500 );
+		$limitsize = get_option( 'wpmc_medias_buffer', 50 );
 
 		if ( $method == 'files' ) {
 			$output = apply_filters( 'wpmc_list_uploaded_files', array(
@@ -1096,7 +1149,7 @@ class Meow_WPMC_Core {
 		return $file;
 	}
 
-	function wpmc_check_media( $attachmentId ) {
+	function wpmc_check_media( $attachmentId, $checkOnly = false ) {
 
 		$this->last_analysis = "N/A";
 
@@ -1165,17 +1218,19 @@ class Meow_WPMC_Core {
 			$issue = 'ORPHAN_MEDIA';
 		}
 
-		$table_name = $wpdb->prefix . "wpmcleaner";
-		$wpdb->insert( $table_name,
-			array(
-				'time' => current_time('mysql'),
-				'type' => 1,
-				'size' => $size,
-				'path' => $mainfile . ( $countfiles > 0 ? ( " (+ " . $countfiles . " files)" ) : "" ),
-				'postId' => $attachmentId,
-				'issue' => $issue
-				)
-			);
+		if ( !$checkOnly ) {
+			$table_name = $wpdb->prefix . "wpmcleaner";
+			$wpdb->insert( $table_name,
+				array(
+					'time' => current_time('mysql'),
+					'type' => 1,
+					'size' => $size,
+					'path' => $mainfile . ( $countfiles > 0 ? ( " (+ " . $countfiles . " files)" ) : "" ),
+					'postId' => $attachmentId,
+					'issue' => $issue
+					)
+				);
+		}
 		return false;
 	}
 
@@ -1220,7 +1275,7 @@ class Meow_WPMC_Core {
 		echo "<script type='text/javascript'>\n";
 		echo 'var wpmc_cfg = {
 			delay: ' . get_option( 'wpmc_delay', 100 ) . ',
-			analysisBuffer: ' . get_option( 'wpmc_analysis_buffer', 5 ) . ',
+			analysisBuffer: ' . get_option( 'wpmc_analysis_buffer', 10 ) . ',
 			isPro: ' . ( $this->admin->is_registered()  ? '1' : '0') . ',
 			scanFiles: ' . ( ( get_option( 'wpmc_method', 'media' ) == 'files' && $this->admin->is_registered() ) ? '1' : '0' ) . ',
 			scanMedia: ' . ( get_option( 'wpmc_method', 'media' ) == 'media' ? '1' : '0' ) . ' };';

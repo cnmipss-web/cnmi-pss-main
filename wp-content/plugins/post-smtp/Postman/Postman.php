@@ -48,6 +48,7 @@ class Postman {
 		require_once 'Postman-Mail/PostmanGmailApiModuleTransport.php';
 		require_once 'Postman-Mail/PostmanMandrillTransport.php';
 		require_once 'Postman-Mail/PostmanSendGridTransport.php';
+		require_once 'Postman-Mail/PostmanMailgunTransport.php';
 		require_once 'PostmanOAuthToken.php';
 		require_once 'PostmanWpMailBinder.php';
 		require_once 'PostmanConfigTextHelper.php';
@@ -116,6 +117,14 @@ class Postman {
 				'on_plugins_loaded',
 		) );
 
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+		if ( in_array( 'sitepress-multilingual-cms/sitepress.php', $active_plugins ) && !get_option( 'postman_wpml_fixed' ) ) {
+			add_action( 'admin_notices', array( $this, 'post_smtp_wpml_admin_notice' ) );
+
+			// Temp: Just a quick solution, need to find a better option.
+			add_action( 'admin_init', array( $this, 'postman_fix_wpml' ) );
+		}
+
 		// hook on the wp_loaded event
 		add_action( 'wp_loaded', array(
 				$this,
@@ -133,6 +142,31 @@ class Postman {
 				$this,
 				'on_deactivation',
 		) );
+	}
+
+	public function post_smtp_wpml_admin_notice() {
+		$class = 'notice notice-error';
+		$title =  __( 'Post SMTP notice!', Postman::TEXT_DOMAIN );
+		$intro = __( 'WPML is installed and has a known bug with Post SMTP and few other plugins.', Postman::TEXT_DOMAIN );
+		$text = __( 'Click here to fix', Postman::TEXT_DOMAIN );
+		$message = '<br><a href="' . esc_url( add_query_arg( 'action', 'postman_fix_wpml', get_permalink() ) ) . '">' . $text . '</a>';
+
+		printf( '<div class="%1$s"><h2>%2$s</h2><p>%3$s</p><p>%4$s</p></div>', esc_attr( $class ), $title, $intro, $message );
+	}
+
+	public function postman_fix_wpml() {
+		if ( isset( $_GET['action'] ) && $_GET['action'] == 'postman_fix_wpml' ) {
+			$wpml_file_path = WP_PLUGIN_DIR . '/sitepress-multilingual-cms/inc/utilities/wpml-data-encryptor.class.php';
+
+			if ( file_exists( $wpml_file_path ) ) {
+				$content = file_get_contents( $wpml_file_path );
+				$content = str_replace( "require_once ABSPATH . '/wp-includes/pluggable.php';", "//require_once ABSPATH . '/wp-includes/pluggable.php';", $content );
+				file_put_contents( $wpml_file_path, $content );
+			}
+
+			update_option( 'postman_wpml_fixed', true );
+			wp_redirect( esc_url( remove_query_arg( 'action' ) ) );
+		}
 	}
 
 	/**
@@ -203,6 +237,7 @@ class Postman {
 		// load the dependencies
 		require_once 'PostmanMessageHandler.php';
 		require_once 'PostmanAdminController.php';
+		require_once 'Postman-Controller/PostmanWelcomeController.php';
 		require_once 'Postman-Controller/PostmanDashboardWidgetController.php';
 		require_once 'Postman-Controller/PostmanAdminPointer.php';
 		require_once 'Postman-Email-Log/PostmanEmailLogController.php';
@@ -215,6 +250,7 @@ class Postman {
 		$this->messageHandler = new PostmanMessageHandler();
 
 		// create the Admin Controllers
+		new PostmanWelcomeController( $rootPluginFilenameAndPath );
 		new PostmanDashboardWidgetController( $rootPluginFilenameAndPath, $options, $authToken, $this->wpMailBinder );
 		new PostmanAdminController( $rootPluginFilenameAndPath, $options, $authToken, $this->messageHandler, $this->wpMailBinder );
 		new PostmanEmailLogController( $rootPluginFilenameAndPath );
@@ -353,6 +389,7 @@ class Postman {
 		PostmanTransportRegistry::getInstance()->registerTransport( new PostmanGmailApiModuleTransport( $rootPluginFilenameAndPath ) );
 		PostmanTransportRegistry::getInstance()->registerTransport( new PostmanMandrillTransport( $rootPluginFilenameAndPath ) );
 		PostmanTransportRegistry::getInstance()->registerTransport( new PostmanSendGridTransport( $rootPluginFilenameAndPath ) );
+		PostmanTransportRegistry::getInstance()->registerTransport( new PostmanMailgunTransport( $rootPluginFilenameAndPath ) );
 	}
 
 	/**

@@ -3,7 +3,7 @@ Contributors: TigrouMeow
 Tags: management, admin, file, files, images, image, media, library, upload, clean, cleaning
 Requires at least: 4.2
 Tested up to: 4.9
-Stable tag: 4.4.7
+Stable tag: 4.5.0
 
 Clean your Media Library and Uploads directory. It has an internal trash and recovery features. Please read the description.
 
@@ -15,7 +15,7 @@ A tutorial is available on the official website, here: [Media Cleaner](https://m
 
 **This tool is a knife. I do my best to make this knife a perfect one. However, this is still a knife, and in the hands of somebody who doesn't know how to use it, it might end badly. Don't use it if you don't have any backup, or if you don't know what it does. For backup, you can use such a plugin as [UpdraftPlus](https://updraftplus.com/?afref=460).**
 
-**COMPATIBILITY**. I am adding support for page builders and specific plugins little by little. Currently, I have been working with ACF, Divi (Elegant Themes), Fusion Builder (Avada), WooCommerce, Visual Composer (WPBakery), Beaver Builder, and Gutenberg.
+**COMPATIBILITY**. I am adding support for page builders and specific plugins little by little. Currently, I have been working with ACF, Divi, Fusion Builder (Avada), WooCommerce, Visual Composer (WPBakery), Elementor, Beaver Builder, and Gutenberg.
 
 **SPECIAL PLUGIN**. Such a plugin is difficult to create and to maintain. If you understand WordPress, you probably know why. This plugin does its best to help you. Learn how to use it and you will get awesome results.
 
@@ -51,6 +51,14 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 4.5.0 =
+* Add: Support for WooCommerce Short Description.
+* Add: Support for Divi Background.
+* Add: Support for Custom Fields Pro (ACF gallery).
+* Fix: Better support for CSS background.
+* Fix: Avoid detected file to be re-added if already there.
+* Update: Removed UTF-8 option (became useless).
 
 = 4.4.7 =
 * Fix: Divi Single Image wasn't always properly detected.

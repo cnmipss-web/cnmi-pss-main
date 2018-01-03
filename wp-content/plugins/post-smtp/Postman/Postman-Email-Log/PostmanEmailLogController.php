@@ -360,10 +360,12 @@ class PostmanEmailLogController {
 	$from_date = isset( $_POST['from_date'] ) ? sanitize_text_field( $_POST['from_date'] ) : '';
 	$to_date = isset( $_POST['to_date'] ) ? sanitize_text_field( $_POST['to_date'] ) : '';
 	$search = isset( $_POST['search'] ) ? sanitize_text_field( $_POST['search'] ) : '';
+	$page_records = apply_filters( 'postman_log_per_page', array( 10, 15, 25, 50, 75, 100 ) );
+	$postman_page_records = isset( $_POST['postman_page_records'] ) ? absint( $_POST['postman_page_records'] ) : '';
 	?>
 
 	<form id="postman-email-log-filter" method="post">
-		<div id="email-log-filter">
+		<div id="email-log-filter" class="postman-log-row">
 			<div class="form-control">
 				<label for="from_date"><?php _e( 'From Date', Postman::TEXT_DOMAIN ); ?></label>
 				<input id="from_date" class="email-log-date" value="<?php echo $from_date; ?>" type="text" name="from_date" placeholder="<?php _e( 'From Date', Postman::TEXT_DOMAIN ); ?>">
@@ -377,12 +379,22 @@ class PostmanEmailLogController {
 				<input id="search" type="text" name="search" value="<?php echo $search; ?>" placeholder="<?php _e( 'Search', Postman::TEXT_DOMAIN ); ?>">
 			</div>
 			<div class="form-control">
-				<button type="submit" name="filter" class="button button-primary"><?php _e( 'Filter', Postman::TEXT_DOMAIN ); ?></button>
-			</div>
-
-			<div class="form-control">
-				<!-- <button type="submit" name="export_email_logs" class="button button-primary">Export To CSV</button> -->
+				<label id="postman_page_records"><?php _e( 'Records per page', Postman::TEXT_DOMAIN ); ?></label>
+				<select id="postman_page_records" name="postman_page_records">
+					<?php
+					foreach ( $page_records as $value ) {
+						$selected = selected( $postman_page_records, $value, false );
+						echo '<option value="' . $value . '"' . $selected . '>' . $value . '</option>';
+					}
+					?>
+				</select>	
 			</div>		
+			<div class="form-control" style="padding: 0 5px 0 5px;">
+				<button type="submit" name="filter" class="button button-primary"><?php _e( 'Filter', Postman::TEXT_DOMAIN ); ?></button>
+			</div>	
+			<div class="form-control">
+				<button type="submit" id="postman_trash_all" name="postman_trash_all" class="button button-primary"><?php _e( 'Trash All', Postman::TEXT_DOMAIN ); ?></button>
+			</div>			
 		</div>
 		<div class="error">Please notice: when you select a date for example 11/20/2017, behind the scene the query select <b>11/20/2017 00:00:00</b>.<br>So if you searching for an email arrived that day at any hour you need to select 11/20/2017 as the <b>From Date</b> and 11/21/2017 as the <b>To Date</b>.</div>
 	</form>
