@@ -60,6 +60,8 @@ The SCSS code for this theme is located in `wp-content/themes/cnmi-pss/scss/` an
 3. `modules` scss files contain style rules organized by the type of element they style (e.g. buttons, tab-panels, inputs, modals, etc.)
 4. `state` scss files contain style rules that depend on user interaction and input (e.g. active vs inactive, expanded vs hidden)
 
+SCSS styles are compiled to CSS using custom gulp tasks defined in `gulpfile.js` in the repository's root directory.  The default and watch tasks compile CSS files with sourcemaps, while the production task compiles CSS files without sourcemaps
+
 #### Clojurescript
 
 Clojurescript was chosen over ES6 for this theme because of its functional paradigm and fantastically simple re-frame wrapper for react/redux.  Clojurescript is primarily only used on pages that use the `interactive.php` template.  On most other pages the only interactive functionality is provided by Bootstrap and jQuery.
