@@ -1,0 +1,1 @@
+Search.setIndex({docnames:["index"],envversion:53,filenames:["index.rst,.md"],objects:{},objnames:{},objtypes:{},terms:{index:0,modul:0,page:0,search:0},titles:["Welcome to CNMI PSS District Website\u2019s documentation!"],titleterms:{cnmi:0,district:0,document:0,indic:0,pss:0,tabl:0,websit:0,welcom:0}})
