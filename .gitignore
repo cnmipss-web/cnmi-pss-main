@@ -51,3 +51,4 @@ __pycache__
 .cache
 *.jl
 testresults.tap
+.vscode
