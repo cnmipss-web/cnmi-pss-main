@@ -1,9 +1,9 @@
-=================
 Table of Contents
 =================
 
-On this site you will find instructions and documentation for a range of website content management and administration tasks.  Questions regarding documentation should be directed to the CNMI PSS Webmaster via email at webmaster@cnmipss.org.
+.. only:: html
 
+    On this site you will find instructions and documentation for a range of website content management and administration tasks.  Questions regarding documentation should be directed to the CNMI PSS Webmaster via email at webmaster@cnmipss.org.
 
 .. toctree::
     :maxdepth: 2
@@ -26,3 +26,4 @@ On this site you will find instructions and documentation for a range of website
 
    accessibility/index.rst
    
+ 
