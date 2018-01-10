@@ -12,7 +12,7 @@ The basic process is
 
 #. Make sure that ssh is installed on your system.  `Bitvise <https://www.bitvise.com/ssh-client-download>`_ is a good Windows client.  Mac OS X and Linux systems should have the ssh command available by default.
 
-#. Generate a keyfile for access.  This means generating a private key and a public key.  The public key should be added to ``/.ssh/authorized_keys`` on the Linode server for your user account.  The private key should be kept private.
+#. Generate a keyfile for access.  This means generating a private key and a public key.  The public key should be added to ``~/.ssh/authorized_keys`` on the Linode server for your user account.  The private key should be kept private.
 
 #. Once the server has your public key, you should be able to connect via ssh to the server securely.
 
