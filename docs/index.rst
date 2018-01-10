@@ -7,12 +7,11 @@ Table of Contents
 
 .. toctree::
     :maxdepth: 2
-    :caption: Administration
+    :caption: Administration        
 
+    administration/server.rst
     administration/wordpress.rst
     administration/webtools.rst
-    administration/server.rst
-    
 
 .. toctree::
     :maxdepth: 2

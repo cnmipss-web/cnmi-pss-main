@@ -103,3 +103,12 @@ Updating the WordPress installation, plugins, or custom code should be performed
         git checkout development && git merge master
 
 The same process should be followed for both updates to WordPress itself and to any plugins that require updating.  Following this process ensures that production, testing, and development servers will stay in sync.
+
+Configuration
+===============
+
+wp-config.php
+----------------
+
+.htaccess
+-----------
