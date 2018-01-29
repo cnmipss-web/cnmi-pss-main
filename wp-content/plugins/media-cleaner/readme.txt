@@ -1,11 +1,11 @@
 === Media Cleaner ===
 Contributors: TigrouMeow
-Tags: management, admin, file, files, images, image, media, library, upload, clean, cleaning
+Tags: clean, delete, file, files, images, image, media, library, upload, clean, acf
 Requires at least: 4.2
 Tested up to: 4.9
-Stable tag: 4.5.0
+Stable tag: 4.5.4
 
-Clean your Media Library and Uploads directory. It has an internal trash and recovery features. Please read the description.
+Clean your WordPress (broken media, unused media, files). It has its own trash and recovery features. Please read the description.
 
 == Description ==
 
@@ -13,19 +13,17 @@ Clean your Media Library from the media which aren't used in any of your posts, 
 
 A tutorial is available on the official website, here: [Media Cleaner](https://meowapps.com/media-cleaner).
 
-**This tool is a knife. I do my best to make this knife a perfect one. However, this is still a knife, and in the hands of somebody who doesn't know how to use it, it might end badly. Don't use it if you don't have any backup, or if you don't know what it does. For backup, you can use such a plugin as [UpdraftPlus](https://updraftplus.com/?afref=460).**
+**This tool is a knife. Do not use it if you don't have any backup, or if you don't know what it does. For backup, you can use such a plugin as [UpdraftPlus](https://updraftplus.com/?afref=460).**
 
-**COMPATIBILITY**. I am adding support for page builders and specific plugins little by little. Currently, I have been working with ACF, Divi, Fusion Builder (Avada), WooCommerce, Visual Composer (WPBakery), Elementor, Beaver Builder, and Gutenberg.
+**COMPATIBILITY**. I am adding support for specific plugins little by little. Currently, I have been working with ACF, Gutenberg, Divi, Fusion Builder (Avada), WooCommerce, Visual Composer (WPBakery), Elementor, and Beaver Builder. **Specific checks for Page Builders are being added to the Pro version** (as it requires meticulous work and updates).
 
 **SPECIAL PLUGIN**. Such a plugin is difficult to create and to maintain. If you understand WordPress, you probably know why. This plugin does its best to help you. Learn how to use it and you will get awesome results.
 
 **DASHBOARD**. The files detected as not used will be listed in a specific dashboard. At this point, it will be up to you to delete them. They will be then moved to a trash internal to the plugin. After more testing, you can trash them permanently.
 
-**FREE / PRO**. The Free version of the plugin analyzes the medias available in your Media Library. [Media Cleaner Pro](https://meowapps.com/media-cleaner) can also scan your physical /uploads directory, and match it against the Media Library.
+**PRO**. [Media Cleaner Pro](https://meowapps.com/media-cleaner) can scan your physical /uploads directory, and match it against the Media Library. It also has extra support for Page Builders.
 
-**AGAIN, BE CAREFUL**. Again, this plugin deletes files so... be careful! Backup is not only important, it is **necessary**. Don't use this plugin if you don't understand how WordPress works. This is a knife, you need to understand what it does and how before using it.
-
-It has been tested with WP Retina 2x and WPML.
+**AGAIN, BE CAREFUL**. Again, this plugin deletes files so be careful! Backup is not only important, it is **necessary**. Don't use this plugin if you don't understand how WordPress works.
 
 == Installation ==
 
@@ -51,6 +49,12 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 4.5.4 =
+* Update: Streamlined the plugin, tutorial has also been rewritten.
+* Update: Simplified the Settings. Removed the Gallery option, as it is part of the Posts or Post Meta.
+* Update: Support for UTF8, Background CSS, and Shortcodes have been moved to the Free version, and are now always enabled. Easier for everyone.
+* Add: Extra support for Page Builders is being added into the Pro version.
 
 = 4.5.0 =
 * Add: Support for WooCommerce Short Description.

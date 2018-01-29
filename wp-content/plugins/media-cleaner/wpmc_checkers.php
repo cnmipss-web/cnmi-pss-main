@@ -31,9 +31,6 @@ class Meow_WPMC_Checkers {
 
 	function check_in_gallery( $file, $mediaId = 0 ) {
 
-		if ( !get_option( 'wpmc_galleries', false ) )
-			return false;
-
 		$file = $this->core->wpmc_clean_uploaded_filename( $file );
 		$pinfo = pathinfo( $file );
 		$url = $pinfo['dirname'] . '/' . $pinfo['filename'] .
@@ -92,8 +89,8 @@ class Meow_WPMC_Checkers {
 		***************************************************************************/
 
 		// Check in standard WP Galleries (URLS)
-		$galleries_images = get_transient( "wpmc_galleries_images" );
-		if ( is_array( $galleries_images ) && in_array( $file, $galleries_images ) ) {
+		$galleries_images_urls = get_transient( "wpmc_galleries_images_urls" );
+		if ( is_array( $galleries_images_urls ) && in_array( $file, $galleries_images_urls ) ) {
 			$this->core->log( "URL {$file} found in a standard WP Gallery" );
 			$this->core->last_analysis = "GALLERY";
 			return true;
@@ -154,11 +151,6 @@ class Meow_WPMC_Checkers {
 		$this->core->last_analysis_ids = null;
 		$shortcode_support = get_option( 'wpmc_shortcode', false );
 		$file = $this->core->wpmc_clean_uploaded_filename( $file );
-
-		// I think that was making sense before, but now now.
-		// $pinfo = pathinfo( $file );
-		// $url = $pinfo['dirname'] . '/' . $pinfo['filename'] .
-		// 	( isset( $pinfo['extension'] ) ? ( '.' . $pinfo['extension'] ) : '' );
 		$url = $file;
 
 		// Check in Posts Content
@@ -178,7 +170,7 @@ class Meow_WPMC_Checkers {
 					$posts_images_vc = get_transient( "wpmc_posts_images_visualcomposer" );
 					if ( is_array( $posts_images_vc ) && in_array( $mediaId, $posts_images_vc ) ) {
 						$this->core->log( "Media {$mediaId} found in content (Visual Composer)" );
-						$this->core->last_analysis = "VISUAL COMPOSER";
+						$this->core->last_analysis = "PAGE BUILDER";
 						return true;
 					}
 				}
