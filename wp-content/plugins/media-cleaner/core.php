@@ -6,13 +6,11 @@ class Meow_WPMC_Core {
 	public $admin = null;
 	public $last_analysis = null;
 	public $last_analysis_ids = null;
-	private $transient_life = 604800; // 7 days
+	public static $transient_life = 604800; // 7 days
 	private $regex_file = '/[A-Za-z0-9-_,\s]+[.]{1}(MIMETYPES)/';
-	private $metakeys = array( '%gallery%', '%ids%' );
 
 	public function __construct( $admin ) {
 		$this->admin = $admin;
-		$this->transient_life = 60 * 60 * 24 * 7; // 7 days
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
@@ -26,21 +24,16 @@ class Meow_WPMC_Core {
 		add_action( 'wp_ajax_wpmc_ignore_do', array( $this, 'wp_ajax_wpmc_ignore_do' ) );
 		add_action( 'wp_ajax_wpmc_recover_do', array( $this, 'wp_ajax_wpmc_recover_do' ) );
 		add_filter( 'media_row_actions', array( $this, 'media_row_actions' ), 10, 2 );
-
-		if ( is_admin() ) {
-			add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
-		}
-
-		// Checkers
-		require( 'wpmc_checkers.php' );
-		$this->checkers = new Meow_WPMC_Checkers( $this );
+		add_action( 'add_meta_boxes', array( $this, 'add_metabox' ) );
 	}
 
 	function admin_init() {
-		//$types = get_allowed_mime_types();
-		//$types = implode( '|', array_keys( $types ) );
 		$types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|pdf|xls|xlsx|doc|docx|tiff|mp3|mp4|wav|lua";
 		$this->regex_file  = str_replace( "MIMETYPES", $types, $this->regex_file );
+		require( 'wpmc_scan.php' );
+		require( 'wpmc_checkers.php' );
+		new MeowApps_WPMC_Scan( $this );
+		$this->checkers = new Meow_WPMC_Checkers( $this );
  	}
 
 	/*******************************************************************************
@@ -73,8 +66,8 @@ class Meow_WPMC_Core {
 			else if ( $this->last_analysis == "THEME" ) {
 				echo "Found in theme.";
 			}
-			else if ( $this->last_analysis == "VISUAL COMPOSER" ) {
-				echo "Found in Visual Composer.";
+			else if ( $this->last_analysis == "PAGE BUILDER" ) {
+				echo "Found in Page Builder.";
 			}
 			else if ( $this->last_analysis == "GALLERY" ) {
 				echo "Found in gallery.";
@@ -254,7 +247,6 @@ class Meow_WPMC_Core {
 		global $wp_registered_widgets;
 		$syswidgets = $wp_registered_widgets;
 		$active_widgets = get_option( 'sidebars_widgets' );
-		$shortcode_support = get_option( 'wpmc_shortcode', false );
 		foreach ( $active_widgets as $sidebar_name => $widgets ) {
 			if ( $sidebar_name != 'wp_inactive_widgets' && !empty( $widgets ) && is_array( $widgets ) ) {
 				$i = 0;
@@ -265,7 +257,7 @@ class Meow_WPMC_Core {
 					// error_log( "INSTANCE $key ($instance_id)" );
 					// error_log( print_r( $widget_data, 1 ) );
 					if ( !empty( $widget_data[$instance_id]['text'] ) ) {
-						$html = $shortcode_support ? do_shortcode( $widget_data[$instance_id]['text'] ) : $widget_data[$instance_id]['text'];
+						$html = do_shortcode( $widget_data[$instance_id]['text'] );
 						$urls = array_merge( $urls, $this->get_urls_from_html( $html ) );
 					}
 					if ( !empty( $widget_data[$instance_id]['attachment_id'] ) ) {
@@ -290,15 +282,26 @@ class Meow_WPMC_Core {
 		if ( empty( $html ) )
 			return array();
 		libxml_use_internal_errors( false );
+
 		$dom = new DOMDocument();
 		@$dom->loadHTML( $html );
 
-		// Images, src
+		// Images, src, srcset
 		$imgs = $dom->getElementsByTagName( 'img' );
 		$results = array();
 		foreach ( $imgs as $img ) {
 			$src = $this->wpmc_clean_url( $img->getAttribute('src') );
     	array_push( $results, $src );
+			$srcset = $img->getAttribute('srcset');
+			if ( !empty( $srcset ) ) {
+				$setImgs = explode( ',', trim( $srcset ) );
+				foreach ( $setImgs as $setImg ) {
+					$finalSetImg = explode( ' ', trim( $setImg ) );
+					if ( is_array( $finalSetImg ) ) {
+						array_push( $results, $this->wpmc_clean_url( $finalSetImg[0] ) );
+					}
+				}
+			}
 		}
 
 		// Links, href
@@ -308,54 +311,37 @@ class Meow_WPMC_Core {
     	array_push( $results, $src );
 		}
 
-		// Single Image in Divi (Elegant Themes)
-		if ( function_exists( '_et_core_find_latest' ) ) {
-			preg_match_all( "/src=\"((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\"/", $html, $res );
-			if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
-				foreach ( $res[1] as $url ) {
-					if ( !preg_match('/(elegantthemesimages\.com)|(elegantthemes\.com)/', $url ) )
-						array_push( $results, $this->wpmc_clean_url( $url ) );
-				}
-			}
-		}
-
-		// Background Image in Divi (Elegant Themes)
-		if ( function_exists( '_et_core_find_latest' ) ) {
-			preg_match_all( "/background_image=\"((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\"/", $html, $res );
-			if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
-				foreach ( $res[1] as $url ) {
-					if ( !preg_match('/(elegantthemesimages\.com)|(elegantthemes\.com)/', $url ) )
-						array_push( $results, $this->wpmc_clean_url( $url ) );
-				}
-			}
-		}
-
-		if ( get_option( 'wpmc_background', false ) ) {
-			preg_match_all( "/url\(\'?\"?((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png|ico|tif?f|bmp))\'?\"?\)/", $html, $res );
+		// if ( get_option( 'wpmc_background', false ) ) {
+			preg_match_all( "/url\(\'?\"?((https?:\/\/)?[^\\&\#\[\] \"\?]+\.(jpe?g|gif|png))\'?\"?/", $html, $res );
 			//error_log( print_r( $res, 1 ) );
 			if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
 				foreach ( $res[1] as $url ) {
 					array_push( $results, $this->wpmc_clean_url( $url ) );
 				}
 			}
-		}
+		// }
 
 		return $results;
 	}
 
+	// Parse a meta, visit all the arrays, look for the attributes, fill $ids and $urls arrays
+	function get_from_meta( $meta, $lookFor, &$ids, &$urls ) {
+		foreach ( $meta as $key => $value ) {
+			if ( is_object( $value ) || is_array( $value ) )
+				$this->get_from_meta( $value, $lookFor, $ids, $urls );
+			else if ( in_array( $key, $lookFor ) ) {
+				if ( empty( $value ) )
+					continue;
+				else if ( is_numeric( $value ) )
+					array_push( $ids, $value );
+				else
+					array_push( $urls, $this->wpmc_clean_url( $value ) );
+			}
+		}
+	}
+
 	function get_images_from_themes( &$ids, &$urls ) {
 		global $wpdb;
-
-		// PARSE OPTIONS
-		// $metas = $wpdb->get_col( "SELECT option_value FROM $wpdb->options WHERE option_name LIKE 'theme_mods_%'" );
-		// foreach ( $metas as $meta ) {
-		// 	$decoded = @unserialize( $meta );
-		// 	if ( is_array( $decoded ) ) {
-		// 		error_log( print_r( $decoded, 1 ) );
-		// 		$this->array_to_ids_or_urls( $decoded, $postmeta_images_ids, $postmeta_images_urls );
-		// 		continue;
-		// 	}
-		// }
 
 		// USE CURRENT THEME AND WP API
 		$ch = get_custom_header();
@@ -388,15 +374,27 @@ class Meow_WPMC_Core {
 		$limitsize = get_option( 'wpmc_posts_buffer', 5 );
 		if ( empty( $limit ) )
 			$this->wpmc_reset_issues();
+
+		$method = get_option( 'wpmc_method', 'media' );
+		$check_library = get_option(' wpmc_media_library', true );
 		$check_postmeta = get_option( 'wpmc_postmeta', false );
 		$check_posts = get_option( 'wpmc_posts', false );
-		$check_galleries = get_option( 'wpmc_galleries', false );
-		if ( !$check_galleries && !$check_posts && !$check_postmeta ) {
+		$check_widgets = get_option( 'wpmc_widgets', false );
+		if ( $method == 'media' && !$check_posts && !$check_postmeta && !$check_widgets ) {
 			echo json_encode( array(
 				'results' => array(),
 				'success' => true,
 				'finished' => true,
-				'message' => __( "Galleries and Posts analysis is off. Done.", 'media-cleaner' )
+				'message' => __( "Posts, Meta and Widgets analysis are all off. Done.", 'media-cleaner' )
+			) );
+			die();
+		}
+		if ( $method == 'files' && $check_library && !$check_posts && !$check_postmeta && !$check_widgets ) {
+			echo json_encode( array(
+				'results' => array(),
+				'success' => true,
+				'finished' => true,
+				'message' => __( "Posts, Meta and Widgets analysis are all off. Done.", 'media-cleaner' )
 			) );
 			die();
 		}
@@ -420,14 +418,13 @@ class Meow_WPMC_Core {
 		);
 
 		$found = array();
-		$shortcode_support = get_option( 'wpmc_shortcode', false );
 
 		if ( empty( $limit ) ) {
 			$theme_ids = array();
 			$theme_urls = array();
 			$this->get_images_from_themes( $theme_ids, $theme_urls );
-			set_transient( "wpmc_theme_ids", $theme_ids, $this->transient_life );
-			set_transient( "wpmc_theme_urls", $theme_urls, $this->transient_life );
+			set_transient( "wpmc_theme_ids", $theme_ids, Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_theme_urls", $theme_urls, Meow_WPMC_Core::$transient_life );
 			$found['wpmc_theme_ids'] = $theme_ids;
 			$found['wpmc_theme_urls'] = $theme_urls;
 		}
@@ -437,8 +434,8 @@ class Meow_WPMC_Core {
 			$widgets_ids = array();
 			$widgets_urls = array();
 			$this->get_images_from_widgets( $widgets_ids, $widgets_urls );
-			set_transient( "wpmc_widgets_ids", $widgets_ids, $this->transient_life );
-			set_transient( "wpmc_widgets_urls", $widgets_urls, $this->transient_life );
+			set_transient( "wpmc_widgets_ids", $widgets_ids, Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_widgets_urls", $widgets_urls, Meow_WPMC_Core::$transient_life );
 			$found['wpmc_widgets_ids'] = $widgets_ids;
 			$found['wpmc_widgets_urls'] = $widgets_urls;
 		}
@@ -449,7 +446,6 @@ class Meow_WPMC_Core {
 				FROM $wpdb->termmeta
 				WHERE meta_key LIKE '%thumbnail_id%'"
 			);
-			print_r( $metas, 1 );
 			if ( count( $metas ) > 0 ) {
 				$postmeta_images_ids = get_transient( "wpmc_postmeta_images_ids" );
 				if ( empty( $postmeta_images_ids ) )
@@ -457,234 +453,24 @@ class Meow_WPMC_Core {
 				foreach ( $metas as $meta )
 					if ( is_numeric( $meta ) && $meta > 0 )
 						array_push( $postmeta_images_ids, $meta );
-				set_transient( "wpmc_postmeta_images_ids", $postmeta_images_ids, $this->transient_life );
+				set_transient( "wpmc_postmeta_images_ids", $postmeta_images_ids, Meow_WPMC_Core::$transient_life );
 				$found['wpmc_postmeta_images_ids'] = $postmeta_images_ids;
 			}
 		}
 
-		// Prepare likes for SQL
-		$like = "";
-		foreach ( $this->metakeys as $metakey )
-			$like .= "OR meta_key LIKE '$metakey' ";
-
 		// Analyze Posts
 		foreach ( $posts as $post ) {
 
+			// Get HTML for this post
 			$html = get_post_field( 'post_content', $post );
+			$html = do_shortcode( $html );
+			$html = wp_make_content_images_responsive( $html );
 
-			if ( $check_postmeta ) {
-
-				// Detect values in the general (known, based on %like%) Meta Keys
-				$metas = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta
-					WHERE post_id = %d
-					AND meta_key = '_thumbnail_id' $like", $post )
-				);
-				if ( count( $metas ) > 0 ) {
-					$postmeta_images_ids = get_transient( "wpmc_postmeta_images_ids" );
-					if ( empty( $postmeta_images_ids ) )
-						$postmeta_images_ids = array();
-					$postmeta_images_urls = get_transient( "wpmc_postmeta_images_urls" );
-					if ( empty( $postmeta_images_urls ) )
-						$postmeta_images_urls = array();
-
-					foreach ( $metas as $meta ) {
-						// Just a number, let's assume it's a Media ID
-						if ( is_numeric( $meta ) ) {
-							//error_log( "META NUMERIC: " . $meta );
-							if ( $meta > 0 )
-								array_push( $postmeta_images_ids, $meta );
-							continue;
-						}
-						$decoded = @unserialize( $meta );
-						if ( is_array( $decoded ) ) {
-							// error_log( "META DECODED" );
-							// error_log( print_r( $decoded, 1 ) );
-							$this->array_to_ids_or_urls( $decoded, $postmeta_images_ids, $postmeta_images_urls );
-							continue;
-						}
-						$exploded = explode( ',', $meta );
-						if ( is_array( $exploded ) ) {
-							// error_log( "META EXPLODED" );
-							// error_log( print_r( $exploded, 1 ) );
-							$this->array_to_ids_or_urls( $exploded, $postmeta_images_ids, $postmeta_images_urls );
-							continue;
-						}
-					}
-					set_transient( "wpmc_postmeta_images_ids", $postmeta_images_ids, $this->transient_life );
-					$found['wpmc_postmeta_images_ids'] = $postmeta_images_ids;
-					set_transient( "wpmc_postmeta_images_urls", $postmeta_images_urls, $this->transient_life );
-					$found['wpmc_postmeta_images_urls'] = $postmeta_images_urls;
-				}
-
-				// Advanced Custom Fields
-				if ( class_exists( 'acf' ) ) {
-					$postmeta_images_acf_ids = get_transient( "wpmc_postmeta_images_acf_ids" );
-					if ( empty( $postmeta_images_acf_ids ) )
-						$postmeta_images_acf_ids = array();
-					$postmeta_images_acf_urls = get_transient( "wpmc_postmeta_images_acf_urls" );
-					if ( empty( $postmeta_images_acf_urls ) )
-						$postmeta_images_acf_urls = array();
-					$fields = get_field_objects( $post );
-					if ( is_array( $fields ) ) {
-						foreach ( $fields as $field ) {
-
-							$format = "";
-							if ( isset( $field['return_format'] ) )
-								$format = $field['return_format'];
-							else if ( isset( $field['save_format'] ) )
-								$format = $field['save_format'];
-
-							if ( $field['type'] == 'image' && ( $format == 'array' || $format == 'object' ) ) {
-								array_push( $postmeta_images_acf_ids, $field['value']['id'] );
-								array_push( $postmeta_images_acf_urls, $this->wpmc_clean_url( $field['value']['url'] ) );
-							}
-							else if ( $field['type'] == 'image' && $format == 'id' ) {
-								array_push( $postmeta_images_acf_ids, $field['value'] );
-							}
-							else if ( $field['type'] == 'image' && $format == 'url' ) {
-								array_push( $postmeta_images_acf_urls, $this->wpmc_clean_url( $field['value'] ) );
-							}
-							else if ( $field['type'] == 'gallery' && !empty( $field['value'] ) ) {
-								foreach ( $field['value'] as $media ) {
-									array_push( $postmeta_images_acf_ids, $media['id'] );
-								}
-							}
-						}
-						set_transient( "wpmc_postmeta_images_acf_ids", $postmeta_images_acf_ids, $this->transient_life );
-						$found['wpmc_postmeta_images_acf_ids'] = $postmeta_images_acf_ids;
-						set_transient( "wpmc_postmeta_images_acf_urls", $postmeta_images_acf_urls, $this->transient_life );
-						$found['wpmc_postmeta_images_acf_urls'] = $postmeta_images_acf_urls;
-					}
-				}
-			}
-
-			if ( $check_posts ) {
-
-				// Single Image in Visual Composer (WPBakery)
-				if ( class_exists( 'Vc_Manager' ) ) {
-					$posts_images_vc = get_transient( "wpmc_posts_images_visualcomposer" );
-					if ( empty( $posts_images_vc ) )
-						$posts_images_vc = array();
-					preg_match_all( "/image=\"([0-9]+)\"/", $html, $res );
-					if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 ) {
-						foreach ( $res[1] as $url ) {
-							array_push( $posts_images_vc, $this->wpmc_clean_url( $url ) );
-						}
-					}
-					set_transient( "wpmc_posts_images_visualcomposer", $posts_images_vc, $this->transient_life );
-					$found['wpmc_posts_images_visualcomposer'] = $posts_images_vc;
-				}
-
-				// Let's resolve the shortcodes if the option is on
-				if ( $shortcode_support )
-					$html = do_shortcode( $html );
-
-				// Check for images urls in posts (and in the excerpt if WooCommerce is used, as
-				// WooCommerce stores the Product Short Description in there.
-				$posts_images_urls = get_transient( "wpmc_posts_images_urls" );
-				if ( empty( $posts_images_urls ) )
-					$posts_images_urls = array();
-				$new_urls = $this->get_urls_from_html( $html );
-				$posts_images_urls = array_merge( $posts_images_urls, $new_urls );
-				if ( class_exists( 'WooCommerce' ) ) {
-					$excerpt = get_post_field( 'post_excerpt', $post );
-					$new_urls = $this->get_urls_from_html( $excerpt );
-					$posts_images_urls = array_merge( $posts_images_urls, $new_urls );
-					set_transient( "wpmc_posts_images_urls", $posts_images_urls, $this->transient_life );
-					$found['wpmc_posts_images_urls'] = $posts_images_urls;
-				}
-				set_transient( "wpmc_posts_images_urls", $posts_images_urls, $this->transient_life );
-				$found['wpmc_posts_images_urls'] = $posts_images_urls;
-
-				// Check for images IDs through classes in in posts
-				$posts_images_ids = get_transient( "wpmc_posts_images_ids" );
-				if ( empty( $posts_images_ids ) )
-					$posts_images_ids = array();
-				preg_match_all( "/wp-image-([0-9]+)/", $html, $res );
-				if ( !empty( $res ) && isset( $res[1] ) && count( $res[1] ) > 0 )
-					$posts_images_ids = array_merge( $posts_images_ids, $res[1] );
-				set_transient( "wpmc_posts_images_ids", $posts_images_ids, $this->transient_life );
-				$found['wpmc_posts_images_ids'] = $posts_images_ids;
-			}
-
-			if ( $check_galleries ) {
-
-				// Galleries in Divi (Elegant Themes)
-				if ( function_exists( '_et_core_find_latest' ) ) {
-					$galleries_images_et = get_transient( "wpmc_galleries_images_divi" );
-					if ( empty( $galleries_images_et ) )
-						$galleries_images_et = array();
-					preg_match_all( "/gallery_ids=\"([0-9,]+)/", $html, $res );
-					if ( !empty( $res ) && isset( $res[1] ) ) {
-						foreach ( $res[1] as $r ) {
-							$ids = explode( ',', $r );
-							$galleries_images_et = array_merge( $galleries_images_et, $ids );
-						}
-					}
-					set_transient( "wpmc_galleries_images_divi", $galleries_images_et, $this->transient_life );
-					$found['wpmc_galleries_images_divi'] = $galleries_images_et;
-				}
-
-				// Galleries in Visual Composer (WPBakery)
-				if ( class_exists( 'Vc_Manager' ) ) {
-					$galleries_images_vc = get_transient( "wpmc_galleries_images_visualcomposer" );
-					if ( empty( $galleries_images_vc ) )
-						$galleries_images_vc = array();
-					preg_match_all( "/images=\"([0-9,]+)/", $html, $res );
-					if ( !empty( $res ) && isset( $res[1] ) ) {
-						foreach ( $res[1] as $r ) {
-							$ids = explode( ',', $r );
-							$galleries_images_vc = array_merge( $galleries_images_vc, $ids );
-						}
-					}
-					set_transient( "wpmc_galleries_images_visualcomposer", $galleries_images_vc, $this->transient_life );
-					$found['wpmc_galleries_images_visualcomposer'] = $galleries_images_vc;
-				}
-
-				// Galleries in Fusion Builder (Avada Theme)
-				if ( function_exists( 'fusion_builder_map' ) ) {
-					$galleries_images_fb = get_transient( "wpmc_galleries_images_fusionbuilder" );
-					if ( empty( $galleries_images_fb ) )
-						$galleries_images_fb = array();
-					preg_match_all( "/image_ids=\"([0-9,]+)/", $html, $res );
-					if ( !empty( $res ) && isset( $res[1] ) ) {
-						foreach ( $res[1] as $r ) {
-							$ids = explode( ',', $r );
-							$galleries_images_fb = array_merge( $galleries_images_fb, $ids );
-						}
-					}
-					set_transient( "wpmc_galleries_images_fusionbuilder", $galleries_images_fb, $this->transient_life );
-					$found['wpmc_galleries_images_fusionbuilder'] = $galleries_images_fb;
-				}
-
-				// WooCommerce
-				if ( class_exists( 'WooCommerce' ) ) {
-					$galleries_images_wc = get_transient( "wpmc_galleries_images_woocommerce" );
-					if ( empty( $galleries_images_wc ) )
-						$galleries_images_wc = array();
-					$res = $wpdb->get_col( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $post
-						AND meta_key = '_product_image_gallery'" );
-					foreach ( $res as $values ) {
-						$ids = explode( ',', $values );
-						$galleries_images_wc = array_merge( $galleries_images_wc, $ids );
-					}
-					set_transient( "wpmc_galleries_images_woocommerce", $galleries_images_wc, $this->transient_life );
-					$found['wpmc_galleries_images_woocommerce'] = $galleries_images_wc;
-				}
-
-				// Standard WP Gallery
-				$galleries_images = get_transient( "wpmc_galleries_images" );
-				if ( empty( $galleries_images ) )
-					$galleries_images = array();
-				$galleries = get_post_galleries_images( $post );
-				foreach ( $galleries as $gallery ) {
-					foreach ( $gallery as $image ) {
-						array_push( $galleries_images, $this->wpmc_clean_url( $image ) );
-					}
-				}
-				set_transient( "wpmc_galleries_images", $galleries_images, $this->transient_life );
-				$found['wpmc_galleries_images'] = $galleries_images;
-			}
+			// Run the scanners
+			if ( $check_postmeta )
+				do_action( 'wpmc_scan_postmeta', $post );
+			if ( $check_posts )
+				do_action( "wpmc_scan_post", $html, $post );
 		}
 		$finished = count( $posts ) < $limitsize;
 		if ( $finished ) {
@@ -701,24 +487,25 @@ class Meow_WPMC_Core {
 			$postmeta_images_acf_urls = get_transient( "wpmc_postmeta_images_acf_urls" );
 			$postmeta_images_acf_ids = get_transient( "wpmc_postmeta_images_acf_ids" );
 			$posts_images_vc = get_transient( "wpmc_posts_images_visualcomposer" );
-			$galleries_images = get_transient( "wpmc_galleries_images" );
+			$galleries_images_urls = get_transient( "wpmc_galleries_images_urls" );
 			$galleries_images_vc = get_transient( "wpmc_galleries_images_visualcomposer" );
 			$galleries_images_fb = get_transient( "wpmc_galleries_images_fusionbuilder" );
 			$galleries_images_wc = get_transient( "wpmc_galleries_images_woocommerce" );
 			$galleries_images_et = get_transient( "wpmc_galleries_images_divi" );
 
 			$found['theme_urls'] = is_array( $theme_urls ) ? array_unique( $theme_urls ) : array();
-			$found['theme_ids'] = is_array( $theme_ids ) ? array_unique( $theme_ids ) : array();
 			$found['widgets_urls'] = is_array( $widgets_urls ) ? array_unique( $widgets_urls ) : array();
-			$found['widgets_ids'] = is_array( $widgets_ids ) ? array_unique( $widgets_ids ) : array();
 			$found['posts_images_urls'] = is_array( $posts_images_urls ) ? array_unique( $posts_images_urls ) : array();
-			$found['posts_images_ids'] = is_array( $posts_images_ids ) ? array_unique( $posts_images_ids ) : array();
 			$found['postmeta_images_urls'] = is_array( $postmeta_images_urls ) ? array_unique( $postmeta_images_urls ) : array();
-			$found['postmeta_images_ids'] = is_array( $postmeta_images_ids ) ? array_unique( $postmeta_images_ids ) : array();
 			$found['postmeta_images_acf_urls'] = is_array( $postmeta_images_acf_urls ) ? array_unique( $postmeta_images_acf_urls ) : array();
+			$found['galleries_images_urls'] = is_array( $galleries_images_urls ) ? array_unique( $galleries_images_urls ) : array();
+
+			$found['theme_ids'] = is_array( $theme_ids ) ? array_unique( $theme_ids ) : array();
+			$found['widgets_ids'] = is_array( $widgets_ids ) ? array_unique( $widgets_ids ) : array();
+			$found['posts_images_ids'] = is_array( $posts_images_ids ) ? array_unique( $posts_images_ids ) : array();
+			$found['postmeta_images_ids'] = is_array( $postmeta_images_ids ) ? array_unique( $postmeta_images_ids ) : array();
 			$found['postmeta_images_acf_ids'] = is_array( $postmeta_images_acf_ids ) ? array_unique( $postmeta_images_acf_ids ) : array();
 			$found['posts_images_vc'] = is_array( $posts_images_vc ) ? array_unique( $posts_images_vc ) : array();
-			$found['galleries_images'] = is_array( $galleries_images ) ? array_unique( $galleries_images ) : array();
 			$found['galleries_images_vc'] = is_array( $galleries_images_vc ) ? array_unique( $galleries_images_vc ) : array();
 			$found['galleries_images_fb'] = is_array( $galleries_images_fb ) ? array_unique( $galleries_images_fb ) : array();
 			$found['galleries_images_wc'] = is_array( $galleries_images_wc ) ? array_unique( $galleries_images_wc ) : array();
@@ -727,28 +514,57 @@ class Meow_WPMC_Core {
 			// For safety, remove the resolutions...
 			// That will match more files, especially the sizes created before, used before, but not part of the
 			// media metadata anymore.
-			array_walk( $found['theme_urls'], array( $this, 'clean_url_from_resolution' ) );
-			array_walk( $found['widgets_urls'], array( $this, 'clean_url_from_resolution' ) );
-			array_walk( $found['posts_images_urls'], array( $this, 'clean_url_from_resolution' ) );
-			array_walk( $found['postmeta_images_urls'], array( $this, 'clean_url_from_resolution' ) );
-			array_walk( $found['postmeta_images_acf_urls'], array( $this, 'clean_url_from_resolution' ) );
 
-			set_transient( "wpmc_theme_urls", $found['theme_urls'], $this->transient_life );
-			set_transient( "wpmc_theme_ids", $found['theme_ids'], $this->transient_life );
-			set_transient( "wpmc_widgets_urls", $found['widgets_urls'], $this->transient_life );
-			set_transient( "wpmc_widgets_ids", $found['widgets_ids'], $this->transient_life );
-			set_transient( "wpmc_posts_images_urls", $found['posts_images_urls'], $this->transient_life );
-			set_transient( "wpmc_posts_images_ids", $found['posts_images_ids'], $this->transient_life );
-			set_transient( "wpmc_postmeta_images_urls", $found['postmeta_images_urls'], $this->transient_life );
-			set_transient( "wpmc_postmeta_images_ids", $found['postmeta_images_ids'], $this->transient_life );
-			set_transient( "wpmc_postmeta_images_acf_urls", $found['postmeta_images_acf_urls'], $this->transient_life );
-			set_transient( "wpmc_postmeta_images_acf_ids", $found['postmeta_images_acf_ids'], $this->transient_life );
-			set_transient( "wpmc_posts_images_visualcomposer", $found['posts_images_vc'], $this->transient_life );
-			set_transient( "wpmc_galleries_images_visualcomposer", $found['galleries_images_vc'], $this->transient_life );
-			set_transient( "wpmc_galleries_images_fusionbuilder", $found['galleries_images_fb'], $this->transient_life );
-			set_transient( "wpmc_galleries_images_woocommerce", $found['galleries_images_wc'], $this->transient_life );
-			set_transient( "wpmc_galleries_images_divi", $found['galleries_images_et'], $this->transient_life );
-			set_transient( "wpmc_galleries_images", $found['galleries_images'], $this->transient_life );
+			// ADD AN OPTION "CHECK SKIP RESOLUTION" (DEFAULT TRUE)
+			$method = get_option( 'wpmc_method', 'media' );
+			if ( $method == 'media' ) {
+				// All URLs should be without resolution to make sure it matches Media
+				array_walk( $found['theme_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				array_walk( $found['widgets_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				array_walk( $found['posts_images_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				array_walk( $found['postmeta_images_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				array_walk( $found['postmeta_images_acf_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				array_walk( $found['galleries_images_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+			}
+			else {
+				// We need both filename without resolution and filename with resolution, it's important
+				// to make sure the original file is not deleted if a size exists for it
+				$clone = $found['theme_urls'];
+				array_walk( $found['theme_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				$found['theme_urls'] = array_merge( $clone, $found['theme_urls'] );
+				$clone = $found['widgets_urls'];
+				array_walk( $found['widgets_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				$found['widgets_urls'] = array_merge( $clone, $found['widgets_urls'] );
+				$clone = $found['posts_images_urls'];
+				array_walk( $found['posts_images_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				$found['posts_images_urls'] = array_merge( $clone, $found['posts_images_urls'] );
+				$clone = $found['postmeta_images_urls'];
+				array_walk( $found['postmeta_images_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				$found['postmeta_images_urls'] = array_merge( $clone, $found['postmeta_images_urls'] );
+				$clone = $found['postmeta_images_acf_urls'];
+				array_walk( $found['postmeta_images_acf_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				$found['postmeta_images_acf_urls'] = array_merge( $clone, $found['postmeta_images_acf_urls'] );
+				$clone = $found['galleries_images_urls'];
+				array_walk( $found['galleries_images_urls'], array( $this, 'clean_url_from_resolution_ref' ) );
+				$found['galleries_images_urls'] = array_merge( $clone, $found['galleries_images_urls'] );
+			}
+
+			set_transient( "wpmc_theme_urls", $found['theme_urls'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_theme_ids", $found['theme_ids'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_widgets_urls", $found['widgets_urls'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_widgets_ids", $found['widgets_ids'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_posts_images_urls", $found['posts_images_urls'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_posts_images_ids", $found['posts_images_ids'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_postmeta_images_urls", $found['postmeta_images_urls'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_postmeta_images_ids", $found['postmeta_images_ids'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_postmeta_images_acf_urls", $found['postmeta_images_acf_urls'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_postmeta_images_acf_ids", $found['postmeta_images_acf_ids'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_posts_images_visualcomposer", $found['posts_images_vc'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_galleries_images_visualcomposer", $found['galleries_images_vc'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_galleries_images_fusionbuilder", $found['galleries_images_fb'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_galleries_images_woocommerce", $found['galleries_images_wc'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_galleries_images_divi", $found['galleries_images_et'], Meow_WPMC_Core::$transient_life );
+			set_transient( "wpmc_galleries_images_urls", $found['galleries_images_urls'], Meow_WPMC_Core::$transient_life );
 		}
 		if ( $finished && get_option( 'wpmc_debuglogs', false ) ) {
 			$this->log( print_r( $found, true ) );
@@ -781,7 +597,7 @@ class Meow_WPMC_Core {
 			$method = 'media';
 		$path = isset( $_POST['path'] ) ? $_POST['path'] : null;
 		$limit = isset( $_POST['limit'] ) ? $_POST['limit'] : 0;
-		$limitsize = get_option( 'wpmc_medias_buffer', 50 );
+		$limitsize = get_option( 'wpmc_medias_buffer', 100 );
 
 		if ( $method == 'files' ) {
 			$output = apply_filters( 'wpmc_list_uploaded_files', array(
@@ -984,7 +800,7 @@ class Meow_WPMC_Core {
 		$table_name = $wpdb->prefix . "wpmcleaner";
 		$issue = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ), OBJECT );
 		$regex = "^(.*)(\\s\\(\\+.*)$";
-		$issue->path = preg_replace('/'.$regex.'/i', '$1', $issue->path); // remove " (+ 6 files)" from path
+		$issue->path = preg_replace( '/' . $regex . '/i', '$1', $issue->path ); // remove " (+ 6 files)" from path
 
 		// Make sure there isn't a media DB entry
 		if ( $issue->type == 0 ) {
@@ -1083,7 +899,7 @@ class Meow_WPMC_Core {
 		return ($count > 0);
 	}
 
-	function wpmc_find_attachment_id_by_file ($file) {
+	function wpmc_find_attachment_id_by_file( $file ) {
 		global $wpdb;
 		$postmeta_table_name = $wpdb->prefix . 'postmeta';
 		$file = $this->wpmc_clean_uploaded_filename( $file );
@@ -1120,10 +936,14 @@ class Meow_WPMC_Core {
 		return $sizes;
 	}
 
-	function clean_url_from_resolution( &$url ) {
+	function clean_url_from_resolution( $url ) {
 		$pattern = '/[_-]\d+x\d+(?=\.[a-z]{3,4}$)/';
 		$url = preg_replace( $pattern, '', $url );
 		return $url;
+	}
+
+	function clean_url_from_resolution_ref( &$url ) {
+		$url = $this->clean_url_from_resolution( $url );
 	}
 
 	// From a url to the shortened and cleaned url (for example '2013/02/file.png')
@@ -1167,6 +987,14 @@ class Meow_WPMC_Core {
 		$countfiles = 0;
 		$issue = 'NO_CONTENT';
 		if ( file_exists( $fullpath ) ) {
+
+			// Special scan: Broken only!
+			$check_postmeta = get_option( 'wpmc_postmeta', false );
+			$check_posts = get_option( 'wpmc_posts', false );
+			$check_widgets = get_option( 'wpmc_widgets', false );
+			if ( !$check_postmeta && !$check_posts && !$check_widgets )
+				return true;
+
 			$size = filesize( $fullpath );
 
 			// ANALYSIS
@@ -1262,7 +1090,7 @@ class Meow_WPMC_Core {
 		delete_transient( "wpmc_galleries_images_fusionbuilder" );
 		delete_transient( "wpmc_galleries_images_woocommerce" );
 		delete_transient( "wpmc_galleries_images_divi" );
-		delete_transient( "wpmc_galleries_images" );
+		delete_transient( "wpmc_galleries_images_urls" );
 	}
 
 	/**
@@ -1275,7 +1103,7 @@ class Meow_WPMC_Core {
 		echo "<script type='text/javascript'>\n";
 		echo 'var wpmc_cfg = {
 			delay: ' . get_option( 'wpmc_delay', 100 ) . ',
-			analysisBuffer: ' . get_option( 'wpmc_analysis_buffer', 10 ) . ',
+			analysisBuffer: ' . get_option( 'wpmc_analysis_buffer', 50 ) . ',
 			isPro: ' . ( $this->admin->is_registered()  ? '1' : '0') . ',
 			scanFiles: ' . ( ( get_option( 'wpmc_method', 'media' ) == 'files' && $this->admin->is_registered() ) ? '1' : '0' ) . ',
 			scanMedia: ' . ( get_option( 'wpmc_method', 'media' ) == 'media' ? '1' : '0' ) . ' };';
@@ -1467,23 +1295,59 @@ class Meow_WPMC_Core {
 
 					if ( !$this->admin->is_registered() ) {
 						echo "<div class='notice notice-info'><p>";
-						_e( "<b>This version is not Pro.</b> This plugin is a lot of work so please consider in getting the Pro version in order to receive support and to help the plugin to evolve. Also, the Pro version will also give you the option <b>to scan the <u>physical files</u> in your /uploads folder</b>. You can <a target='_blank' href='http://meowapps.com/media-cleaner'>get a serial for the Pro version here</a></b>.", 'media-cleaner' );
+						_e( "<b>This version is not Pro.</b> This plugin is a lot of work so please consider <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a> in order to receive support and to contribute in the evolution of it. Also, <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a> version will also give you the option <b>to scan the physical files in your /uploads folder</b> and extra checks for the common Page Builders.", 'media-cleaner' );
 						echo "</p></div>";
+
+						if ( function_exists( '_et_core_find_latest' ) ) {
+							echo "<div class='notice notice-warning'><p>";
+							_e( "<b>Divi has been detected</b>. The free version might detect the files used by Divi correctly, but its full support is only available in <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a>.", 'media-cleaner' );
+							echo "</p></div>";
+						}
+
+						if ( class_exists( 'Vc_Manager' ) ) {
+							echo "<div class='notice notice-warning'><p>";
+							_e( "<b>Visual Composer has been detected</b>. The free version might detect the files used by Visual Composer correctly, but its full support is only available in <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a>.", 'media-cleaner' );
+							echo "</p></div>";
+						}
+
+						if ( function_exists( 'fusion_builder_map' ) ) {
+							echo "<div class='notice notice-warning'><p>";
+							_e( "<b>Fusion Builder has been detected</b>. The free version might detect the files used by Fusion Builder correctly, but its full support is only available in <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a>.", 'media-cleaner' );
+							echo "</p></div>";
+						}
+
+						if ( class_exists( 'FLBuilderModel' ) ) {
+							echo "<div class='notice notice-warning'><p>";
+							_e( "<b>Beaver Builder has been detected</b>. The free version might detect the files used by Beaver Builder correctly, but its full support is only available in <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a>.", 'media-cleaner' );
+							echo "</p></div>";
+						}
+
+						if ( function_exists( 'elementor_load_plugin_textdomain' ) ) {
+							echo "<div class='notice notice-warning'><p>";
+							_e( "<b>Elementor has been detected</b>. The free version might detect the files used by Elementor correctly, but its full support is only available in <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a>.", 'media-cleaner' );
+							echo "</p></div>";
+						}
+
+						if ( class_exists( 'SiteOrigin_Panels' ) ) {
+							echo "<div class='notice notice-warning'><p>";
+							_e( "<b>SiteOrigin Page Builder has been detected</b>. The free version might detect the files used by SiteOrigin Page Builder correctly, but its full support is only available in <a target='_blank' href='//meowapps.com/media-cleaner'>Media Cleaner Pro</a>.", 'media-cleaner' );
+							echo "</p></div>";
+						}
+
 					}
 
-					$anychecks = get_option( 'wpmc_posts', false ) || get_option( 'wpmc_galleries', false ) ||
-						get_option( 'wpmc_postmeta', false );
-					$check_library = get_option(' wpmc_media_library', false );
+					$anychecks = get_option( 'wpmc_posts', false ) || get_option( 'wpmc_postmeta', false ) || get_option( 'wpmc_widgets', false );
+					$check_library = get_option(' wpmc_media_library', true );
 
 					if ( $method == 'media' ) {
 						if ( !$anychecks )
-							_e( "<div class='error'><p>Media Cleaner will analyze your Media Library. However, There is <b>NOTHING MARKED TO BE CHECKED</b> in the Settings. If you scan now, everything will be detected as NOT in used.</p></div>", 'media-cleaner' );
+							_e( "<div class='error'><p>Media Cleaner will analyze your Media Library. However, There is <b>NOTHING MARKED TO BE CHECKED</b> in the Settings. Media Cleaner will therefore run a special scan: <b>only the broken medias will be detected as issues.</b></p></div>", 'media-cleaner' );
 						else
 							_e( "<div class='notice notice-success'><p>Media Cleaner will analyze your Media Library.</p></div>", 'media-cleaner' );
 					}
 					else if ( $method == 'files' ) {
 						if ( !$anychecks && !$check_library )
-							_e( "<div class='error'><p>Media Cleaner will analyze your Filesystem. However, There is <b>NOTHING MARKED TO BE CHECKED</b> in the Settings. If you scan now, everything will be detected as NOT in used.</p></div>", 'media-cleaner' );
+							_e( "<div class='error'><p>Media Cleaner will analyze your Filesystem. However, There is <b>NOTHING MARKED TO BE CHECKED</b> in the Settings. If you scan now, all the files will be detected as <b>NOT USED</b>.</p></div>", 'media-cleaner' );
 						else
 							_e( "<div class='notice notice-success'><p>Media Cleaner will analyze your Filesystem.</p></div>", 'media-cleaner' );
 					}
@@ -1552,11 +1416,21 @@ class Meow_WPMC_Core {
 									}
 									else {
 										// MEDIA
-										$attachmentsrc = wp_get_attachment_image_src( $issue->postId, 'thumbnail' );
-										$attachmentsrc_clean = htmlspecialchars( $attachmentsrc[0], ENT_QUOTES );
-										echo "<a target='_blank' href='" . $attachmentsrc_clean .
-											"'><img style='max-width: 48px; max-height: 48px;' src='" .
-											$attachmentsrc_clean . "' />";
+										$file = get_attached_file( $issue->postId );
+										if ( file_exists( $file ) ) {
+											$attachmentsrc = wp_get_attachment_image_src( $issue->postId, 'thumbnail' );
+											if ( empty( $attachmentsrc ) )
+												echo '<span class="dashicons dashicons-no-alt"></span>';
+											else {
+												$attachmentsrc_clean = htmlspecialchars( $attachmentsrc[0], ENT_QUOTES );
+												echo "<a target='_blank' href='" . $attachmentsrc_clean .
+													"'><img style='max-width: 48px; max-height: 48px;' src='" .
+													$attachmentsrc_clean . "' />";
+											}
+										}
+										else {
+											echo '<span class="dashicons dashicons-no-alt"></span>';
+										}
 									}
 								}
 								if ( $issue->deleted == 1 ) {
