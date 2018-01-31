@@ -10,5 +10,6 @@ module.exports = {
         "no-await-in-loop": "off",
         "no-underscore-dangle": "off",
         "no-use-before-define": "off",
+        "guard-for-in": "off",
     }
 };

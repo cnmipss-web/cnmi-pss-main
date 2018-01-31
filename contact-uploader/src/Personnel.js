@@ -15,6 +15,7 @@ const WP_CONFIG = Symbol('WordPress Client');
 const MAIN_ROUTE = Symbol('Personnel API Route');
 const ACF_ROUTE = Symbol('Advanced Custom Field Route');
 const AUTH_TOKEN = Symbol('JWT for WP API');
+const PROTOCOL = Symbol('HTTP vs HTTPS');
 
 export default class PersonnelHandler {
   constructor(config) {
@@ -22,8 +23,9 @@ export default class PersonnelHandler {
       encoding: 'utf-8',
     });
     this[WP_CONFIG] = config;
-    this[MAIN_ROUTE] = `http://${config.host}/wp-json/wp/v2/contact_info/`;
-    this[ACF_ROUTE] = `http://${config.host}/wp-json/acf/v3/contact_info/`;
+    this[PROTOCOL] = config.secure ? 'https://' : 'http://';
+    this[MAIN_ROUTE] = `${this[PROTOCOL]}${config.host}/wp-json/wp/v2/contact_info/`;
+    this[ACF_ROUTE] = `${this[PROTOCOL]}${config.host}/wp-json/acf/v3/contact_info/`;
   }
 
   async parse() {
@@ -42,9 +44,21 @@ export default class PersonnelHandler {
 
   async post() {
     this[AUTH_TOKEN] = await getToken(this[WP_CONFIG]);
-    this[PERSONNEL]
-      .map(searchWP.bind(this))
-      .map(postData.bind(this));
+    const personnel = [];
+    for (const person of this[PERSONNEL]) {
+      console.log(`Searching ${person.fields.email}`);
+      const newPerson = await searchWP.call(this, person);
+      personnel.push(newPerson);
+    }
+
+    for (const person of personnel) {
+      if (person instanceof Error) {
+        console.error(person.config.headers);
+      } else if (person.title.trim().length > 0) {
+        console.log(`Posting ${person.title}`);
+        await postData.call(this, person);
+      }
+    }
   }
 }
 
@@ -75,11 +89,16 @@ async function postData(entry) {
   };
 
   const mainRoute = existingData ? this[MAIN_ROUTE] + existingData.id : this[MAIN_ROUTE];
-  const mainResult = await axios.post(mainRoute, dataString, config).catch(err => console.error(err.response));
+  const mainResult = await axios.post(mainRoute, dataString, config).catch(err => console.error(mainRoute, data.title, '\n', err));
 }
-
+/**
+ * Search for existing WP Contact Info posts based on email address.
+ *
+ * @param {any} personnelRecord
+ * @returns
+ */
 async function searchWP(personnelRecord) {
-  const queryRoute = `${this[MAIN_ROUTE]}?per_page=50&search=${personnelRecord.fields.name}`;
+  const queryRoute = `${this[MAIN_ROUTE]}?per_page=50&search=${personnelRecord.fields.email}`;
   const searchResults = await axios.get(queryRoute);
   const searchResult = searchResults.data.filter(res => res.type === 'contact_info')[0];
   return {
@@ -101,11 +120,21 @@ function parseRows(officePersonnel) {
   const { office, personnel } = officePersonnel;
   return personnel.map((person) => {
     const address = `${office[0]}\nPO Box 501370 CK\nSaipan MP, 96950`;
-    const name = person[0].split(',')[0];
+
+    let name;
+    let jobTitle;
+    const splitName = person[0].split(', ');
+    if (splitName.length > 1) {
+      name = person[0].split(', ').slice(0, -1).join(', ');
+      jobTitle = person[0].split(', ').slice(-1);
+    } else {
+      name = person[0];
+      jobTitle = [''];
+    }
+
     const telephone = person.slice(1, 4).filter(s => s.trim().length > 0).join(', ');
     const fax = person[4];
     const email = person[5];
-    const jobTitle = person[0].split(',').slice(1) || [''];
 
     return {
       title: name,
