@@ -244,7 +244,7 @@ function cnmi_search_form ($location) {
 function cnmi_contact_info($slug, $type = 'full') {
     $info = new WP_Query(array(
         'post_type' => 'contact_info',
-        'name' => $slug,
+        'title' => $slug,
     ));
     if($info->have_posts()):
             $info->the_post();
