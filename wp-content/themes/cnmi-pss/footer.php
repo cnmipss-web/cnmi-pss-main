@@ -39,7 +39,7 @@
                 <div class="col-xs-12">
                     <h2>Contact District Office</h2>
                     <div class="footer-center">
-                        <?php cnmi_contact_info('district-office'); ?>
+                        <?php cnmi_contact_info('district office'); ?>
                     </div>
                 </div>
                 <!-- <div class="col-xs-0 col-sm-3">
