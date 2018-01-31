@@ -32,8 +32,7 @@
       "selectors": [
         "#masthead",
         "#colophon",
-        "#content",
-        "document"
+        "#content"
       ],
       "readyEvent": null,
       "delay": 250,
@@ -49,7 +48,7 @@
       "removeSelectors": [],
       "selectorExpansion": true,
       "selectors": [
-        "document"
+        "#content"
       ],
       "readyEvent": null,
       "delay": 250,
@@ -65,7 +64,7 @@
       "removeSelectors": [],
       "selectorExpansion": true,
       "selectors": [
-        "document"
+        "#content"
       ],
       "readyEvent": null,
       "delay": 250,
@@ -81,7 +80,7 @@
       "removeSelectors": [],
       "selectorExpansion": true,
       "selectors": [
-        "document"
+        "#content"
       ],
       "readyEvent": null,
       "delay": 500,
@@ -98,7 +97,7 @@
       "removeSelectors": [],
       "selectorExpansion": true,
       "selectors": [
-        "document"
+        "#content"
       ],
       "readyEvent": null,
       "delay": 250,
@@ -114,7 +113,7 @@
       "removeSelectors": [],
       "selectorExpansion": true,
       "selectors": [
-        "document"
+        "#content"
       ],
       "readyEvent": null,
       "delay": 250,
@@ -128,7 +127,7 @@
   "paths": {
     "bitmaps_reference": "backstop_data/bitmaps_reference",
     "bitmaps_test": "backstop_data/bitmaps_test",
-    "casper_scripts": "backstop_data/casper_scripts",
+    "casper_scripts": "backstop_data/engine_scripts",
     "html_report": "backstop_data/html_report",
     "ci_report": "backstop_data/ci_report"
   },
