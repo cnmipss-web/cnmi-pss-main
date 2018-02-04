@@ -21,10 +21,10 @@
     color: $dark-blue;
     text-align: left;
     @include for-xs {
-        font-size: 24px;
+        font-size: 1.8rem;
     }
     @include for-sm {
-        font-size: 36px;
+        font-size: 2rem;
         margin: 10% 0px 15px 0px;
     }
 }
@@ -32,21 +32,21 @@
 .entry-content.col-xs-12 {
     margin-top: 0px !important;
     @include for-xs {
-        font-size: 14px;
+        font-size: 1rem;
         padding: 0px 15px !important;
     }
     @include for-sm {
-        font-size: 16px;
+        font-size: 1.2rem;
     }
 }
 
 .entry-meta {
     padding: 0px !important;
     @include for-xs {
-        font-size: 12px
+        font-size: 0.8rem;
     }
     @include for-sm {
-        font-size: 14px
+        font-size: 1rem;
     }
 }
 
