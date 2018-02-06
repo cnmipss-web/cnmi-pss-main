@@ -3,16 +3,18 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests
 
+import settings
+
 
 class NewsPage(unittest.TestCase):
-    """Functional tests for the 'News' page at http://cnmipss.org/news"""
+    """Functional tests for the 'News' page at /news"""
 
     @classmethod
     def setUpClass(cls):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         cls.browser = webdriver.Chrome(chrome_options=chrome_options)
-        cls.browser.get('http://cnmipss.org/news')
+        cls.browser.get(settings.URL + '/news')
 
     @classmethod
     def tearDownClass(cls):

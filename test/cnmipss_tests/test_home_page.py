@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests
 
+import settings
 
 class HomePageTests(unittest.TestCase):
     """Functional tests for cnmipss.org home page"""
@@ -12,7 +13,7 @@ class HomePageTests(unittest.TestCase):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         cls.browser = webdriver.Chrome(chrome_options=chrome_options)
-        cls.browser.get('http://cnmipss.org')
+        cls.browser.get(settings.URL)
 
     @classmethod
     def tearDownClass(cls):
