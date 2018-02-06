@@ -1,11 +1,13 @@
+from urllib.request import urlopen
+import re
+
+from bs4 import BeautifulSoup
+import requests
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from crawler.items import ImagesItem
-from bs4 import BeautifulSoup
 
-from urllib.request import urlopen
-import requests
+from crawler.items import ImagesItem
 
 # Follows urls on target domain and saves url, status, and referrer.
 #
@@ -42,11 +44,19 @@ class ImageSpider(CrawlSpider):
         # load target domain and then use it once to define the rules
         # target domain is a string value.
         print('Target domain: ', 'localhost')
+        
+        allowed_domains = [
+            re.compile(r"localhost"), 
+            re.compile(r"cnmipss.org")
+        ]
 
         # If a link matches multiple rules, the first rule wins.
         self.rules = (
             # If a link is within the target domain, follow it.
-            Rule(LinkExtractor(allow_domains=['localhost'], unique=True),
+            Rule(LinkExtractor(
+                allow=allowed_domains,
+                unique=True
+                ),
                  callback='parse_images',
                  process_links='clean_links',
                  follow=True),
@@ -68,8 +78,11 @@ class ImageSpider(CrawlSpider):
 
     # rule callback
     def parse_images(self, response):
-        soup = BeautifulSoup(response.body, 'html.parser')
-        images = soup.find_all(name='img')
-        images_item = ImagesItem()
-        images_item['sources'] = [img.get('src') for img in images]
+        try:
+            soup = BeautifulSoup(response.body, 'html.parser')
+            images = soup.find_all(name='img')
+            images_item = ImagesItem()
+            images_item['sources'] = [img.get('src') for img in images]
+        except Exception as err:
+            print('EXCEPTION:', err)
         yield images_item
