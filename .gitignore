@@ -54,3 +54,4 @@ testresults.tap
 .vscode
 _build
 docs/_build/
+contactUploader.json
