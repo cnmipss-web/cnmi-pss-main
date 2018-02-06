@@ -41,19 +41,19 @@ class ImageSpider(CrawlSpider):
         # update rules
         # load target domain and then use it once to define the rules
         # target domain is a string value.
-        print('Target domain: ', 'cnmipss.org')
+        print('Target domain: ', 'localhost')
 
         # If a link matches multiple rules, the first rule wins.
         self.rules = (
             # If a link is within the target domain, follow it.
-            Rule(LinkExtractor(allow_domains=['cnmipss.org'], unique=True),
+            Rule(LinkExtractor(allow_domains=['localhost'], unique=True),
                  callback='parse_images',
                  process_links='clean_links',
                  follow=True),
         )
         self._compile_rules()
 
-        start_urls = ['http://cnmipss.org']
+        start_urls = ['http://localhost']
 
         for url in start_urls:
             yield scrapy.Request(url, dont_filter=True)

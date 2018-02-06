@@ -1,0 +1,5 @@
+{
+  "test_home_page.py": true, 
+  "test_news_page.py": true, 
+  "test_valid_urls.py": true
+}

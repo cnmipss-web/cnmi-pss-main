@@ -55,3 +55,4 @@ testresults.tap
 _build
 docs/_build/
 contactUploader.json
+src_old/
