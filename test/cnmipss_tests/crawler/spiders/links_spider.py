@@ -80,6 +80,7 @@ class LinkSpider(CrawlSpider):
 
     # rule callback
     def parse_item(self, response):
+        print(response)
         item = LinkItem()
         item['url'] = response.url
         item['status'] = response.status
