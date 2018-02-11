@@ -56,3 +56,4 @@ _build
 docs/_build/
 contactUploader.json
 src_old/
+.pytest_cache
