@@ -1,5 +1,5 @@
-from urllib.request import urlopen
 import re
+from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 import requests
@@ -43,8 +43,6 @@ class ImageSpider(CrawlSpider):
         # update rules
         # load target domain and then use it once to define the rules
         # target domain is a string value.
-        print('Target domain: ', 'localhost')
-        
         allowed_domains = [
             re.compile(r"localhost"), 
             re.compile(r"cnmipss.org")

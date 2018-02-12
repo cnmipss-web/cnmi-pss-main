@@ -1,8 +1,10 @@
-import scrapy
+import re
+from urllib.request import urlopen
+
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.utils.sitemap import Sitemap
-from urllib.request import urlopen
+import scrapy
 
 from crawler.items import LinkItem
 
@@ -48,12 +50,15 @@ class LinkSpider(CrawlSpider):
         # update rules
         # load target domain and then use it once to define the rules
         # target domain is a string value.
-        print('Target domain: ', 'localhost')
+        allowed_domains = [
+            re.compile(r"localhost"), 
+            re.compile(r"cnmipss.org")
+        ]
 
         # If a link matches multiple rules, the first rule wins.
         self.rules = (
             # If a link is within the target domain, follow it.
-            Rule(LinkExtractor(allow_domains=['localhost'], unique=True),
+            Rule(LinkExtractor(allow_domains=allowed_domains, unique=True),
                  callback='parse_item',
                  process_links='clean_links',
                  follow=True),
@@ -80,6 +85,7 @@ class LinkSpider(CrawlSpider):
 
     # rule callback
     def parse_item(self, response):
+        print(response)
         item = LinkItem()
         item['url'] = response.url
         item['status'] = response.status

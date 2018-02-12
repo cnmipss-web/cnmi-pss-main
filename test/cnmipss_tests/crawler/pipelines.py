@@ -40,7 +40,8 @@ class CheckImageStatusPipeline(object):
     def process_item(self, item, spider):
         item_sources = []
         for source in item['sources']:
-            response = requests.get(source)
+            print('Checking image at: ', source)
+            response = requests.head(source)
             item_sources.append(
                 {'url': source, 'status': response.status_code})
 
