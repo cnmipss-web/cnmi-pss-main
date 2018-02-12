@@ -1,12 +1,15 @@
 import unittest
+import re
+import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import requests
 
 import settings
 
 class HomePageTests(unittest.TestCase):
-    """Functional tests for cnmipss.org home page"""
+    """
+    Functional tests for cnmipss.org home page
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -39,11 +42,28 @@ class HomePageTests(unittest.TestCase):
             [x for x in menu_items if x.getText() is not None],
             menu_items)
 
-        # Menu items contain links or are dropdowns
+        # Menu items are links or dropdowns
         self.assertEqual(
             [x for x in menu_items if x.find_element_by_css_selector(
                 '& > a') is not None or x.get_attribute('class') == 'dropdown'],
             menu_items)
+
+        # Top Level Menu options are all one of:
+        CORRECT_MENU_CATEGORIES = [
+            'PSS News', 
+            'Students & Parents', 
+            'Employees', 'Community', 
+            'District Information', 
+            'Public Reports'
+        ]
+        menu_categories = self.browser.find_elements_by_css_selector(
+            '#menu-main > ul > li'
+        )
+        self.assertEqual(
+            len([x for x in menu_categories if x.text in CORRECT_MENU_CATEGORIES]),
+            len(menu_categories)
+        )
+
 
     def test_school_links(self):
         school_links = self.browser.find_element_by_css_selector(
@@ -53,7 +73,7 @@ class HomePageTests(unittest.TestCase):
         # School links exist
         self.assertIsNotNone(school_links)
 
-        # 33 links including Head Start & Early Intervention
+        # There are 33 links, including Head Start & Early Intervention
         self.assertEqual(len(school_links), 33)
 
     def test_recent_news_articles(self):
@@ -81,8 +101,45 @@ class HomePageTests(unittest.TestCase):
             img_links,
         )
 
+        # Remaining links are text-only and do not contain images
+        non_img_links = news_links[3:]
+        self.assertEqual(
+            [x for x in non_img_links if x.find_element_by_tag_name(
+                'img') is None],
+            non_img_links,
+        )
+        self.assertEqual(
+            [x for x in non_img_links if x.find_element_by_css_selector(
+                'a[title="Link to article"]') is not None],
+            non_img_links,
+        )
+
         # Check img sources:
         for link in img_links:
             source = link.find_element_by_tag_name('img').get_attribute('src')
-            response = requests.get(source)
+            response = requests.head(source)
             self.assertEqual(response.status_code, 200)
+
+    def test_search_form(self):
+        search_form = self.browser.find_element_by_css_selector('#masthead form[role="search"]')
+
+        # Search form exists
+        self.assertIsNotNone(search_form)
+
+        # Search form action is one of regexes:
+        VALID_ACTIONS = [
+            re.compile('localhost'),
+            re.compile('cnmipss.org'),            
+        ]
+        action = search_form.get_attribute('action')
+        self.assertTrue(
+            any(regex.search(action) for regex in VALID_ACTIONS)
+        )
+
+
+        # Search input is named 's'
+        search_input = search_form.find_element_by_css_selector('input[type="search"]')
+        self.assertEqual(
+            search_input.get_attribute('name'),
+            's'
+        )
