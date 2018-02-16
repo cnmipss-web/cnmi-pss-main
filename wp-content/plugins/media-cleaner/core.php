@@ -47,7 +47,7 @@ class Meow_WPMC_Core {
 	function display_metabox( $post ) {
 		$posts_images_urls = get_transient( "wpmc_posts_images_urls" );
 		if ( !is_array( $posts_images_urls ) ) {
-			echo "You need to run a scan first.";
+			echo "You need to run a Media Library scan first.";
 			return;
 		}
 		$this->log( "Media Edit > Checking Media #{$post->ID}" );
@@ -583,10 +583,13 @@ class Meow_WPMC_Core {
 	function log( $data, $force = false ) {
 		if ( !get_option( 'wpmc_debuglogs', false ) && !$force )
 			return;
-		$fh = fopen( trailingslashit( dirname(__FILE__) ) . '/media-cleaner.log', 'a' );
+		$fh = @fopen( trailingslashit( dirname(__FILE__) ) . '/media-cleaner.log', 'a' );
+		if ( !$fh )
+			return false;
 		$date = date( "Y-m-d H:i:s" );
 		fwrite( $fh, "$date: {$data}\n" );
 		fclose( $fh );
+		return true;
 	}
 
 	function wp_ajax_wpmc_scan() {
@@ -740,6 +743,8 @@ class Meow_WPMC_Core {
 
 		try {
 			if ( !file_exists( $path_parts['dirname'] ) && !wp_mkdir_p( $path_parts['dirname'] ) ) {
+				$this->log( "Could not create the trash directory for Media Cleaner." );
+				error_log( "Media Cleaner: Could not create the trash directory." );
 				return false;
 			}
 			// Rename the file (move). 'is_dir' is just there for security (no way we should move a whole directory)
@@ -752,7 +757,7 @@ class Meow_WPMC_Core {
 				$this->log( "The file $originalPath actually does not exist." );
 				return true;
 			}
-			if ( !rename( $originalPath, $trashPath ) ) {
+			if ( !@rename( $originalPath, $trashPath ) ) {
 				return false;
 			}
 		}
@@ -843,6 +848,7 @@ class Meow_WPMC_Core {
 				if ( !$this->wpmc_trash_file( $file ) ) {
 					$this->log( "Could not trash $file." );
 					error_log( "Media Cleaner: Could not trash $file." );
+					return false;
 				}
 
 				// If images, check the other files as well

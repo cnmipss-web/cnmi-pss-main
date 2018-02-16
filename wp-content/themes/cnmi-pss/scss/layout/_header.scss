@@ -31,13 +31,13 @@
     }
     li a {
         @include for-xs {
-            font-size: $base-font-size - 0px !important;
+            font-size: $base-font-size - 0rem !important;
         }
         @include for-sm {
-            font-size: $base-font-size - 5px !important;
+            font-size: $base-font-size - 0.25rem !important;
         }
         @include for-md {
-            font-size: $base-font-size - 2px !important;
+            font-size: $base-font-size - 0.10rem !important;
         }
         @include for-lg {
             font-size: $base-font-size !important;

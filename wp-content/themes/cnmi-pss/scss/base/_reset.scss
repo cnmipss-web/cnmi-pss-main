@@ -46,3 +46,10 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+article p,
+article li, 
+.notice p {
+  font-family: $article-font-family;
+  font-weight: $article-font-weight;
+  font-size: $article-font-size;
+}

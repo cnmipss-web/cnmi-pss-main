@@ -3,9 +3,9 @@
 }
 
 .search-entry-header {
-    @extends .entry-header;
+    @extend .entry-header;
     h2, a, span {
-        font-size: $base-font-size + 8px;
+        font-size: $base-font-size + 0.5rem;
         font-weight: $bold;
         color: $blue;
         float: left;
@@ -32,7 +32,7 @@
 }
 
 .search-entry-meta {
-    @extends .entry-meta;
+    @extend .entry-meta;
     margin-left: 15px; 
 }
 

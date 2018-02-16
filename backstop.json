@@ -132,7 +132,7 @@
     "ci_report": "backstop_data/ci_report"
   },
   "casperFlags": [],
-  "engine": "phantomjs",
+  "engine": "chrome",
   "report": ["browser"],
   "debug": false
 }

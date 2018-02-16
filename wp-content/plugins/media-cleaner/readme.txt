@@ -2,8 +2,8 @@
 Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, clean, acf
 Requires at least: 4.2
-Tested up to: 4.9
-Stable tag: 4.5.4
+Tested up to: 4.9.4
+Stable tag: 4.5.6
 
 Clean your WordPress (broken media, unused media, files). It has its own trash and recovery features. Please read the description.
 
@@ -49,6 +49,9 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 4.5.6 =
+* Update: Improve the code.
 
 = 4.5.4 =
 * Update: Streamlined the plugin, tutorial has also been rewritten.
