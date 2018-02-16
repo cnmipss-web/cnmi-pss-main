@@ -139,12 +139,12 @@ button.navbar-toggle {
 
     &.full-width {
         @include for-xs {
-            font-size: $base-font-size - 5px;
+            font-size: $base-font-size - 0.25rem;
             white-space: pre-wrap;
             width: 85px;
         }
         @include for-sm {
-            font-size: $base-font-size - 2px;
+            font-size: $base-font-size - 0.10rem;
             width: 100px;
         }
         @include for-md {

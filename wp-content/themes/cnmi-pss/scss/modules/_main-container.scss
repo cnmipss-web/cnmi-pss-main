@@ -6,7 +6,7 @@
 
     @for $i from 1 through 6 {
         h#{$i} {
-            font-size: $base-font-size + 16px / $i ;
+            font-size: $base-font-size + 1rem / $i ;
             font-weight: $bold;
             font-family: $base-font-family;
         }
