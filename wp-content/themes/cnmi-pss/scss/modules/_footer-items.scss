@@ -3,23 +3,30 @@
     border-top: solid 5px $light-gold;
     color: $footer-txt-color;
 
-    .site-info {
-        background-color: $dark-blue;
-    }
-
+    
     h2 {
         font-size: 1.2rem;
         margin-top: 5px; 
         text-align: center;
         color: $light-gold;
     }
-
+    
     p {
         font-size: $base-font-size - 0.10rem;
         white-space: nowrap;
     }
-
+    
     a {
         color: $light-gold;
+    }
+
+    .site-info {
+        background-color: $dark-blue;
+        p {
+            @include for-phone-only {
+                font-size: $base-font-size - 0.25rem;
+            } 
+            white-space: normal;
+        }
     }
 }
