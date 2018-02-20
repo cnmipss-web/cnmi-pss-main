@@ -48,6 +48,16 @@ class HomePageTests(unittest.TestCase):
                 '& > a') is not None or x.get_attribute('class') == 'dropdown'],
             menu_items)
 
+        # Each nav-link is unique
+        nav_links = [x.find_element_by_css_selector('& > a') 
+                    for x in menu_items 
+                        if x.find_element_by_css_selector('& > a') is not None]
+        
+        nav_link_props = [(x.text, x.get_attribute('href')) for x in nav_links]
+
+        self.assertEqual(len(nav_link_props), len(set(nav_link_props)), msg="nav-links should be unique")
+        
+
         # Top Level Menu options are all one of:
         CORRECT_MENU_CATEGORIES = [
             'PSS News', 
@@ -63,6 +73,8 @@ class HomePageTests(unittest.TestCase):
             len([x for x in menu_categories if x.text in CORRECT_MENU_CATEGORIES]),
             len(menu_categories)
         )
+
+
 
 
     def test_school_links(self):
