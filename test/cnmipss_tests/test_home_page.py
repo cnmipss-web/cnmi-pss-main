@@ -31,32 +31,21 @@ class HomePageTests(unittest.TestCase):
             'nav#site-navigation')
 
         # Site navigation exists
-        self.assertIsNotNone(nav_element)
+        self.assertIsNotNone(nav_element, msg="nav#site-navigation element must exist")
 
         # Menu items exist and have text
         menu_items = self.browser.find_elements_by_css_selector(
-            'nav#site-naviation li[role="menuitem"]')
+            'nav#site-navigation li a')
+        
+        for item in menu_items:
+            self.assertIsNotNone(item, msg="Menu items must exist")
+            self.assertFalse(item.get_attribute('textContent') == '', msg="Menu items must have text")
 
-        self.assertIsNotNone(menu_items)
-        self.assertEqual(
-            [x for x in menu_items if x.getText() is not None],
-            menu_items)
-
+        
         # Menu items are links or dropdowns
         self.assertEqual(
-            [x for x in menu_items if x.find_element_by_css_selector(
-                '& > a') is not None or x.get_attribute('class') == 'dropdown'],
+            [x for x in menu_items if  x.get_attribute('class') == 'dropdown-toggle' or x.get_attribute('href')[-1] != "#" ],
             menu_items)
-
-        # Each nav-link is unique
-        nav_links = [x.find_element_by_css_selector('& > a') 
-                    for x in menu_items 
-                        if x.find_element_by_css_selector('& > a') is not None]
-        
-        nav_link_props = [(x.text, x.get_attribute('href')) for x in nav_links]
-
-        self.assertEqual(len(nav_link_props), len(set(nav_link_props)), msg="nav-links should be unique")
-        
 
         # Top Level Menu options are all one of:
         CORRECT_MENU_CATEGORIES = [
@@ -71,7 +60,8 @@ class HomePageTests(unittest.TestCase):
         )
         self.assertEqual(
             len([x for x in menu_categories if x.text in CORRECT_MENU_CATEGORIES]),
-            len(menu_categories)
+            len(menu_categories),
+            msg=("Nav dropdowns should be one of: " + ', '.join(CORRECT_MENU_CATEGORIES) + '\n\t' 'Found: ' + ', '.join([x.text for x in menu_categories if x.text not in CORRECT_MENU_CATEGORIES]))
         )
 
 
