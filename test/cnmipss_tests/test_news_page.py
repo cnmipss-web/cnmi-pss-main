@@ -30,6 +30,7 @@ class NewsPage(unittest.TestCase):
         self.assertEqual('News – CNMI PSS District Site', title)
         # Should only be one h1
         self.assertEqual(1, len(header1))
+        # Should be one h2 per article.  
         # Add two because there are two extra h2 in page footer
         self.assertEqual(len(articles) + 2, len(header2))
 
@@ -39,7 +40,7 @@ class NewsPage(unittest.TestCase):
         # All images load correctly
         for img in imgs:
             source = img.get_attribute('src')
-            response = requests.get(source)
+            response = requests.head(source)
             self.assertEqual(response.status_code, 200)
 
         # Every article has a featured image
