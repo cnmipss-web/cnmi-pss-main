@@ -43,7 +43,6 @@ class ImageSources(unittest.TestCase):
 
     def test_no_broken_img_sources(self):
         link_file = open(SETTINGS['IMG_DATA'], 'r')
-        link_set = set()
         for data in link_file.readlines():
             json_data = json.loads(data)
             for img in json_data['sources']:
