@@ -39,7 +39,7 @@ class HomePageTests(unittest.TestCase):
         
         for item in menu_items:
             self.assertIsNotNone(item, msg="Menu items must exist")
-            self.assertFalse(item.get_attribute('textContent') == '', msg="Menu items must have text")
+            self.assertFalse(item.get_attribute('textContent') is None or item.get_attribute('textContent') == '', msg="Menu items must have text")
 
         
         # Menu items are links or dropdowns
@@ -77,6 +77,11 @@ class HomePageTests(unittest.TestCase):
 
         # There are 33 links, including Head Start & Early Intervention
         self.assertEqual(len(school_links), 33)
+
+        # Links must have text
+        for link in school_links:
+            text = link.get_attribute('textContent')
+            self.assertFalse(text is None or text == '', msg="School links must have link text")
 
     def test_recent_news_articles(self):
         news_grid = self.browser.find_element_by_css_selector('div.news-grid')
