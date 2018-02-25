@@ -1,0 +1,7 @@
+article p,
+article ul:not([role="tablist"])
+.notice p {
+  font-family: $article-font-family;
+  font-weight: $article-font-weight;
+  font-size: $article-font-size;
+}
