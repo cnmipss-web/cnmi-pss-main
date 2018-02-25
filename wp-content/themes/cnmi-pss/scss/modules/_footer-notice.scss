@@ -1,10 +1,11 @@
 .footer-notice {
     p {
+        font-family: $article-font-family;
+        font-size: $article-font-size;
+        font-weight: $article-font-weight;
+        font-size: $article-font-size;
         @include for-xs {
-            font-size: 1rem;
             padding: 0px 15px !important;
         }
-        @include for-sm {
-            font-size: 1.2rem;
-        }    }
+    }
 }
