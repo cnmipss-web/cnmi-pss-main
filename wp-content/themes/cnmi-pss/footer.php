@@ -14,7 +14,7 @@
 	<div class="footer-notice">
     	<div class="container">
           	<div class="row notice">
-              	<div class="col-xs-12">
+              	<div class="col-xs-12 col-sm-10 col-sm-push-1">
                   	<h2 class="section-title">Notice to Persons with Disabilities</h2>
                 	<p class="section-text">
                   		The CNMI Public School System is committed to providing equal access to educational and professional opportunities to all members of our community.  In accordance with the CNMI Public School System’s obligations under Title II of the Americans with Disabilities Act and Section 504 of the Rehabilitation Act, the CNMI PSS District Website has been re-designed to conform to WCAG 2.0 Level AA and WAI-ARIA 1.0 accessibility guidelines.  The changes to the website include improved compatibility with assistive technology, easier keyboard navigation, and the consistent use of text equivalents for audio/visual content, among other changes.
