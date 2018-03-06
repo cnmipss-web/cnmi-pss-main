@@ -7,8 +7,20 @@ article ol,
   font-size: $article-font-size;
 }
 
-article {  
-  h1, h2, h3, h4, h5, h6 {
-    margin-top: 1rem;
+@for $i from 1 through 5 {
+  article  h#{$i} {
+      font-weight: $bold;
+      font-size: 2rem - 0.15 * $i;
+      margin: 1rem 0rem;
+      @if $i > 1 {
+          padding-left: 0.75rem * ($i - 2);
+      }
+      strong, em {
+          font-size: inherit;
+          font-weight: inherit;
+      }
+      em {
+          font-style: italic;
+      }
   }
 }

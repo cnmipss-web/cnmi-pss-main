@@ -16,23 +16,3 @@
     width: 83.3%;
     margin-left: 8.33%;
 }
-
-@for $i from 1 through 5 {
-    article  h#{$i} {
-        font-weight: $bold;
-        font-size: 24px - 2 * $i;
-        margin-bottom: 30px - 5*$i;
-        @if $i > 1 {
-            padding-left: 10px * ($i - 2);
-        }
-        strong, em {
-            font-size: inherit;
-            font-weight: inherit;
-        }
-        em {
-            font-style: italic;
-            font-size: inherit;
-            font-weight: inherit;
-        }
-    }
-}
