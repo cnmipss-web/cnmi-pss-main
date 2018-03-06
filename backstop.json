@@ -58,8 +58,40 @@
       "onReadyScript": "onReady.js"
     },
     {
-      "label": "CNMI PSS Single Page",
+      "label": "CNMI PSS Single News Item Page",
       "url": "http://localhost.com/blog/cnmi-pss-website-redesigned-for-accessibility",
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "selectorExpansion": true,
+      "selectors": [
+        "#content"
+      ],
+      "readyEvent": null,
+      "delay": 250,
+      "misMatchThreshold" : 0.1,
+      "requireSameDimensions" : true,
+      "onBeforeScript": "onBefore.js",
+      "onReadyScript": "onReady.js"
+    },
+    {
+      "label": "CNMI PSS Single Permanent Page",
+      "url": "http://localhost.com/student-support-services",
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "selectorExpansion": true,
+      "selectors": [
+        "#content"
+      ],
+      "readyEvent": null,
+      "delay": 250,
+      "misMatchThreshold" : 0.1,
+      "requireSameDimensions" : true,
+      "onBeforeScript": "onBefore.js",
+      "onReadyScript": "onReady.js"
+    },
+    {
+      "label": "CNMI PSS Single Permanent Page (2)",
+      "url": "http://localhost.com/school-calendars",
       "hideSelectors": [],
       "removeSelectors": [],
       "selectorExpansion": true,
