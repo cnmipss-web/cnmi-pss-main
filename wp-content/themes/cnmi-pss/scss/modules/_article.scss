@@ -1,5 +1,6 @@
 article p,
-article ul:not([role="tablist"])
+article ul:not([role="tablist"]),
+article ol,
 .notice p {
   font-family: $article-font-family;
   font-weight: $article-font-weight;
