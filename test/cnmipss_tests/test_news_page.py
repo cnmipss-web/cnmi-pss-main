@@ -32,7 +32,7 @@ class NewsPage(unittest.TestCase):
         self.assertEqual(1, len(header1))
         # Should be one h2 per article.  
         # Add two because there are two extra h2 in page footer
-        self.assertEqual(len(articles) + 2, len(header2))
+        self.assertEqual(len(articles) + 3, len(header2))
 
     def test_news_images(self):
         imgs = self.browser.find_elements_by_css_selector('img')
@@ -41,7 +41,8 @@ class NewsPage(unittest.TestCase):
         for img in imgs:
             source = img.get_attribute('src')
             response = requests.head(source)
-            self.assertEqual(response.status_code, 200)
+            self.assertLess(response.status_code, 400)
+            self.assertGreaterEqual(response.status_code, 200)
 
         # Every article has a featured image
         articles = self.browser.find_elements_by_css_selector('article')
