@@ -7,7 +7,7 @@ declare interface ContactUploaderConfig {
 
 type RawPersonnelRecord = string[];
 
-type PersonnelData = {
+declare interface PersonnelData {
     address:    string,
     name:       string,
     telephone:  string,
@@ -29,6 +29,26 @@ declare interface OfficePersonnel {
     personnel: RawPersonnelRecord[],
 }
 
-type WPPersonnelRecord = {
+type WPPersonnelRecord = any;
+type WPOfficeRecord = any;
 
+declare interface WPAuth {
+    token: string,
+    user_display_name: string,
+    user_email: string,
+    user_nicename: string,
+}
+
+declare interface OfficeData {
+    address: string,
+    fax: string,
+    name: string,
+    telephone: string,
+}
+
+declare interface OfficeContact {
+    existingData: any,
+    fields: OfficeData,
+    status: "publish" | "draft",
+    title: string
 }
