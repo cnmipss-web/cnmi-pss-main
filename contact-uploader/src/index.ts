@@ -1,11 +1,11 @@
-import * as fs from 'fs';
-import minimist from 'minimist';
+import * as fs from "fs";
+import minimist from "minimist";
 
-import Personnel from './Personnel';
+import Personnel from "./Personnel";
 
 const WP_CONFIG = JSON.parse(
-    fs.readFileSync('contactUploader.json')
-    .toString()
+    fs.readFileSync("contactUploader.json")
+    .toString(),
 );
 
 uploadPersonnel();
