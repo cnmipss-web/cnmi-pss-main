@@ -3,33 +3,20 @@ import parse from "csv-parse";
 import * as fs from "fs";
 import { isEmail } from "validator";
 
-import { getToken } from "./WordPress";
+import ContactUploader from "../ContactUploader";
+import { getToken } from "../WordPress";
 
-const FILE = Symbol("Personnel File");
-const PERSONNEL = Symbol("Valid personnel records");
-const WP_CONFIG = Symbol("WordPress Client");
-const MAIN_ROUTE = Symbol("Personnel API Route");
-const ACF_ROUTE = Symbol("Advanced Custom Field Route");
-const AUTH_TOKEN = Symbol("JWT for WP API");
-const PROTOCOL = Symbol("HTTP vs HTTPS");
 
-export default class PersonnelHandler {
-    private [FILE]: string;
-    private [PERSONNEL]: PersonnelRecord[];
-    private [WP_CONFIG]: ContactUploaderConfig;
-    private [MAIN_ROUTE]: string;
-    private [ACF_ROUTE]: string;
-    private [AUTH_TOKEN]: string;
-    private [PROTOCOL]: string;
+export default class PersonnelHandler extends ContactUploader {
+    private personnel: PersonnelRecord[];
 
     constructor(config: ContactUploaderConfig) {
-        this[FILE] = fs.readFileSync("personnel.csv", {
+        super(config);
+        this.file = fs.readFileSync("personnel.csv", {
             encoding: "utf-8",
         });
-        this[WP_CONFIG] = config;
-        this[PROTOCOL] = config.secure ? "https://" : "http://";
-        this[MAIN_ROUTE] = `${this[PROTOCOL]}${config.host}/wp-json/wp/v2/contact_info/`;
-        this[ACF_ROUTE] = `${this[PROTOCOL]}${config.host}/wp-json/acf/v3/contact_info/`;
+        this.mainRoute += 'contact_info/';
+        this.acfRoute += 'contact_info/';
     }
 
 /**
@@ -39,15 +26,17 @@ export default class PersonnelHandler {
  * @memberof PersonnelHandler
  */
     public async parse() {
-        const file: string = this[FILE];
-        const data: any = await new Promise((resolve, reject) => {
-            parse(file, {}, (err, out: any[]) => {
-                if (err) { reject(err); }
-                resolve(out);
-            });
-        });
+        const file: string = this.file;
+        const data: string[][] = await new Promise<string[][]>(
+            (resolve, reject) => {
+                parse(file, {}, (err: Error, out: string[][]) => {
+                    if (err) { reject(err); }
+                    resolve(out);
+                });
+            }
+        );
 
-        this[PERSONNEL] = await data.reduce(reducePersonnel, [])
+        this.personnel = await data.reduce(reducePersonnel, [])
             .map(filterRows)
             .map(parseRows)
             .reduce((
@@ -64,9 +53,9 @@ export default class PersonnelHandler {
  * @memberof PersonnelHandler
  */
     public async post() {
-        this[AUTH_TOKEN] = await getToken(this[WP_CONFIG]);
+        this.authToken = await getToken(this.config);
         const personnel: PersonnelRecord[] = [];
-        for (const person of this[PERSONNEL]) {
+        for (const person of this.personnel) {
             console.info(`Searching for pre-existing ${person.fields.email}`);
             const newPerson = await searchWP.call(this, person);
             personnel.push(newPerson);
@@ -86,7 +75,7 @@ export default class PersonnelHandler {
  */
 async function postData(entry: Promise<PersonnelRecord>) {
     const { existingData, ...data } = await entry;
-    const authToken = this[AUTH_TOKEN].token;
+    const authToken: string = this.authToken.token;
     const dataString = JSON.stringify(data);
     const config = {
         headers: {
@@ -96,12 +85,16 @@ async function postData(entry: Promise<PersonnelRecord>) {
     };
 
     if (existingData) {
-        console.log("Updating pre-existing record", data.title, existingData.id);
+        console.log(
+            "Updating pre-existing record", 
+            data.title, 
+            existingData.id
+        );
     } else {
         console.log(`Posting data for ${data.title}`);
     }
 
-    const mainRoute = existingData ? this[MAIN_ROUTE] + existingData.id : this[MAIN_ROUTE];
+    const mainRoute = existingData ? this.mainRoute + existingData.id : this.mainRoute;
 
     await axios.post(mainRoute, dataString, config)
         .catch((err) => console.error("Error posting data to WP", mainRoute, data.title, "\n", err));
@@ -114,7 +107,7 @@ async function postData(entry: Promise<PersonnelRecord>) {
  * @returns
  */
 async function searchWP(personnelRecord: PersonnelRecord) {
-    const queryRoute = `${this[MAIN_ROUTE]}?per_page=50&search=${personnelRecord.fields.email}`;
+    const queryRoute = `${this.mainRoute}?per_page=50&search=${personnelRecord.fields.email}`;
 
     const searchResults = await axios.get(queryRoute);
 
