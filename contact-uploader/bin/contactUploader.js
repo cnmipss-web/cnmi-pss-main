@@ -7370,24 +7370,33 @@ module.exports = exports['default'];
 
 /***/ }),
 
-/***/ "./src/Personnel.ts":
-/*!**************************!*\
-  !*** ./src/Personnel.ts ***!
-  \**************************/
+/***/ "./src/ContactUploader/Offices.ts":
+/*!****************************************!*\
+  !*** ./src/ContactUploader/Offices.ts ***!
+  \****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs */ "fs");
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var csv_parse__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! csv-parse */ "./node_modules/csv-parse/lib/index.js");
 /* harmony import */ var csv_parse__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(csv_parse__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! validator */ "./node_modules/validator/index.js");
-/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(validator__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _WordPress__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./WordPress */ "./src/WordPress.ts");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _ContactUploader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ContactUploader */ "./src/ContactUploader/index.ts");
+/* harmony import */ var _WordPress__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../WordPress */ "./src/WordPress.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __assign = (undefined && undefined.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -7445,47 +7454,305 @@ var __rest = (undefined && undefined.__rest) || function (s, e) {
 
 
 
-var FILE = Symbol('Personnel File');
-var PERSONNEL = Symbol('Valid personnel records');
-var WP_CONFIG = Symbol('WordPress Client');
-var MAIN_ROUTE = Symbol('Personnel API Route');
-var ACF_ROUTE = Symbol('Advanced Custom Field Route');
-var AUTH_TOKEN = Symbol('JWT for WP API');
-var PROTOCOL = Symbol('HTTP vs HTTPS');
-var PersonnelHandler = /** @class */ (function () {
-    function PersonnelHandler(config) {
-        this[FILE] = fs__WEBPACK_IMPORTED_MODULE_0__["readFileSync"]('personnel.csv', {
-            encoding: 'utf-8',
+var Offices = /** @class */ (function (_super) {
+    __extends(Offices, _super);
+    function Offices(config) {
+        var _this = _super.call(this, config) || this;
+        _this.file = fs__WEBPACK_IMPORTED_MODULE_2__["readFileSync"]("offices.csv", {
+            encoding: "utf-8",
         });
-        this[WP_CONFIG] = config;
-        this[PROTOCOL] = config.secure ? 'https://' : 'http://';
-        this[MAIN_ROUTE] = "" + this[PROTOCOL] + config.host + "/wp-json/wp/v2/contact_info/";
-        this[ACF_ROUTE] = "" + this[PROTOCOL] + config.host + "/wp-json/acf/v3/contact_info/";
+        _this.mainRoute += 'contact_info/';
+        _this.acfRoute += 'contact_info/';
+        return _this;
+    }
+    Offices.prototype.parse = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var data, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, new Promise(function (resolve, reject) {
+                            csv_parse__WEBPACK_IMPORTED_MODULE_1___default()(_this.file, {}, function (err, out) {
+                                if (err) {
+                                    reject(err);
+                                }
+                                resolve(out.slice(1));
+                            });
+                        })];
+                    case 1:
+                        data = _b.sent();
+                        _a = this;
+                        return [4 /*yield*/, data.filter(filterOffices)
+                                .map(parseOffices)];
+                    case 2:
+                        _a.offices = _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Offices.prototype.post = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, offices, _i, _b, office, newOffice, _c, offices_1, office;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, Object(_WordPress__WEBPACK_IMPORTED_MODULE_4__["getToken"])(this.config)];
+                    case 1:
+                        _a.authToken = _d.sent();
+                        offices = [];
+                        _i = 0, _b = this.offices;
+                        _d.label = 2;
+                    case 2:
+                        if (!(_i < _b.length)) return [3 /*break*/, 5];
+                        office = _b[_i];
+                        console.info("Searching for pre-existing " + office.fields.name);
+                        return [4 /*yield*/, searchWP.call(this, office)];
+                    case 3:
+                        newOffice = _d.sent();
+                        offices.push(newOffice);
+                        _d.label = 4;
+                    case 4:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 5:
+                        _c = 0, offices_1 = offices;
+                        _d.label = 6;
+                    case 6:
+                        if (!(_c < offices_1.length)) return [3 /*break*/, 9];
+                        office = offices_1[_c];
+                        return [4 /*yield*/, postData.call(this, office)];
+                    case 7:
+                        _d.sent();
+                        _d.label = 8;
+                    case 8:
+                        _c++;
+                        return [3 /*break*/, 6];
+                    case 9: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return Offices;
+}(_ContactUploader__WEBPACK_IMPORTED_MODULE_3__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (Offices);
+/**
+ * Keep only offices which have a valid building number and location
+ *
+ * @param {string[]} row
+ * @returns {boolean}
+ */
+function filterOffices(row) {
+    return row[0].trim().length > 0 && row[2].trim().length > 1;
+}
+/**
+ * Convert a record from the CSV file to an OfficeData
+ *
+ * @param {string[]} office
+ * @returns {OfficeData}
+ */
+function parseOffices(office) {
+    var address = office[2].trim() == "Capitol Hill" ? "Capitol Hill Bldg #" + office[0].trim() : office[2].trim();
+    return {
+        title: office[1],
+        status: "publish",
+        existingData: null,
+        fields: {
+            name: office[1],
+            address: address,
+            telephone: office[3],
+            fax: office[4],
+        }
+    };
+}
+/**
+ * Transmit a PersonnelRecord to the WP server to save it.
+ *
+ * @param {Promise<PersonnelRecord>} entry
+ */
+function postData(office) {
+    return __awaiter(this, void 0, void 0, function () {
+        var _a, existingData, data, authToken, dataString, config, mainRoute;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, office];
+                case 1:
+                    _a = _b.sent(), existingData = _a.existingData, data = __rest(_a, ["existingData"]);
+                    authToken = this.authToken.token;
+                    dataString = JSON.stringify(data);
+                    config = {
+                        headers: {
+                            "Authorization": "Bearer " + authToken,
+                            "Content-Type": "application/json",
+                        },
+                    };
+                    if (existingData) {
+                        console.log("Updating pre-existing record", data.title, existingData.id);
+                    }
+                    else {
+                        console.log("Posting data for " + data.title);
+                    }
+                    mainRoute = existingData ? this.mainRoute + existingData.id : this.mainRoute;
+                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(mainRoute, dataString, config)
+                            .catch(function (err) { return console.error("Error posting data to WP", mainRoute, data.title, "\n", err); })];
+                case 2:
+                    _b.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+/**
+ * Search for existing WP Contact Info posts based on email address.
+ *
+ * @param {PersonnelRecord} personnelRecord
+ * @returns
+ */
+function searchWP(officeContact) {
+    return __awaiter(this, void 0, void 0, function () {
+        var queryRoute, searchResults, searchResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    queryRoute = this.mainRoute + "?per_page=50&search=" + officeContact.fields.name;
+                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(queryRoute)];
+                case 1:
+                    searchResults = _a.sent();
+                    searchResult = searchResults
+                        .data
+                        .filter(function (res) { return res.type === "contact_info"; })[0];
+                    return [2 /*return*/, __assign({}, officeContact, { existingData: searchResult })];
+            }
+        });
+    });
+}
+
+
+/***/ }),
+
+/***/ "./src/ContactUploader/Personnel.ts":
+/*!******************************************!*\
+  !*** ./src/ContactUploader/Personnel.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var csv_parse__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! csv-parse */ "./node_modules/csv-parse/lib/index.js");
+/* harmony import */ var csv_parse__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(csv_parse__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! fs */ "fs");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! validator */ "./node_modules/validator/index.js");
+/* harmony import */ var validator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(validator__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _ContactUploader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ContactUploader */ "./src/ContactUploader/index.ts");
+/* harmony import */ var _WordPress__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../WordPress */ "./src/WordPress.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (undefined && undefined.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __rest = (undefined && undefined.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+
+
+
+
+
+
+var PersonnelHandler = /** @class */ (function (_super) {
+    __extends(PersonnelHandler, _super);
+    function PersonnelHandler(config) {
+        var _this = _super.call(this, config) || this;
+        _this.file = fs__WEBPACK_IMPORTED_MODULE_2__["readFileSync"]("personnel.csv", {
+            encoding: "utf-8",
+        });
+        _this.mainRoute += 'contact_info/';
+        _this.acfRoute += 'contact_info/';
+        return _this;
     }
     /**
- * Parse 'personnel.csv' and create a list of personnel records defined there
- * storing them in a private member variable.
- *
- * @memberof PersonnelHandler
- */
+     * Parse 'personnel.csv' and create a list of personnel records defined there
+     * storing them in a private member variable.
+     *
+     * @memberof PersonnelHandler
+     */
     PersonnelHandler.prototype.parse = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var file, data, _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var file, data, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        file = this[FILE];
+                        file = this.file;
                         return [4 /*yield*/, new Promise(function (resolve, reject) {
                                 csv_parse__WEBPACK_IMPORTED_MODULE_1___default()(file, {}, function (err, out) {
-                                    if (err)
+                                    if (err) {
                                         reject(err);
+                                    }
                                     resolve(out);
                                 });
                             })];
                     case 1:
-                        data = _c.sent();
+                        data = _b.sent();
                         _a = this;
-                        _b = PERSONNEL;
                         return [4 /*yield*/, data.reduce(reducePersonnel, [])
                                 .map(filterRows)
                                 .map(parseRows)
@@ -7493,57 +7760,56 @@ var PersonnelHandler = /** @class */ (function () {
                                 return (list.concat(officePersonnel));
                             }, [])];
                     case 2:
-                        _a[_b] = _c.sent();
+                        _a.personnel = _b.sent();
                         return [2 /*return*/];
                 }
             });
         });
     };
     /**
- * POST data read from personnel.csv to WP server defined by
- * contactUploader.json
- *
- * @memberof PersonnelHandler
- */
+     * POST data read from personnel.csv to WP server defined by
+     * contactUploader.json
+     *
+     * @memberof PersonnelHandler
+     */
     PersonnelHandler.prototype.post = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b, personnel, _i, _c, person, newPerson, _d, personnel_1, person;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            var _a, personnel, _i, _b, person, newPerson, _c, personnel_1, person;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0:
                         _a = this;
-                        _b = AUTH_TOKEN;
-                        return [4 /*yield*/, Object(_WordPress__WEBPACK_IMPORTED_MODULE_4__["getToken"])(this[WP_CONFIG])];
+                        return [4 /*yield*/, Object(_WordPress__WEBPACK_IMPORTED_MODULE_5__["getToken"])(this.config)];
                     case 1:
-                        _a[_b] = _e.sent();
+                        _a.authToken = _d.sent();
                         personnel = [];
-                        _i = 0, _c = this[PERSONNEL];
-                        _e.label = 2;
+                        _i = 0, _b = this.personnel;
+                        _d.label = 2;
                     case 2:
-                        if (!(_i < _c.length)) return [3 /*break*/, 5];
-                        person = _c[_i];
+                        if (!(_i < _b.length)) return [3 /*break*/, 5];
+                        person = _b[_i];
                         console.info("Searching for pre-existing " + person.fields.email);
                         return [4 /*yield*/, searchWP.call(this, person)];
                     case 3:
-                        newPerson = _e.sent();
+                        newPerson = _d.sent();
                         personnel.push(newPerson);
-                        _e.label = 4;
+                        _d.label = 4;
                     case 4:
                         _i++;
                         return [3 /*break*/, 2];
                     case 5:
-                        _d = 0, personnel_1 = personnel;
-                        _e.label = 6;
+                        _c = 0, personnel_1 = personnel;
+                        _d.label = 6;
                     case 6:
-                        if (!(_d < personnel_1.length)) return [3 /*break*/, 9];
-                        person = personnel_1[_d];
+                        if (!(_c < personnel_1.length)) return [3 /*break*/, 9];
+                        person = personnel_1[_c];
                         if (!(person.title.trim().length > 0)) return [3 /*break*/, 8];
                         return [4 /*yield*/, postData.call(this, person)];
                     case 7:
-                        _e.sent();
-                        _e.label = 8;
+                        _d.sent();
+                        _d.label = 8;
                     case 8:
-                        _d++;
+                        _c++;
                         return [3 /*break*/, 6];
                     case 9: return [2 /*return*/];
                 }
@@ -7551,7 +7817,7 @@ var PersonnelHandler = /** @class */ (function () {
         });
     };
     return PersonnelHandler;
-}());
+}(_ContactUploader__WEBPACK_IMPORTED_MODULE_4__["default"]));
 /* harmony default export */ __webpack_exports__["default"] = (PersonnelHandler);
 /**
  * Transmit a PersonnelRecord to the WP server to save it.
@@ -7566,23 +7832,23 @@ function postData(entry) {
                 case 0: return [4 /*yield*/, entry];
                 case 1:
                     _a = _b.sent(), existingData = _a.existingData, data = __rest(_a, ["existingData"]);
-                    authToken = this[AUTH_TOKEN].token;
+                    authToken = this.authToken.token;
                     dataString = JSON.stringify(data);
                     config = {
                         headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: "Bearer " + authToken,
+                            "Authorization": "Bearer " + authToken,
+                            "Content-Type": "application/json",
                         },
                     };
                     if (existingData) {
-                        console.log('Updating pre-existing record', data.title, existingData.id);
+                        console.log("Updating pre-existing record", data.title, existingData.id);
                     }
                     else {
                         console.log("Posting data for " + data.title);
                     }
-                    mainRoute = existingData ? this[MAIN_ROUTE] + existingData.id : this[MAIN_ROUTE];
-                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_3___default.a.post(mainRoute, dataString, config)
-                            .catch(function (err) { return console.error('Error posting data to WP', mainRoute, data.title, '\n', err); })];
+                    mainRoute = existingData ? this.mainRoute + existingData.id : this.mainRoute;
+                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(mainRoute, dataString, config)
+                            .catch(function (err) { return console.error("Error posting data to WP", mainRoute, data.title, "\n", err); })];
                 case 2:
                     _b.sent();
                     return [2 /*return*/];
@@ -7602,13 +7868,13 @@ function searchWP(personnelRecord) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    queryRoute = this[MAIN_ROUTE] + "?per_page=50&search=" + personnelRecord.fields.email;
-                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(queryRoute)];
+                    queryRoute = this.mainRoute + "?per_page=50&search=" + personnelRecord.fields.email;
+                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(queryRoute)];
                 case 1:
                     searchResults = _a.sent();
                     searchResult = searchResults
                         .data
-                        .filter(function (res) { return res.type === 'contact_info'; })[0];
+                        .filter(function (res) { return res.type === "contact_info"; })[0];
                     return [2 /*return*/, __assign({}, personnelRecord, { existingData: searchResult })];
             }
         });
@@ -7624,7 +7890,7 @@ function searchWP(personnelRecord) {
  * @returns
  */
 function reducePersonnel(personnelList, nextLine) {
-    if (nextLine[1] === 'PHONE') {
+    if (nextLine[1] === "PHONE") {
         personnelList.push([nextLine]);
         return personnelList;
     }
@@ -7646,7 +7912,7 @@ function filterRows(officePersonnel) {
     var personnel = officePersonnel.slice(1);
     return {
         office: office,
-        personnel: personnel.filter(function (person) { return Object(validator__WEBPACK_IMPORTED_MODULE_2__["isEmail"])(person[5]); }),
+        personnel: personnel.filter(function (person) { return Object(validator__WEBPACK_IMPORTED_MODULE_3__["isEmail"])(person[5]); }),
     };
 }
 /**
@@ -7660,41 +7926,65 @@ function parseRows(officePersonnel) {
     var office = officePersonnel.office, personnel = officePersonnel.personnel;
     return personnel.map(function (person) {
         var address = office[0] + "\nPO Box 501370 CK\nSaipan MP, 96950";
-        var name = '';
+        var name = "";
         var jobTitle;
-        var splitName = person[0].split(', ');
+        var splitName = person[0].split(", ");
         if (splitName.length > 1) {
-            name = person[0].split(', ')
+            name = person[0].split(", ")
                 .slice(0, -1)
-                .join(', ');
-            jobTitle = person[0].split(', ')
+                .join(", ");
+            jobTitle = person[0].split(", ")
                 .slice(-1);
         }
         else {
             name = person[0];
-            jobTitle = [''];
+            jobTitle = [""];
         }
         var telephone = person.slice(1, 4)
             .filter(function (s) { return s.trim().length > 0; })
-            .join(', ');
+            .join(", ");
         var fax = person[4];
         var email = person[5];
         return {
-            title: name,
-            status: 'publish',
+            existingData: null,
             fields: {
                 address: address,
+                email: email,
+                fax: fax,
+                job_title: jobTitle
+                    .join(",")
+                    .trim(),
                 name: name,
                 telephone: telephone,
-                fax: fax,
-                email: email,
-                job_title: jobTitle.join(',')
-                    .trim(),
             },
-            existingData: null,
+            status: "publish",
+            title: name,
         };
     });
 }
+
+
+/***/ }),
+
+/***/ "./src/ContactUploader/index.ts":
+/*!**************************************!*\
+  !*** ./src/ContactUploader/index.ts ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var ContactUploader = /** @class */ (function () {
+    function ContactUploader(config) {
+        this.config = config;
+        this.protocol = config.secure ? "https://" : "http://";
+        this.mainRoute = "" + this.protocol + config.host + "/wp-json/wp/v2/";
+        this.acfRoute = "" + this.protocol + config.host + "/wp-json/acf/v3/";
+    }
+    return ContactUploader;
+}());
+/* harmony default export */ __webpack_exports__["default"] = (ContactUploader);
 
 
 /***/ }),
@@ -7761,8 +8051,8 @@ function getToken(config) {
             switch (_a.label) {
                 case 0:
                     host = config.host, username = config.username, password = config.password, secure = config.secure;
-                    protocol = secure ? 'https' : 'http';
-                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(protocol + "://" + host + "/wp-json/jwt-auth/v1/token", { username: username, password: password }, { headers: { 'Content-Type': 'application/json' } }).catch(function (err) {
+                    protocol = secure ? "https" : "http";
+                    return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(protocol + "://" + host + "/wp-json/jwt-auth/v1/token", { username: username, password: password }, { headers: { "Content-Type": "application/json" } }).catch(function (err) {
                             console.error("Error retrieving WP auth token", err);
                             console.log("Exiting...");
                             process.exit(1);
@@ -7790,7 +8080,8 @@ function getToken(config) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs */ "fs");
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Personnel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Personnel */ "./src/Personnel.ts");
+/* harmony import */ var _ContactUploader_Personnel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ContactUploader/Personnel */ "./src/ContactUploader/Personnel.ts");
+/* harmony import */ var _ContactUploader_Offices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ContactUploader/Offices */ "./src/ContactUploader/Offices.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -7828,9 +8119,11 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 };
 
 
-var WP_CONFIG = JSON.parse(fs__WEBPACK_IMPORTED_MODULE_0__["readFileSync"]('contactUploader.json')
+
+var CONFIG = JSON.parse(fs__WEBPACK_IMPORTED_MODULE_0__["readFileSync"]("contactUploader.json")
     .toString());
 uploadPersonnel();
+uploadOffices();
 // const schools = fs.readFileSync('schools.csv');
 // const offices = fs.readFileSync('offices.csv');
 function uploadPersonnel() {
@@ -7839,7 +8132,7 @@ function uploadPersonnel() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    personnel = new _Personnel__WEBPACK_IMPORTED_MODULE_1__["default"](WP_CONFIG);
+                    personnel = new _ContactUploader_Personnel__WEBPACK_IMPORTED_MODULE_1__["default"](CONFIG);
                     return [4 /*yield*/, personnel.parse().catch(function (err) {
                             console.error("Failed to parse personnel", err);
                             console.log("Exiting...");
@@ -7849,6 +8142,32 @@ function uploadPersonnel() {
                     _a.sent();
                     return [4 /*yield*/, personnel.post().catch(function (err) {
                             console.error("Failed to post personnel", err);
+                            console.log("Exiting...");
+                            process.exit(1);
+                        })];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function uploadOffices() {
+    return __awaiter(this, void 0, void 0, function () {
+        var offices;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    offices = new _ContactUploader_Offices__WEBPACK_IMPORTED_MODULE_2__["default"](CONFIG);
+                    return [4 /*yield*/, offices.parse().catch(function (err) {
+                            console.error("Failed to parse offices", err);
+                            console.log("Exiting...");
+                            process.exit(1);
+                        })];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, offices.post().catch(function (err) {
+                            console.error("Failed to post offices", err);
                             console.log("Exiting...");
                             process.exit(1);
                         })];
