@@ -7,7 +7,7 @@ import axios, { AxiosResponse } from "axios";
  * @param {ContactUploaderConfig} config
  * @returns {Promise<string>}
  */
-export async function getToken(config: ContactUploaderConfig): Promise<string> {
+export async function getToken(config: ContactUploaderConfig): Promise<WPAuth> {
     const {host, username, password, secure} = config;
     const protocol: string = secure ? "https" : "http";
     const result: any = await axios.post(
