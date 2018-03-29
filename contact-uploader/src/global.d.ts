@@ -1,8 +1,24 @@
 declare interface ContactUploaderConfig {
-    host: string
-    username: string
-    password: string
-    secure: boolean
+    host: string,
+    username: string,
+    password: string,
+    secure: boolean,
+}
+
+declare interface HandlerConfig {
+    uploaderConfig: ContactUploaderConfig
+    type: string
+    searchQuery: (record: AbstractRecord) => string
+    filename: string
+}
+
+type HandlerConstructor = (config: ContactUploaderConfig) => void;
+
+declare interface AbstractRecord {
+    title: string,
+    status: 'publish' | 'draft',
+    fields: any,
+    existingData: any    
 }
 
 type RawPersonnelRecord = string[];
@@ -51,4 +67,20 @@ declare interface OfficeContact {
     fields: OfficeData,
     status: "publish" | "draft",
     title: string
+}
+
+declare interface SchoolData {
+    long_name: string,
+    short_name: string,
+    address: string,
+    fax: string,
+    telephone: string,
+    admin_staff: any
+}
+
+declare interface SchoolContact {
+    existingData: any,
+    fields: SchoolData,
+    status: "publish" | "draft",
+    title: string,
 }
