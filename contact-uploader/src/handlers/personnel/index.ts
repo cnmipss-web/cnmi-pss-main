@@ -85,17 +85,17 @@ function parseRows(officePersonnel: OfficePersonnel): PersonnelRecord[] {
         const address = `${office[0]}\nPO Box 501370 CK\nSaipan MP, 96950`;
 
         let name = "";
-        let jobTitle;
+        let jobTitle: string;
         const splitName = person[0].split(", ");
         if (splitName.length > 1) {
             name = person[0].split(", ")
                 .slice(0, -1)
                 .join(", ");
             jobTitle = person[0].split(", ")
-                .slice(-1);
+                .slice(-1)[0];
         } else {
             [name] = person;
-            jobTitle = [""];
+            jobTitle = "";
         }
 
         const telephone = person.slice(1, 4)
@@ -110,9 +110,7 @@ function parseRows(officePersonnel: OfficePersonnel): PersonnelRecord[] {
                 address,
                 email,
                 fax,
-                job_title: jobTitle
-                    .join(",")
-                    .trim(),
+                job_title: jobTitle.trim(),
                 name,
                 telephone,
             },
