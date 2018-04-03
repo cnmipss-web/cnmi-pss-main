@@ -177,21 +177,22 @@
   [k data]
   (let [th-props {:scope "col"}]
     (if (not-empty data)
-      [:table.col-xs-12.lookup-list
-       [:caption [:h2 (case k
-                        :rfps "Requests for Proposals"
-                        :ifbs "Invitations for Bids")]]
-       [:thead
-        [:tr.row.jva-list-row
-         [:th.col-xs-1.text-center th-props "Number"]
-         [:th.col-xs-1.text-center th-props "Open Date"]
-         [:th.col-xs-1.text-center th-props "Close Date"]
-         [:th.col-xs-3.text-center th-props "Title"]
-         [:th.col-xs-4.text-center th-props "Description"]
-         [:th.col-xs-2.text-center th-props "Links"]]]
-       [:tbody
-        (for [row data]
-          ^{:key (str "pns-" (:id row))} [pns-announcement-row (assoc row :status true)])]]
+      [:div.table-box
+       [:table.col-xs-12.lookup-list
+        [:caption [:h2 (case k
+                         :rfps "Requests for Proposals"
+                         :ifbs "Invitations for Bids")]]
+        [:thead
+         [:tr.row.jva-list-row
+          [:th.col-xs-1.text-center th-props "Number"]
+          [:th.col-xs-1.text-center th-props "Open Date"]
+          [:th.col-xs-1.text-center th-props "Close Date"]
+          [:th.col-xs-3.text-center th-props "Title"]
+          [:th.col-xs-4.text-center th-props "Description"]
+          [:th.col-xs-2.text-center th-props "Links"]]]
+        [:tbody
+         (for [row data]
+           ^{:key (str "pns-" (:id row))} [pns-announcement-row (assoc row :status true)])]]]
       [:div.col-xs-10.col-xs-push-1.lookup-list
        [:h2 (case k
               :rfps "There Are No Currently Open Requests for Proposals"

@@ -3,7 +3,7 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, clean, acf
 Requires at least: 4.2
 Tested up to: 4.9.4
-Stable tag: 4.5.7
+Stable tag: 4.5.8
 
 Clean your WordPress (broken media, unused media, files). It has its own trash and recovery features. Please read the description.
 
@@ -50,7 +50,8 @@ It re-creates the Media Cleaner table in the database. You will need to re-run t
 
 == Changelog ==
 
-= 4.5.7 =
+= 4.5.8 =
+* Add: ACF Repeater support.
 * Update: Improve the code.
 * Fix: Debug logs weren't logging.
 

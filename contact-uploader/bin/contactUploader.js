@@ -8324,7 +8324,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
 var CONFIG = JSON.parse(fs__WEBPACK_IMPORTED_MODULE_0__["readFileSync"]("contactUploader.json")
     .toString());
 main();
