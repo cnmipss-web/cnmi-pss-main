@@ -31,6 +31,7 @@ declare interface PersonnelData {
     fax:        string,
     email:      string,
     job_title:  string,
+    office?:    string,
 }
 
 declare interface PersonnelRecord {
@@ -42,7 +43,7 @@ declare interface PersonnelRecord {
 
 
 declare interface OfficePersonnel {
-    office: string[],
+    office: string,
     personnel: RawPersonnelRecord[],
 }
 

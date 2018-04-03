@@ -64,7 +64,12 @@ function reducePersonnel(personnelList: string[][][], nextLine: string[]) {
  * @returns
  */
 function filterRows(officePersonnel: string[][]): OfficePersonnel {
-    const office = officePersonnel[0];
+    console.log(officePersonnel[0][0]);
+    const office = officePersonnel[0][0].toLowerCase()
+        .split(" ")
+        .filter((word: string) => word.length > 0)
+        .map((word: string) => `${word[0].toUpperCase()}${word.slice(1)}`)
+        .join(" ");
     const personnel = officePersonnel.slice(1);
     return {
         office,
@@ -82,7 +87,7 @@ function filterRows(officePersonnel: string[][]): OfficePersonnel {
 function parseRows(officePersonnel: OfficePersonnel): PersonnelRecord[] {
     const { office, personnel } = officePersonnel;
     return personnel.map((person: RawPersonnelRecord): PersonnelRecord => {
-        const address = `${office[0]}\nPO Box 501370 CK\nSaipan MP, 96950`;
+        const address = `${office}\nPO Box 501370 CK\nSaipan MP, 96950`;
 
         let name = "";
         let jobTitle: string;
@@ -113,6 +118,7 @@ function parseRows(officePersonnel: OfficePersonnel): PersonnelRecord[] {
                 job_title: jobTitle.trim(),
                 name,
                 telephone,
+                office,
             },
             status: "publish",
             title: name,
