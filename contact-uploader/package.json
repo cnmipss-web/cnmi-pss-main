@@ -5,7 +5,7 @@
   "main": "bin/contactUploader.js",
   "directories": {
     "doc": "doc",
-    "test": "test"
+    "test": "__tests__"
   },
   "scripts": {
     "build": "NODE_ENV=production node_modules/rollup/bin/rollup -c rollup.config.js",
@@ -38,6 +38,7 @@
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-typescript": "^0.8.1",
     "rollup-plugin-uglify": "^3.0.0",
+    "sinon": "^4.5.0",
     "source-map-loader": "^0.2.3",
     "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
@@ -46,5 +47,19 @@
     "uglify-es": "^3.3.9",
     "webpack": "^4.3.0",
     "webpack-cli": "^2.0.13"
+  }, 
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

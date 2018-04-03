@@ -1,0 +1,6 @@
+{
+    "host": "wpsite.com",
+    "username": "admin",
+    "password": "admin-password",
+    "secure": false
+}
