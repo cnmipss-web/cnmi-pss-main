@@ -63,8 +63,7 @@ function reducePersonnel(personnelList: string[][][], nextLine: string[]) {
  * @param {string[][]} officePersonnel
  * @returns
  */
-function filterRows(officePersonnel: string[][]): OfficePersonnel {
-    console.log(officePersonnel[0][0]);
+function filterRows(officePersonnel: string[][], number: number): OfficePersonnel {
     const office = officePersonnel[0][0].toLowerCase()
         .split(" ")
         .filter((word: string) => word.length > 0)
@@ -73,6 +72,7 @@ function filterRows(officePersonnel: string[][]): OfficePersonnel {
     const personnel = officePersonnel.slice(1);
     return {
         office,
+        number,
         personnel: personnel.filter((person) => isEmail(person[5])),
     };
 }
@@ -84,9 +84,9 @@ function filterRows(officePersonnel: string[][]): OfficePersonnel {
  * @param {OfficePersonnel} officePersonnel
  * @returns {PersonnelRecord[]}
  */
-function parseRows(officePersonnel: OfficePersonnel): PersonnelRecord[] {
-    const { office, personnel } = officePersonnel;
-    return personnel.map((person: RawPersonnelRecord): PersonnelRecord => {
+function parseRows(officePersonnel: OfficePersonnel, rank: number): PersonnelRecord[] {
+    const { office, number, personnel } = officePersonnel;
+    return personnel.map((person: RawPersonnelRecord, n: number): PersonnelRecord => {
         const address = `${office}\nPO Box 501370 CK\nSaipan MP, 96950`;
 
         let name = "";
@@ -119,9 +119,16 @@ function parseRows(officePersonnel: OfficePersonnel): PersonnelRecord[] {
                 name,
                 telephone,
                 office,
+                rank: `${pad(number, 3)}-${pad(n, 3)}`,
             },
             status: "publish",
             title: name,
         };
     });
+}
+
+function pad(num: number, size: number): string {
+    let s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
 }

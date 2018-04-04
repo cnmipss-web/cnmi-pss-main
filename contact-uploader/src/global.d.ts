@@ -15,23 +15,25 @@ declare interface HandlerConfig {
 type HandlerConstructor = (config: ContactUploaderConfig) => void;
 
 declare interface AbstractRecord {
-    title: string,
-    status: 'publish' | 'draft',
-    fields: any,
+    title:        string,
+    status:       'publish' | 'draft',
+    fields:       any,
     existingData: any,
-    level?: string[], 
+    level?:       string[], 
+    menu_order?:  number,
 }
 
 type RawPersonnelRecord = string[];
 
 declare interface PersonnelData {
-    address:    string,
-    name:       string,
-    telephone:  string,
-    fax:        string,
-    email:      string,
-    job_title:  string,
-    office?:    string,
+    address:   string,
+    name:      string,
+    telephone: string,
+    fax:       string,
+    email:     string,
+    job_title: string,
+    office?:   string,
+    rank?:     string,
 }
 
 declare interface PersonnelRecord {
@@ -43,8 +45,9 @@ declare interface PersonnelRecord {
 
 
 declare interface OfficePersonnel {
-    office: string,
+    office:    string,
     personnel: RawPersonnelRecord[],
+    number:    number,
 }
 
 type WPPersonnelRecord = any;

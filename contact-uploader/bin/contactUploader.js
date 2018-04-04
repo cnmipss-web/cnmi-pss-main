@@ -7769,232 +7769,6 @@ var Handler = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/handlers/headstarts/index.ts":
-/*!******************************************!*\
-  !*** ./src/handlers/headstarts/index.ts ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Handler */ "./src/handlers/Handler.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-var HeadstartsHandler = /** @class */ (function (_super) {
-    __extends(HeadstartsHandler, _super);
-    function HeadstartsHandler(uploaderConfig) {
-        return _super.call(this, {
-            uploaderConfig: uploaderConfig,
-            type: "school",
-            searchQuery: searchQuery,
-            filename: "headstarts.csv",
-        }) || this;
-    }
-    HeadstartsHandler.prototype.process = function (data) {
-        return data.slice(1)
-            .reduce(reduceSchools, [])
-            .filter(filterSchools)
-            // .slice(0, 1)
-            .map(parseSchools);
-    };
-    return HeadstartsHandler;
-}(_Handler__WEBPACK_IMPORTED_MODULE_0__["default"]));
-/* harmony default export */ __webpack_exports__["default"] = (HeadstartsHandler);
-function searchQuery(record) {
-    return this.mainRoute + "?per_page=50&search=" + record.title;
-}
-function reduceSchools(schoolList, nextLine) {
-    if (!Array.isArray(schoolList[0])) {
-        return [[nextLine]];
-    }
-    else if (nextLine[0].match("\\d")) {
-        return schoolList.concat([[nextLine]]);
-    }
-    else {
-        var lastSchool = schoolList.pop();
-        if (lastSchool) {
-            lastSchool.push(nextLine);
-            return schoolList.concat([lastSchool]);
-        }
-    }
-    return schoolList;
-}
-function filterSchools(school) {
-    return true;
-}
-function parseSchools(school) {
-    var long_name = school[0][1];
-    var coordinator = {
-        name: school[1][4],
-        telephone: formatTel(school[1][5]),
-        email: school[1][6]
-    };
-    var admin_staff = school.map(function (row) { return ({
-        name: row[2],
-        telephone: [row[3], row[5]]
-            .filter(function (n) { return n.trim().length > 0; })
-            .map(formatTel)
-            .join(", "),
-        email: row[6]
-    }); })
-        .filter(function (_a) {
-        var name = _a.name;
-        return name.length > 0;
-    })
-        .map(function (_a) {
-        var name = _a.name, telephone = _a.telephone, email = _a.email;
-        return [name,
-            telephone.trim().length > 0 ? "Tel: " + telephone : null,
-            email.trim().length > 0 ? "Email: " + email : null].filter(function (str) { return str; }).join("\r\n");
-    })
-        .reduce(function (arr, next) { return arr.concat([next]); }, coordinator.name ? [
-        [coordinator.name + ", Site Coordinator",
-            "Tel: " + coordinator.telephone,
-            "Email: " + coordinator.email,
-        ].join("\r\n")
-    ] : [])
-        .join("\r\n\r\n");
-    return {
-        title: long_name,
-        status: "publish",
-        level: setSchoolLevel(long_name),
-        fields: {
-            long_name: long_name,
-            short_name: long_name,
-            address: "",
-            fax: "",
-            telephone: "",
-            admin_staff: admin_staff,
-        },
-        existingData: null,
-    };
-}
-function formatTel(tel) {
-    if (tel.length > 0 && tel.match("\\d")) {
-        var correctPattern = new RegExp("^\\(\\d{3}\\)\\s*\\d{3}\\-\\d{4}$");
-        var fixPattern = new RegExp("(\\(\\d{3}\\))?\\s*(\\d{3})\\-([\\d\\/\\-\\s]{4,})");
-        if (tel.match(correctPattern)) {
-            return tel;
-        }
-        else {
-            var matches = tel.match(fixPattern);
-            if (matches) {
-                return "(670) " + matches[2] + "-" + matches[3];
-            }
-        }
-    }
-    return "";
-}
-function setSchoolLevel(name) {
-    var headstartRE = new RegExp("Head", "i");
-    var elemRE = new RegExp("Elem", "i");
-    var middleRE = new RegExp("Middle", "i");
-    var jrsrRE = new RegExp("jr", "i");
-    var highRE = new RegExp("(High|Da'ok)", "i");
-    var reList = [headstartRE, elemRE, middleRE, jrsrRE, highRE];
-    var mapping = (_a = {},
-        _a[headstartRE] = ["54"],
-        _a[elemRE] = ["51"],
-        _a[middleRE] = ["50"],
-        _a[jrsrRE] = ["53"],
-        _a[highRE] = ["52"],
-        _a);
-    return reList.filter(function (re) { return re.test(name); })
-        .map(function (re) { return mapping[re]; })[0];
-    var _a;
-}
-
-
-/***/ }),
-
-/***/ "./src/handlers/offices/index.ts":
-/*!***************************************!*\
-  !*** ./src/handlers/offices/index.ts ***!
-  \***************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Handler */ "./src/handlers/Handler.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-var OfficesHandler = /** @class */ (function (_super) {
-    __extends(OfficesHandler, _super);
-    function OfficesHandler(uploaderConfig) {
-        var _this = this;
-        var config = {
-            uploaderConfig: uploaderConfig,
-            type: "contact_info",
-            searchQuery: searchQuery,
-            filename: "offices.csv",
-        };
-        _this = _super.call(this, config) || this;
-        return _this;
-    }
-    OfficesHandler.prototype.process = function (data) {
-        return data.slice(1)
-            .filter(filterOffices)
-            .map(parseOffices);
-    };
-    return OfficesHandler;
-}(_Handler__WEBPACK_IMPORTED_MODULE_0__["default"]));
-/* harmony default export */ __webpack_exports__["default"] = (OfficesHandler);
-function searchQuery(record) {
-    return this.mainRoute + "?per_page=50&search=" + record.fields.name;
-}
-/**
- * Keep only offices which have a valid building number and location
- *
- * @param {string[]} row
- * @returns {boolean}
- */
-function filterOffices(row) {
-    return row[0].trim().length > 0 && row[2].trim().length > 1;
-}
-/**
- * Convert a record from the CSV file to an OfficeData
- *
- * @param {string[]} office
- * @returns {OfficeData}
- */
-function parseOffices(office) {
-    var address = office[2].trim() == "Capitol Hill" ? "Capitol Hill Bldg #" + office[0].trim() : office[2].trim();
-    return {
-        title: office[1],
-        status: "publish",
-        existingData: null,
-        fields: {
-            name: office[1],
-            address: address,
-            telephone: office[3],
-            fax: office[4],
-        }
-    };
-}
-
-
-/***/ }),
-
 /***/ "./src/handlers/personnel/index.ts":
 /*!*****************************************!*\
   !*** ./src/handlers/personnel/index.ts ***!
@@ -8070,11 +7844,16 @@ function reducePersonnel(personnelList, nextLine) {
  * @param {string[][]} officePersonnel
  * @returns
  */
-function filterRows(officePersonnel) {
-    var office = officePersonnel[0];
+function filterRows(officePersonnel, number) {
+    var office = officePersonnel[0][0].toLowerCase()
+        .split(" ")
+        .filter(function (word) { return word.length > 0; })
+        .map(function (word) { return "" + word[0].toUpperCase() + word.slice(1); })
+        .join(" ");
     var personnel = officePersonnel.slice(1);
     return {
         office: office,
+        number: number,
         personnel: personnel.filter(function (person) { return Object(validator__WEBPACK_IMPORTED_MODULE_0__["isEmail"])(person[5]); }),
     };
 }
@@ -8085,10 +7864,10 @@ function filterRows(officePersonnel) {
  * @param {OfficePersonnel} officePersonnel
  * @returns {PersonnelRecord[]}
  */
-function parseRows(officePersonnel) {
-    var office = officePersonnel.office, personnel = officePersonnel.personnel;
-    return personnel.map(function (person) {
-        var address = office[0] + "\nPO Box 501370 CK\nSaipan MP, 96950";
+function parseRows(officePersonnel, rank) {
+    var office = officePersonnel.office, number = officePersonnel.number, personnel = officePersonnel.personnel;
+    return personnel.map(function (person, n) {
+        var address = office + "\nPO Box 501370 CK\nSaipan MP, 96950";
         var name = "";
         var jobTitle;
         var splitName = person[0].split(", ");
@@ -8097,11 +7876,11 @@ function parseRows(officePersonnel) {
                 .slice(0, -1)
                 .join(", ");
             jobTitle = person[0].split(", ")
-                .slice(-1);
+                .slice(-1)[0];
         }
         else {
             name = person[0];
-            jobTitle = [""];
+            jobTitle = "";
         }
         var telephone = person.slice(1, 4)
             .filter(function (s) { return s.trim().length > 0; })
@@ -8114,157 +7893,22 @@ function parseRows(officePersonnel) {
                 address: address,
                 email: email,
                 fax: fax,
-                job_title: jobTitle
-                    .join(",")
-                    .trim(),
+                job_title: jobTitle.trim(),
                 name: name,
                 telephone: telephone,
+                office: office,
+                rank: pad(number, 3) + "-" + pad(n, 3),
             },
             status: "publish",
             title: name,
         };
     });
 }
-
-
-/***/ }),
-
-/***/ "./src/handlers/schools/index.ts":
-/*!***************************************!*\
-  !*** ./src/handlers/schools/index.ts ***!
-  \***************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Handler */ "./src/handlers/Handler.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-var SchoolsHandler = /** @class */ (function (_super) {
-    __extends(SchoolsHandler, _super);
-    function SchoolsHandler(uploaderConfig) {
-        return _super.call(this, {
-            uploaderConfig: uploaderConfig,
-            type: "school",
-            searchQuery: searchQuery,
-            filename: "schools.csv",
-        }) || this;
-    }
-    SchoolsHandler.prototype.process = function (data) {
-        return data.slice(1)
-            .reduce(reduceSchools, [])
-            .filter(filterSchools)
-            // .slice(0, 1)
-            .map(parseSchools);
-    };
-    return SchoolsHandler;
-}(_Handler__WEBPACK_IMPORTED_MODULE_0__["default"]));
-/* harmony default export */ __webpack_exports__["default"] = (SchoolsHandler);
-function searchQuery(record) {
-    return this.mainRoute + "?per_page=50&search=" + record.title;
-}
-function reduceSchools(schoolList, nextLine) {
-    if (!Array.isArray(schoolList[0])) {
-        return [[nextLine]];
-    }
-    else if (nextLine[0].match("\\d")) {
-        return schoolList.concat([[nextLine]]);
-    }
-    else {
-        var lastSchool = schoolList.pop();
-        if (lastSchool) {
-            lastSchool.push(nextLine);
-            return schoolList.concat([lastSchool]);
-        }
-    }
-    return schoolList;
-}
-function filterSchools(school) {
-    return true;
-}
-function parseSchools(school) {
-    var long_name = school[0][1];
-    var short_name = school[1][0];
-    var address = [school[1][1], school[2][1], school[3][1]].join("\r\n");
-    var fax = school[0][5];
-    var telephone = school[0][3];
-    var admin_staff = school.map(function (row) { return ({
-        name: row[2],
-        telephone: [row[3], row[4]]
-            .filter(function (n) { return n.trim().length > 0; })
-            .map(formatTel)
-            .join(", "),
-        email: row[7]
-    }); })
-        .filter(function (_a) {
-        var name = _a.name;
-        return name.length > 0;
-    })
-        .map(function (_a) {
-        var name = _a.name, telephone = _a.telephone, email = _a.email;
-        return [name,
-            telephone.trim().length > 0 ? "Tel: " + telephone : null,
-            email.trim().length > 0 ? "Email: " + email : null].filter(function (str) { return str; }).join("\r\n");
-    })
-        .join("\r\n\r\n");
-    return {
-        title: long_name,
-        status: "publish",
-        level: setSchoolLevel(long_name),
-        fields: {
-            long_name: long_name,
-            short_name: short_name,
-            address: address,
-            fax: fax,
-            telephone: telephone,
-            admin_staff: admin_staff,
-        },
-        existingData: null,
-    };
-}
-function formatTel(tel) {
-    if (tel.length > 0 && tel.match("\\d")) {
-        var correctPattern = new RegExp("^\\(\\d{3}\\)\\s*\\d{3}\\-\\d{4}$");
-        var fixPattern = new RegExp("(\\(\\d{3}\\))?\\s*(\\d{3})\\-([\\d\\/\\-\\s]{4,})");
-        if (tel.match(correctPattern)) {
-            return tel;
-        }
-        else {
-            var matches = tel.match(fixPattern);
-            if (matches) {
-                return "(670) " + matches[2] + "-" + matches[3];
-            }
-        }
-    }
-    return "";
-}
-function setSchoolLevel(name) {
-    var headstartRE = new RegExp("Head", "i");
-    var elemRE = new RegExp("Elem", "i");
-    var middleRE = new RegExp("Middle", "i");
-    var jrsrRE = new RegExp("jr", "i");
-    var highRE = new RegExp("(High|Da'ok)", "i");
-    var reList = [headstartRE, elemRE, middleRE, jrsrRE, highRE];
-    var mapping = (_a = {},
-        _a[headstartRE] = ["54"],
-        _a[elemRE] = ["51"],
-        _a[middleRE] = ["50"],
-        _a[jrsrRE] = ["53"],
-        _a[highRE] = ["52"],
-        _a);
-    return reList.filter(function (re) { return re.test(name); })
-        .map(function (re) { return mapping[re]; })[0];
-    var _a;
+function pad(num, size) {
+    var s = num + "";
+    while (s.length < size)
+        s = "0" + s;
+    return s;
 }
 
 
@@ -8282,9 +7926,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs */ "fs");
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _handlers_personnel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./handlers/personnel */ "./src/handlers/personnel/index.ts");
-/* harmony import */ var _handlers_offices__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./handlers/offices */ "./src/handlers/offices/index.ts");
-/* harmony import */ var _handlers_schools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./handlers/schools */ "./src/handlers/schools/index.ts");
-/* harmony import */ var _handlers_headstarts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./handlers/headstarts */ "./src/handlers/headstarts/index.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -8322,9 +7963,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 };
 
 
-
-
-
 var CONFIG = JSON.parse(fs__WEBPACK_IMPORTED_MODULE_0__["readFileSync"]("contactUploader.json")
     .toString());
 main();
@@ -8334,15 +7972,6 @@ function main() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, upload(_handlers_personnel__WEBPACK_IMPORTED_MODULE_1__["default"])];
                 case 1:
-                    _a.sent();
-                    return [4 /*yield*/, upload(_handlers_offices__WEBPACK_IMPORTED_MODULE_2__["default"])];
-                case 2:
-                    _a.sent();
-                    return [4 /*yield*/, upload(_handlers_schools__WEBPACK_IMPORTED_MODULE_3__["default"])];
-                case 3:
-                    _a.sent();
-                    return [4 /*yield*/, upload(_handlers_headstarts__WEBPACK_IMPORTED_MODULE_4__["default"])];
-                case 4:
                     _a.sent();
                     return [2 /*return*/];
             }
