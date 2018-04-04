@@ -106,35 +106,3 @@
 
 // BEM from here on
 
-.directory-table {
-    width: 100%;
-    border: 1px solid #ddd;
-    font-family: $article-font-family;
-    font-weight: $article-font-weight;
-    font-size: $article-font-size;
-    line-height: $article-font-line-height;
-    margin-top: 15px;
-}
-
-.directory-table__header-row {
-    th {
-        font-family: $title-font-family;
-        font-weight: $title-font-weight;
-        text-align: center;
-        padding: 10px;
-        width: 25%;
-    }
-    border: 1px solid #ddd;
-}
-
-.directory-table__header-row,
-.directory-table__entry-row {
-    border: 1px solid #ddd;
-    &:nth-of-type(odd):not(:first-child) {
-        background-color: lighten($light-gold, 35);
-    }
-    td {
-        padding: 10px;
-        width: 25%;
-    }
-}
