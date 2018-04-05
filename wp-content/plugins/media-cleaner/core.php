@@ -1587,13 +1587,14 @@ function wpmc_install() {
 	dbDelta( $sql );
 	$table_name = $wpdb->prefix . "mclean_refs";
 	$charset_collate = $wpdb->get_charset_collate();
+	// This key doesn't work on too many installs because of the 'Specified key was too long' issue
+	// KEY mediaLookUp (mediaId, mediaUrl)
 	$sql = "CREATE TABLE $table_name (
 		id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		mediaId BIGINT(20) NULL,
 		mediaUrl VARCHAR(256) NULL,
 		originType VARCHAR(32) NOT NULL,
-		PRIMARY KEY  (id),
-		KEY mediaLookUp (mediaId, mediaUrl)
+		PRIMARY KEY  (id)
 	) " . $charset_collate . ";";
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	dbDelta( $sql );

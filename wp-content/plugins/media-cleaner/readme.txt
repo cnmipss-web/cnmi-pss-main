@@ -3,7 +3,7 @@ Contributors: TigrouMeow
 Tags: clean, delete, file, files, images, image, media, library, upload, clean, acf
 Requires at least: 4.2
 Tested up to: 4.9.4
-Stable tag: 4.6.2
+Stable tag: 4.6.3
 
 Clean your WordPress (broken media, unused media, files). It has its own trash and recovery features. Please read the description.
 
@@ -42,7 +42,7 @@ The official FAQ is [here](https://meowapps.com/wplr-sync/faq/).
 
 == Changelog ==
 
-= 4.6.2 =
+= 4.6.3 =
 * Add: Added an option to only scan the thumbnails and ignore the base files.
 * Add: ACF Repeater support.
 * Update: Improved the code and the performance. Scan is now done differently, using the DB.
