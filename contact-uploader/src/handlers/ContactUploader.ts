@@ -65,8 +65,12 @@ export default class ContactUploader {
     
         const mainRoute = existingData ? this.mainRoute + existingData.id : this.mainRoute;
     
-        await axios.post(mainRoute, dataString, config)
-            .catch((err) => console.error("Error posting data to WP", mainRoute, data.title, "\n", err));
+        if (!this.config.test) {
+            await axios.post(mainRoute, dataString, config)
+                .catch((err) => console.error("Error posting data to WP", mainRoute, data.title, "\n", err));
+        } else {
+            console.info("\nThis is a test.  Otherwise, would have posted: \n", mainRoute, "\n", dataString, "\n", config, "\n");
+        }
     }
 
     /**

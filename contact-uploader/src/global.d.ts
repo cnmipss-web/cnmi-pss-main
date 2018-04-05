@@ -3,6 +3,7 @@ declare interface ContactUploaderConfig {
     username: string,
     password: string,
     secure: boolean,
+    test: boolean,
 }
 
 declare interface HandlerConfig {
