@@ -17,6 +17,7 @@ export default class Configuration {
     public headstarts:  boolean;
     public test:        boolean;
     public download:    boolean;
+    public rateLimit:   number;
 
     constructor(file: string) {
         Object.defineProperties(this, {

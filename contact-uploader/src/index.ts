@@ -1,5 +1,9 @@
 import * as fs from "fs";
+
+import axios from "axios";
 import minimist from "minimist";
+
+import { rateLimit } from "./ajax/interceptors";
 
 import Configuration from "./handlers/Configuration";
 import Downloader from "./handlers/Downloader";
@@ -13,6 +17,9 @@ const config = new Configuration("./contactUploader.json");
 main(); 
 
 async function main() {
+    if (config.rateLimit) {
+        rateLimit(config.rateLimit);
+    }
     if (config.download) {
         const downloader = new Downloader(config);
         await downloader.download();
