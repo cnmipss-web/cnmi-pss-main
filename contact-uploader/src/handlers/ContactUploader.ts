@@ -89,7 +89,11 @@ export default class ContactUploader {
     
         if (!this.config.test) {
             await axios.post(mainRoute, dataString, config)
-                .catch((err) => console.error("Error posting data to WP", mainRoute, data.title, "\n", err));
+                .catch((err) => {
+                    console.error("Error posting data to WP", mainRoute, data.title);
+                    console.error(err.stack);
+                    console.error(err.config)
+                });
         } else {
             console.info("\nThis is a test.  Otherwise, would have posted: \n", mainRoute, "\n", dataString, "\n", config, "\n");
         }
@@ -129,7 +133,9 @@ async function getToken(config: ContactUploaderConfig): Promise<WPAuth> {
       { username, password },
       { headers: { "Content-Type": "application/json" } },
     ).catch((err) => {
-        console.error("Error retrieving WP auth token\n", err);
+        console.error("Error retrieving WP auth token") 
+        console.error(err.stack)
+        console.error(err.config);
         console.log("Exiting...");
         process.exit(1);
     });
