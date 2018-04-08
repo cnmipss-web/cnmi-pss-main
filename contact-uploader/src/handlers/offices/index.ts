@@ -1,5 +1,7 @@
 import * as fs from "fs";
 
+import htmlEntities from "he";
+
 import Handler from "../Handler";
 import ContactUploader from "../ContactUploader";
 import CSVParser from "../CSVParser";
@@ -19,8 +21,16 @@ export default class OfficesHandler extends Handler {
 
     protected process(data: string[][]): OfficeContact[] {
         return data.slice(1)
+            // .slice(0,1)
             .filter(filterOffices)
             .map(parseOffices);
+    }
+
+    protected createWPResultsFilter(record: SchoolContact): FilterFn {
+        return ({title: {rendered: title}}) => {
+            // console.log(record.title, ":", htmlEntities.decode(title), "\n");
+            return htmlEntities.decode(title).trim() === record.title.trim();
+        };
     }
 
 }

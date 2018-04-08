@@ -20,13 +20,22 @@ export default abstract class Handler {
         this.uploader = new ContactUploader(
             opts.uploaderConfig, 
             opts.type, 
-            opts.searchQuery
+            opts.searchQuery,
+            this.createWPResultsFilter,
         );
         this.file = fs.readFileSync(opts.filename, {
             encoding: "utf-8",
         });
         
         this.parser = new CSVParser(this.file, this.process);
+    }
+
+    public static createWPSlug(string: string): string {
+        return string.trim()
+        .replace(/[\-=_!"#%&'*{},.:;?\(\)\[\]@$\^*+<>~`]/g, "")
+        .replace(/[^a-z]/gi, "-")
+        .replace(/\-{2,}/g, "-")
+        .toLowerCase();
     }
 
     /**
@@ -58,4 +67,8 @@ export default abstract class Handler {
      * @memberof Handler
      */
     protected abstract process(data: string[][]): AbstractRecord[]
+
+    protected createWPResultsFilter(record: AbstractRecord): FilterFn {
+        return (result) => true;
+    }
 }

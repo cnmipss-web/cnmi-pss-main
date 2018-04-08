@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+let counter = 0;
+
 /**
  * Abstract base class containing share functionality for reading, parsing, and 
  * uploading contact information to CNMI PSS WordPress site.
@@ -16,14 +18,17 @@ export default class ContactUploader {
     private protocol:     string;
     private wpPostType:   string;
     private searchQuery:  (record: AbstractRecord) => string;
+    private createWPResultsFilter: (record: AbstractRecord) => FilterFn;
+    ;
 
-    constructor(config: ContactUploaderConfig, wpPostType: string, searchQuery) {
+    constructor(config: ContactUploaderConfig, wpPostType: string, searchQuery, filterFn?) {
         this.config = config;
         this.wpPostType = wpPostType;
         this.protocol = config.secure ? "https://" : "http://";
         this.mainRoute = `${this.protocol}${config.host}/wp-json/wp/v2/${wpPostType}/`;
         this.acfRoute = `${this.protocol}${config.host}/wp-json/acf/v3/${wpPostType}/`;
         this.searchQuery = searchQuery.bind(this);
+        this.createWPResultsFilter = filterFn || (() => true);
     }
 
     private searchWP(
@@ -33,8 +38,25 @@ export default class ContactUploader {
         return records.map(async (record) => {
             const queryRoute = this.searchQuery(record);
             const searchResults = await axios.get(queryRoute);
-            const existingData = searchResults.data.filter((result) => result.type === type)[0];
+            const existingDataL = searchResults.data
+                .filter((result) => result.type === type)
+                .filter(this.createWPResultsFilter(record));
 
+            if (existingDataL.length > 1) {
+                console.error("Too many matches for: ", record.title);
+                console.error(existingDataL.map(record => ({
+                    id: record.id,
+                    title: record.title.rendered,
+                    slug: record.slug,
+                    link: record.link,
+                    type: record.type,
+                    acf: record.acf,
+                })));
+
+                // Return a null record which will be filtered out and ignored.
+                return null;
+            }
+            const existingData = existingDataL[0];
             return {
                 ...record,
                 existingData,
@@ -54,11 +76,11 @@ export default class ContactUploader {
         };
     
         if (existingData) {
-            console.log(
-                "Updating pre-existing record", 
-                data.title, 
-                existingData.id
-            );
+            // console.log(
+            //     "Updating pre-existing record", 
+            //     data.title, 
+            //     existingData.id
+            // );
         } else {
             console.log(`Posting data for ${data.title}`);
         }
@@ -82,12 +104,13 @@ export default class ContactUploader {
     public async post(records: AbstractRecord[]) {
         this.authToken = await getToken(this.config);
         this.searchWP(records, this.wpPostType)
-            .map(async (promisedRecord) => {
+            // Use reduce rather than map to make requests one at a time
+            .reduce(async (list, promisedRecord) => {
                 let record = await promisedRecord;
-                if (record.title.trim().length > 0) {
-                    await this.postData(record);
+                if (record !== null && record.title.trim().length > 0) {
+                    return await this.postData(record);
                 }
-            });
+            }, null);
     }
 }
 
@@ -106,7 +129,7 @@ async function getToken(config: ContactUploaderConfig): Promise<WPAuth> {
       { username, password },
       { headers: { "Content-Type": "application/json" } },
     ).catch((err) => {
-        console.error("Error retrieving WP auth token", err);
+        console.error("Error retrieving WP auth token\n", err);
         console.log("Exiting...");
         process.exit(1);
     });

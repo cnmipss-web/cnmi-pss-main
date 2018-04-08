@@ -26,7 +26,7 @@ export default class PersonnelHandler extends Handler {
                 officePersonnel: PersonnelRecord[],
             ) =>
                 ([...list, ...officePersonnel]), []);
-    } 
+    }
 
 }
 

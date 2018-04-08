@@ -28,6 +28,10 @@ export default class HeadstartsHandler extends Handler {
             // .slice(0, 1)
             .map(parseSchools);
     }
+
+    protected createWPResultsFilter(record: SchoolContact): FilterFn {
+        return (result) => result.slug === HeadstartsHandler.createWPSlug(record.title);
+    }
 }
 
 function searchQuery(record: PersonnelRecord): string {
