@@ -2,6 +2,7 @@ import * as fs from "fs";
 import minimist from "minimist";
 
 import Configuration from "./handlers/Configuration";
+import Downloader from "./handlers/Downloader";
 import Personnel from "./handlers/personnel";
 import Offices from "./handlers/offices";
 import Schools from "./handlers/schools";
@@ -12,6 +13,10 @@ const config = new Configuration("./contactUploader.json");
 main(); 
 
 async function main() {
+    if (config.download) {
+        const downloader = new Downloader(config);
+        await downloader.download();
+    }
     if (config.all || config.personnel) await upload(Personnel);
     if (config.all || config.offices) await upload(Offices);
     if (config.all || config.schools) await upload(Schools);

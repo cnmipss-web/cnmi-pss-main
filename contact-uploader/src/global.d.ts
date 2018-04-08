@@ -91,3 +91,5 @@ declare interface SchoolContact {
     level: string[],
     title: string,
 }
+
+type FilterFn = (value: any) => boolean;

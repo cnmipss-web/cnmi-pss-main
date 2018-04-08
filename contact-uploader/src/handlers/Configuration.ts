@@ -16,6 +16,7 @@ export default class Configuration {
     public schools:     boolean;
     public headstarts:  boolean;
     public test:        boolean;
+    public download:    boolean;
 
     constructor(file: string) {
         Object.defineProperties(this, {
@@ -92,8 +93,8 @@ export default class Configuration {
             defaultValue: false
         });
 
-        this.argParser.addArgument(['--secure'], {
-            help: 'Whether to force the use of https', 
+        this.argParser.addArgument(['--download'], {
+            help: 'Whether to download new data from Google Drive.  Requires access to user credentials.', 
             action: 'storeTrue',
             defaultValue: false
         });
