@@ -1,10 +1,9 @@
 import scrapy
 
 
-class LinkItem(scrapy.Item):
-    url = scrapy.Field()
-    status = scrapy.Field()
-    link_text = scrapy.Field()
+class LinksItem(scrapy.Item):
+    links = scrapy.Field()
+    page = scrapy.Field()
 
 
 class ImagesItem(scrapy.Item):

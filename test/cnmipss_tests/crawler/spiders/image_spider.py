@@ -2,10 +2,9 @@ import re
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
-import requests
-import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+import scrapy
 
 from crawler.items import ImagesItem
 
@@ -44,20 +43,20 @@ class ImageSpider(CrawlSpider):
         # load target domain and then use it once to define the rules
         # target domain is a string value.
         allowed_domains = [
-            re.compile(r"localhost"), 
-            re.compile(r"cnmipss.org")
+            "localhost", 
+            "cnmipss.org",
+            "www.cnmipss.org",
         ]
 
         # If a link matches multiple rules, the first rule wins.
         self.rules = (
             # If a link is within the target domain, follow it.
-            Rule(LinkExtractor(
-                allow=allowed_domains,
-                unique=True
-                ),
-                 callback='parse_images',
-                 process_links='clean_links',
-                 follow=True),
+            Rule(
+                LinkExtractor(allow_domains=allowed_domains, unique=True),
+                callback='parse_images',
+                process_links='clean_links',
+                follow=True
+            ),
         )
         self._compile_rules()
 

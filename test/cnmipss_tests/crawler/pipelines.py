@@ -48,6 +48,21 @@ class CheckImageStatusPipeline(object):
         item['sources'] = item_sources
         return item
 
+class CheckLinkStatusPipeline(object):
+
+    def process_item(self, item, spider):
+        links = []
+        for link in item['links']:
+            print('Checking link at: ', link)
+            response = requests.head(link)
+            if response.status_code in range(300, 400):
+                response = requests.head(response.headers['Location'])
+            links.append(
+                {'url': link, 'status': response.status_code})
+
+        item['links'] = links
+        return item
+
 
 class DuplicateLinksPipeline(object):
 
@@ -55,12 +70,18 @@ class DuplicateLinksPipeline(object):
         self.links_seen = set()
 
     def process_item(self, item, spider):
-        if item['url'] in self.links_seen:
-            raise DropItem('Duplicate link found: %s' % item)
+        new_links = []
+        drop = True
+        for link in item['links']:
+            if link not in self.links_seen:
+                self.links_seen.add(link)
+                new_links.append(link)
+                drop = False
+        item['links'] = new_links
+        if drop:
+            raise DropItem('No new links found: %s' % item)
         else:
-            self.links_seen.add(item['url'])
             return item
-
 
 class JsonWriterPipeline(object):
 

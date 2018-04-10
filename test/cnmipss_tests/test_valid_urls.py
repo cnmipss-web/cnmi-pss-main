@@ -3,6 +3,7 @@
 """
 
 import json
+import pprint
 import unittest
 from scrapy.utils.project import get_project_settings
 
@@ -13,22 +14,29 @@ class BrokenLinks(unittest.TestCase):
     "Test for broken links on all pages of cnmipss.org"
 
     def setUp(self):
-        self.broken_links = []
+        self.broken_links = {}
 
     def tearDown(self):
-        self.assertEqual([], self.broken_links,
-                         msg="Broken links found")
+        pp = pprint.PrettyPrinter(depth=3, indent=1)
+        err_msg = "Broken links found: \n" + pp.pformat(self.broken_links)
+        self.assertEqual({}, self.broken_links,
+                        msg=err_msg)
 
     def test_no_broken_links(self):
         link_file = open(SETTINGS['LINK_DATA'], 'r')
-        for link in link_file.readlines():
-            link_data = json.loads(link)
-            err_msg = 'Broken link: ' + str(link_data)
-            try:
-                self.assertLess(link_data['status'], 400,
-                                msg=err_msg)
-            except AssertionError as err:
-                self.broken_links.append(err)
+        for data in link_file.readlines():
+            link_data = json.loads(data)
+            page = link_data['page']
+            for link in link_data['links']:
+                err_msg = 'Broken link: ' + str(link)
+                try:
+                    self.assertLess(link['status'], 400,
+                                    msg=err_msg)
+                except AssertionError as err:
+                    if isinstance(self.broken_links.get(page), list):
+                        self.broken_links[page].append(err)
+                    else:
+                        self.broken_links[page] = [err]
 
 
 class ImageSources(unittest.TestCase):

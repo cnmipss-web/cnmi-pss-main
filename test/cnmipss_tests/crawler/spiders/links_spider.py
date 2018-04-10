@@ -1,12 +1,13 @@
 import re
 from urllib.request import urlopen
 
+from bs4 import BeautifulSoup
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.utils.sitemap import Sitemap
 import scrapy
 
-from crawler.items import LinkItem
+from crawler.items import LinksItem
 
 # Follows urls on target domain and saves url, status, and referrer.
 #
@@ -22,6 +23,7 @@ class LinkSpider(CrawlSpider):
     custom_settings = {
         'ITEM_PIPELINES': {
             'crawler.pipelines.DuplicateLinksPipeline': 250,
+            'crawler.pipelines.CheckLinkStatusPipeline': 375,
             'crawler.pipelines.JsonWriterPipeline': 500,
         }
     }
@@ -51,22 +53,20 @@ class LinkSpider(CrawlSpider):
         # load target domain and then use it once to define the rules
         # target domain is a string value.
         allowed_domains = [
-            re.compile(r"localhost"), 
-            re.compile(r"cnmipss.org")
+            "localhost",
+            "cnmipss.org",
+            "www.cnmipss.org",
         ]
 
         # If a link matches multiple rules, the first rule wins.
         self.rules = (
             # If a link is within the target domain, follow it.
-            Rule(LinkExtractor(allow_domains=allowed_domains, unique=True),
-                 callback='parse_item',
-                 process_links='clean_links',
-                 follow=True),
-            # Crawl external links and don't follow them
-            Rule(LinkExtractor(unique=True),
-                 callback='parse_item',
-                 process_links='clean_links',
-                 follow=False),
+            Rule(
+                LinkExtractor(allow_domains=allowed_domains, unique=True),
+                callback=self.parse_item,
+                process_links=self.clean_links,
+                follow=True
+            ),
         )
         self._compile_rules()
 
@@ -85,9 +85,12 @@ class LinkSpider(CrawlSpider):
 
     # rule callback
     def parse_item(self, response):
-        print(response)
-        item = LinkItem()
-        item['url'] = response.url
-        item['status'] = response.status
-        item['link_text'] = response.meta.get('link_text')
-        yield item
+        links_item = LinksItem()
+        try:
+            soup = BeautifulSoup(response.body, 'html.parser')
+            links = soup.find_all(name='a')
+            links_item['links'] = [link.get('href') for link in links]
+            links_item['page'] = response.url
+        except Exception as err:
+            print('EXCEPTION:', err)
+        yield links_item
