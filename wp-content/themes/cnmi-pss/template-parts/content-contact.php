@@ -22,8 +22,8 @@
 
     <div class="page-entry-content col-xs-12 col-sm-10 col-sm-push-1">
 	<?php
-	$slug = get_post_field( 'post_name', get_post() );
-	cnmi_contact_info($slug, 'full');
+    global $post;
+    cnmi_contact_info($post, 'full');
 	wp_link_pages( array(
 	    'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'cnmi-pss' ),
 	    'after'  => '</div>',

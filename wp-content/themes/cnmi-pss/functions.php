@@ -239,12 +239,12 @@ function cnmi_search_form ($location) {
 /**
  * cnmi_contact_info - Simple function to fetch contact information posts by slug
  *
- * @param  {string} $slug slug to fetch
+ * @param  {post} $entry contact_info post object
  */
-function cnmi_contact_info($slug, $type = 'full') {
+function cnmi_contact_info($entry, $type = 'full') {
     $info = new WP_Query(array(
         'post_type' => 'contact_info',
-        'name' => $slug,
+        'name' => $entry->post_name,
     ));
     if($info->have_posts()):
             $info->the_post();

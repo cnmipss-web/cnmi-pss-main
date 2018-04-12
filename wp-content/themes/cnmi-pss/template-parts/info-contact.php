@@ -15,13 +15,11 @@ $contacts = get_field('contact_name');
 $include = get_field('include_info');
 
 foreach ($contacts as $entry) {
-    $contact = $entry->post_title;
-    if(strlen($contact) > 0) { ?>
-        <p><?php echo $contact; ?></p>
+    $name = $entry->post_title;
+    if(strlen($name) > 0) { ?>
+        <p><?php echo $name; ?></p>
         <?php 
-        $contact = strtolower($contact);
-        preg_replace('/\s/', '-', $contact);
-        cnmi_contact_info($contact, $include);
+        cnmi_contact_info($entry, $include);
     }
 }
 ?>
