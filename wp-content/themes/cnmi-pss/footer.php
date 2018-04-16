@@ -23,7 +23,7 @@
                     	If you have questions, comments, or concerns regarding the accessibility or usability of any part of the CNMI Public School System website or the websites of any individual public schools or public school programs in the CNMI, please contact the CNMI PSS Webmaster, Tyler Collins, via email at webmaster@cnmipss.org or by telephone at the CNMI PSS Office of Administrative Services (670) 664-3820. 
                 	</p>
                 	<p class="section-text">
-                    	If you would like to file a formal grievance against the CNMI PSS pursuant to the requirements of Section 504 and Title II, you may submit such grievance to the Legal Counsel Office Attorney Tiberius Mocanu by telephone (670) 287-8427 or email tiberius.mocanu@cnmipss.org.
+                    	If you would like to file a formal grievance against the CNMI PSS pursuant to the requirements of Section 504 and Title II, you may submit such grievance to the Legal Counsel Office Attorney Ryan Meyerhoff by telephone (670) 237-3080 or email ryan.meyerhoff@cnmipss.org.
                 	</p>
               	</div>
           	</div>
