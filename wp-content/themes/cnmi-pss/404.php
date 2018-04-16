@@ -19,12 +19,13 @@ get_header(); ?>
               <h1 class="page-title"><?php esc_html_e( 'Oops! That page can&rsquo;t be found.', 'cnmi-pss' ); ?></h1>
             </header><!-- .page-header -->
 
-            <div class="page-content">
+            <div class="page-content col-xs-12 col-sm-10 col-sm-push-1">
               <p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try a search?', 'cnmi-pss' ); ?></p>
 
               <?php
-              get_search_form();
+              cnmi_search_form('body');
               ?>
+              <br />
               <br />
             </div><!-- .page-content -->
           </section><!-- .error-404 -->
