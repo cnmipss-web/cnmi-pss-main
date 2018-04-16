@@ -39,7 +39,14 @@
                 <div class="col-xs-12">
                     <h2>Contact District Office</h2>
                     <div class="footer-center">
-                        <?php cnmi_contact_info('district office'); ?>
+                        <?php 
+                        $contact = new WP_Query(array(
+                            'title' => 'District Office',
+                            'post_type' => 'contact_info',
+                        ));
+                        cnmi_contact_info($contact->posts[0]);
+                        
+                        ?>
                     </div>
                 </div>
                 <!-- <div class="col-xs-0 col-sm-3">
