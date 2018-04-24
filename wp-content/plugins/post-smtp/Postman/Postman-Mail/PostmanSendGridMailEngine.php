@@ -188,14 +188,19 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 
 				$response_body = json_decode( $response->body() );
 
-				if ( isset( $response_body->errors[0]->message ) ) {
-					$this->transcript = $response_body->errors[0]->message;
+                $response_code = $response->statusCode();
+				$email_sent = ( $response_code >= 200 and $response_code < 300 );
+
+				if ( isset( $response_body->errors[0]->message ) || ! $email_sent ) {
+
+					$e = ! $email_sent ? $this->errorCodesMap($response_code) : $response_body->errors[0]->message;
+					$this->transcript = $e;
 					$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS;
 					$this->transcript .= print_r( $mail, true );
 
 					$this->logger->debug( 'Transcript=' . $this->transcript );
 
-					throw new Exception( $response_body->errors[0]->message );
+					throw new Exception( $e );
 				}
 				$this->transcript = print_r( $response->body(), true );
 				$this->transcript .= PostmanModuleTransport::RAW_MESSAGE_FOLLOWS;
@@ -207,6 +212,31 @@ if ( ! class_exists( 'PostmanSendGridMailEngine' ) ) {
 				$this->logger->debug( 'Transcript=' . $this->transcript );
 				throw $e;
 			}
+		}
+		
+
+		private function errorCodesMap($error_code) {
+			switch ($error_code) {
+				case 413:
+					$message = sprintf( __( 'ERROR: The JSON payload you have included in your request is too large. Status code is %1$s', Postman::TEXT_DOMAIN ), $error_code );
+					break;
+				case 429:
+					$message = sprintf( __( 'ERROR: The number of requests you have made exceeds SendGrid rate limitations. Status code is %1$s', Postman::TEXT_DOMAIN ), $error_code );
+					break;
+				case 500:
+					$message = sprintf( __( 'ERROR: An error occurred on a SendGrid server. Status code is %1$s', Postman::TEXT_DOMAIN ), $error_code );
+					break;
+				case 513:
+					$message = sprintf( __( 'ERROR: The SendGrid v3 Web API is not available. Status code is %1$s', Postman::TEXT_DOMAIN ), $error_code );
+					break;
+				case 502:
+					$message =  sprintf( __( 'ERROR: No recipient supplied. Status code is %1$s', Postman::TEXT_DOMAIN ), $error_code );
+					break;
+				default:
+					$message = sprintf( __( 'ERROR: Status code is %1$s', Postman::TEXT_DOMAIN ), $error_code );
+			}
+
+			return $message;
 		}
 
 		/**
