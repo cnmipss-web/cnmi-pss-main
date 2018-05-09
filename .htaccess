@@ -42,25 +42,30 @@ php_value post_max_size 25M
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
-RewriteRule ^index\.php$ - [L]
-RewriteRule ^wp-login$ /wp-login.php [L]
-# add a trailing slash to /wp-admin
-RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+    RewriteRule ^wp-login$ /wp-login.php [L]
+    # add a trailing slash to /wp-admin
+    RewriteRule ^wp-admin$ wp-admin/ [R=301,L]
 
-RewriteCond %{REQUEST_URI} !=/server-status
-RewriteCond %{REQUEST_FILENAME} !-f [OR]
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^axe-report(.*)(\.html)?$ - [L]
-RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
-RewriteRule ^(.*\.php)$ $1 [L]
-RewriteRule . /index.php [L]
+    RewriteCond %{REQUEST_URI} !=/server-status
+    RewriteCond %{REQUEST_FILENAME} !-f [OR]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Rewrite URL axe-reports
+    RewriteRule ^axe-report(.*)(\.html)?$ - [L]
 
-#Enable Auth Headers for JWT Authentication
-RewriteCond %{HTTP:Authorization} ^(.*)
-RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
-SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    # Rewrite URL for accessible Academic Achievement Reports
+    RewriteRule ^academic-achievement-reports/(\d+)/?(.*) /wp-content/aars/$1/$2 [L]  
+
+    RewriteRule ^(wp-(content|admin|includes).*) $1 [L]
+    RewriteRule ^(.*\.php)$ $1 [L]
+    RewriteRule . /index.php [L]
+
+    #Enable Auth Headers for JWT Authentication
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 </IfModule>
-
 # END WordPress
