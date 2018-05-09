@@ -1,0 +1,2 @@
+webpackJsonp([0xc2e62144da96],{579:function(e,t){e.exports={data:{site:{siteMetadata:{title:"Academic Achievement Report SY 2016-2017",description:"",author:{name:"Tyler Collins"}}},markdownRemark:{html:"<h2>NMC Placement Test Results</h2>\n<h3>Results Data</h3>",excerpt:"NMC Placement Test Results Results Data",frontmatter:{title:"NMCPlacement"}}},pathContext:{slug:"/NMCPlacement/"}}}});
+//# sourceMappingURL=path---nmc-placement-e17d1bfe5f49c18346d8.js.map
