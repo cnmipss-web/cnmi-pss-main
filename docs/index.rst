@@ -24,5 +24,11 @@ Table of Contents
    :caption: Accessibility
 
    accessibility/index.rst
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Automated Testing
+
+    automated_testing/selenium_testing.md 
    
  
