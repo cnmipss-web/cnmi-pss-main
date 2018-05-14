@@ -29,6 +29,6 @@ Table of Contents
     :maxdepth: 2
     :caption: Automated Testing
 
-    automated_testing/selenium_testing.md 
+    automated_testing/cnmipssorg.md 
    
  
