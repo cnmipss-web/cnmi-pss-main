@@ -1,49 +1,41 @@
-Linode Server Administration
-============================
+# Linode Server Administration
 
-The CNMI PSS District Website is hosted on an Ubuntu Linux server provided by `Linode <http://linode.com>`_.  This server runs a variety of applications including an HTTTP web servers and RDBMSs to provide content to users visiting the CNMI PSS District Website.
+The CNMI PSS District Website is hosted on an Ubuntu Linux server provided by [Linode](http://linode.com).  This server runs a variety of applications including an HTTTP web servers and RDBMSs to provide content to users visiting the CNMI PSS District Website.
 
-Logging In (SSH) 
------------------
+## Logging In (SSH)
 
 Login access to the server is done via ssh.  The server is configured to only allow SSH via keyfile (except for the webmaster account, which can login by password) and to ban any user who repeatedly fails to login correctly.  In order to give an account access to the server you will have to transfer a copy of your keyfile to the server.
 
 The basic process is
 
-#. Make sure that ssh is installed on your system.  `Bitvise <https://www.bitvise.com/ssh-client-download>`_ is a good Windows client.  Mac OS X and Linux systems should have the ssh command available by default.
+* Make sure that ssh is installed on your system.  [Bitvise](https://www.bitvise.com/ssh-client-download) is a good Windows client.  Mac OS X and Linux systems should have the ssh command available by default.
+* Generate a keyfile for access.  This means generating a private key and a public key.  The public key should be added to `~/.ssh/authorized_keys` on the Linode server for your user account.  The private key should be kept private.
+* Once the server has your public key, you should be able to connect via ssh to the server securely.
 
-#. Generate a keyfile for access.  This means generating a private key and a public key.  The public key should be added to ``~/.ssh/authorized_keys`` on the Linode server for your user account.  The private key should be kept private.
+## Logging In (FTP)
 
-#. Once the server has your public key, you should be able to connect via ssh to the server securely.
+FTP is only available over SSH and requires the use of keyfiles except for the `webmaster` account which can login with a password.
 
-Logging In (FTP)
------------------
-
-FTP is only available over SSH and requires the use of keyfiles except for the ``webmaster`` account which can login with a password.
-
-Software Updates
------------------
+## Software Updates
 
 To update the server's operating system and other software run the following command (while logged in via ssh)
 
-.. code-block:: bash
-
+```bash
     sudo apt-get update
     sudo apt-get upgrade
+```
 
-Press ``y`` when prompted and wait for the updates to finish.
+Press `y` when prompted and wait for the updates to finish.
 
-Restarting the Server
----------------------
+## Restarting the Server
 
-The server can be restarted from `Linode's management interface <https://manager.linode.com>`_ or by running the ``reboot`` command via ssh (*note: this will log you out from the server while it reboots*).
+The server can be restarted from [Linode's management interface](https://manager.linode.com) or by running the `reboot` command via ssh (*note: this will log you out from the server while it reboots*).
 
-Restarting Server Services
---------------------------
+## Restarting Server Services
 
 There are several services you may want to stop or restart on the server.  These can be simply started/stopped/restarted by running the appropriate command from the following options
 
-.. code-block:: bash
+```bash
 
     sudo service apache2 start/stop/restart
     sudo service mysql start/stop/restart
@@ -51,29 +43,27 @@ There are several services you may want to stop or restart on the server.  These
     sudo service postgresql start/stop/restart
 
     sudo service SERVICE_NAME start/stop/restart
+```
 
-Apache Administration
-----------------------
+## Apache Administration
 
-`Official documentation for the Apache HTTP Server <https://httpd.apache.org/docs/2.4/>`_
+[Official documentation for the Apache HTTP Server](https://httpd.apache.org/docs/2.4/)
 
-Reverse Proxy Setup
-~~~~~~~~~~~~~~~~~~~~
+### Reverse Proxy Setup
 
-The Apache server provides a reverse proxy to unify multiple services behind the ``cnmipss.org`` domain.  Ensure that the following reverse proxy rules are included in the apache configuration
+The Apache server provides a reverse proxy to unify multiple services behind the `cnmipss.org` domain.  Ensure that the following reverse proxy rules are included in the apache configuration
 
-.. code-block:: linux-config 
+```linux-config
 
     ProxyPass /webtools http://localhost:3000
     ProxyPassReverse /webtools http://localhost:3000
+```
 
-Enabled Modules
-~~~~~~~~~~~~~~~~
+### Enabled Modules
 
 The Apache configuration for the CNMI PSS District website relies on the following Apache modules:
 
-.. code-block:: none
-
+```none
     setenvif (enabled by maintainer script)
     proxy_ajp (enabled by site administrator)
     proxy_balancer (enabled by site administrator)
@@ -107,81 +97,80 @@ The Apache configuration for the CNMI PSS District website relies on the followi
     authn_core (enabled by maintainer script)
     proxy_html (enabled by site administrator)
     rewrite (enabled by site administrator)
+```
 
-SSL Encryption
-~~~~~~~~~~~~~~~~
+### SSL Encryption
 
 Apache is configured to use a Let's Encrypt SSL certificate for secure communications.  All non-secure traffic should be redirected to secure traffic by the following mode_rewrite rule
 
-.. code-block:: linux-config 
+```linux-config
 
     <IfModule mod_ssl.c>
         RewriteEngine on
         RewriteCond %{SERVER_NAME} =server.cnmipss.org [OR]
         RewriteCond %{SERVER_NAME} =www.cnmipss.org [OR]
-        RewriteCond %{SERVER_NAME} =cnmipss.org 
+        RewriteCond %{SERVER_NAME} =cnmipss.org
         RewriteRule ^ https://www.cnmipss.org%{REQUEST_URI} [END,NE,R=permanent]
     </IfModule>
+```
 
-Certificate installation and renewal is managed using `Certbot <https://certbot.eff.org/#ubuntutzesty-apache>`_ and should occur automatically without needing any intervention.  If for some reason automatic renewal of the SSL certificate does not work, try running ``sudo certbot renew`` when connected via ssh.
+Certificate installation and renewal is managed using [Certbot](https://certbot.eff.org/#ubuntutzesty-apache) and should occur automatically without needing any intervention.  If for some reason automatic renewal of the SSL certificate does not work, try running `sudo certbot renew` when connected via ssh.
 
-MySQL Administration
----------------------
+## MySQL Administration
 
-`Official documentation for MySQL <https://dev.mysql.com/doc/refman/5.7/en/>`_
+[Official documentation for MySQL](https://dev.mysql.com/doc/refman/5.7/en/)
 
 MySQL is used by the WordPress installation to store data for the CNMI PSS District website.  It has its own set of user accounts and passwords separate from the Linode server's accounts and passwords.  Check the KeePassX file for accounts and passwords.
 
-Backups
-~~~~~~~~
+### Backups
 
 The primary reason to directly interact with the MySQL RDBMS is to backup or restore data for the WordPress installation.
 
-Create
-***********
+#### Create
 
 To create a database backup run the following command
 
-``sudo mysqldump -u cnmipss_website -p cnmipss_website > /var/www/html/cnmipss.org/backup/cnmipss_website-20180101.sql``
+```bash
+sudo mysqldump -u cnmipss_website -p cnmipss_website > /var/www/html/cnmipss.org/backup/cnmipss_website-20180101.sql
+```
 
-Replace ``20180101`` with the current YEAR MONTH DAY to identify the backup file that will be created.  You will be prompted to enter two passwords, first your sudo password and second the cnmipss_website MySQL password.
+Replace `20180101` with the current YEAR MONTH DAY to identify the backup file that will be created.  You will be prompted to enter two passwords, first your sudo password and second the cnmipss_website MySQL password.
 
-Restore
-***********
+#### Restore
 
 To restore the database from a backup file run the following command
 
-``sudo mysql -u cnmipss_website -p < /var/www/html/cnmipss.org/backup/cnmipss_website-20180101.sql``
+```bash
+    sudo mysql -u cnmipss_website -p < /var/www/html/cnmipss.org/backup/cnmipss_website-20180101.sql
+```
 
-Replace ``20180101`` with the current YEAR MONTH DAY to identify the backup file that will be created.  You will be prompted to enter two passwords, first your sudo password and second the cnmipss_website MySQL password.
+Replace `20180101` with the current YEAR MONTH DAY to identify the backup file that will be created.  You will be prompted to enter two passwords, first your sudo password and second the cnmipss_website MySQL password.
 
-Postgresql Administration
---------------------------
+## Postgresql Administration
 
-`Official documentation for Postgresql <https://www.postgresql.org/docs/9.6/static/index.html>`_
+[Official documentation for Postgresql](https://www.postgresql.org/docs/9.6/static/index.html)
 
 Postgres is used as the RDBMS for the Webtools application.  It has its own set of user accounts and passwords separate from the Linode server's accounts and passwords.  Check the KeePassX file for accounts and passwords.
 
 Be extremely careful modifying this DB is production.  Certain features depend on external user input that cannot be recreated if lost.  Be sure to store a database backup before attempting any modifications.
 
-Backups
-~~~~~~~~
+### Backups
 
-Create
-***********
+#### Create
 
 To create a database backup run the following commands
 
-``sudo -u cnmipss_webtools pg_dump cnmipss_webtools > ~/cnmipss_webtools-20180101.sql``
+```bash
+sudo -u cnmipss_webtools pg_dump cnmipss_webtools > ~/cnmipss_webtools-20180101.sql
+```
 
-Replace ``20180101`` with the current YEAR MONTH DAY to identify the backup file that will be created.  You will be prompted to enter your sudo password.
+Replace `20180101` with the current YEAR MONTH DAY to identify the backup file that will be created.  You will be prompted to enter your sudo password.
 
-Restore
-***********
+#### Restore
 
 To restore a database backup run the following command
 
-.. code-block:: bash
-   
+```bash
     sudo -u cnmipss_webtools dropdb cnmipss_webtools
-    sudo -u cnmipss_webtools pg_restore -C -d postrgres cnmipss_webtools-20180101.sql`` 
+    sudo -u cnmipss_webtools pg_restore -C -d postrgres cnmipss_webtools-20180101.sql
+```

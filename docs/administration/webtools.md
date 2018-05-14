@@ -1,39 +1,32 @@
-CNMI PSS Webtools Administration
-================================
+# CNMI PSS Webtools Administration
 
 The CNMI PSS Webtools application provides a web application interface for various CNMI PSS Offices to manage content for the CNMI PSS District Website that is not easily managed using the WordPress CMS.
 
-The Webtools application can be accessed at https://cnmipss.org/webtools.  
+The Webtools application can be accessed at [https://cnmipss.org/webtools](https://cnmipss.org/webtools).
 
-Application Administration
----------------------------
+## Application Administration
 
-Managing Users
-~~~~~~~~~~~~~~~~
+### Managing Users
 
-The primary admistrative task in the application is managing user access to the various roles the application.  This can be done by selecting the ``Manage Users`` role where you can invite new users, remove users, and edit the roles assigned to existing users.
+The primary admistrative task in the application is managing user access to the various roles the application.  This can be done by selecting the `Manage Users` role where you can invite new users, remove users, and edit the roles assigned to existing users.
 
-System Administration
------------------------
+## System Administration
 
-Starting and Stopping the Server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### Starting and Stopping the Server
 
-The CNMI PSS Webtools application runs as a `systemd service <https://wiki.ubuntu.com/SystemdForUpstartUsers>`_ on the Linode linux server.  Starting and stopping the server can be done simply using the following commmands
+The CNMI PSS Webtools application runs as a [systemd service](https://wiki.ubuntu.com/SystemdForUpstartUsers) on the Linode linux server.  Starting and stopping the server can be done simply using the following commmands
 
-.. code:: bash
-
-    service webtools start 
+```bash
+    service webtools start
     service webtools restart
     service webtools stop
+```
 
-Configuring the Server 
-~~~~~~~~~~~~~~~~~~~~~~~
+### Configuring the Server
 
-The Webtools service file is ``/etc/systemd/system/webtools.service`` and should contain the following
+The Webtools service file is `/etc/systemd/system/webtools.service` and should contain the following
 
-.. code-block:: linux-config 
-
+```linux-config
     [Unit]
     Description = Webtools server
     After = network.target
@@ -54,13 +47,13 @@ The Webtools service file is ``/etc/systemd/system/webtools.service`` and should
 
     [Install]
     Alias=webtools.service
+```
 
-where the ``*********`` entries are secure information to be provided in production only.  It is important that the permissions of the ``webtools.service`` file be set to ``400`` in order to protect the secure information there from unauthorized access.
+where the `*********` entries are secure information to be provided in production only.  It is important that the permissions of the `webtools.service` file be set to `400` in order to protect the secure information there from unauthorized access.
 
 The executable file which launches the Webtools server, ``/usr/local/bin/webtools-server``, is a shell script which initiates the JVM and loads the jar files installed in /var/www/bin via FTP.  This shell script is:
 
-.. code-block:: bash
-
+```bash
     #!/bin/bash
     # /usr/local/bin/webtools-server
     #
@@ -110,19 +103,14 @@ The executable file which launches the Webtools server, ``/usr/local/bin/webtool
     esac
 
     exit 0
-	
+```
 
-Deploying Updates
-~~~~~~~~~~~~~~~~~~
+### Deploying Updates
 
 To deploy an update of the CNMI PSS Webtools Application requires the use of FTP to transfer the two ``jar`` files that make up the application.  The ``jar`` files are created using ``leiningen`` to build the Clojure source code:
 
-#. Run ``lein clean`` in the local repository to clean out previous builds of the application.
-
-#. Run ``lein uberjar`` to build the jar files.
-
-#.  The jar files will be located in ``target/uberjar/``.
-
-#.  Upload the jar files via FTP to /var/www/bin/ on the Linode server.
-
-#.  Login to the Linode server using SSH and run ``sudo service webtools restart`` to restart the Webtools server using the new jar files.
+* Run ``lein clean`` in the local repository to clean out previous builds of the application.
+* Run ``lein uberjar`` to build the jar files.
+* The jar files will be located in ``target/uberjar/``.
+* Upload the jar files via FTP to /var/www/bin/ on the Linode server.
+* Login to the Linode server using SSH and run ``sudo service webtools restart`` to restart the Webtools server using the new jar files.
