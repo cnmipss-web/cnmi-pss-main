@@ -82,7 +82,7 @@ The executable file which launches the Webtools server, ``/usr/local/bin/webtool
     }
 
     case $1 in
-            start)
+        start)
             start_server
             ;;
         stop)
@@ -107,10 +107,14 @@ The executable file which launches the Webtools server, ``/usr/local/bin/webtool
 
 ### Deploying Updates
 
-To deploy an update of the CNMI PSS Webtools Application requires the use of FTP to transfer the two ``jar`` files that make up the application.  The ``jar`` files are created using ``leiningen`` to build the Clojure source code:
+To deploy an update of the CNMI PSS Webtools Application requires the use of FTP to transfer the two `jar` files that make up the application.  The `jar` files are created using `leiningen` to build the Clojure source code:
 
-* Run ``lein clean`` in the local repository to clean out previous builds of the application.
-* Run ``lein uberjar`` to build the jar files.
-* The jar files will be located in ``target/uberjar/``.
-* Upload the jar files via FTP to /var/www/bin/ on the Linode server.
-* Login to the Linode server using SSH and run ``sudo service webtools restart`` to restart the Webtools server using the new jar files.
+* Run `lein clean` in the local repository to clean out previous builds of the application.
+* Run `lein uberjar` to build the jar files.
+* The jar files will be located in `target/uberjar/`.
+* Upload the jar files via FTP to `/var/www/bin/` on the Linode server.
+* Login to the Linode server using SSH and run `sudo service webtools restart` to restart the Webtools server using the new jar files.
+
+#### Deploy Updates Via Git
+
+As an alternative, updates can be deployed using the git post-receive hook in a repository hosted on the server.  Doing this requires hosting a copy of the repository in your home directory on the Linode server and writing a script to automate the above steps at repo_dir/hooks/post-receive.  This will also likely require some configuration of permissions to allow your user to copy the jar files to `/var/www/bin`.

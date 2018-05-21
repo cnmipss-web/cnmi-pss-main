@@ -9,12 +9,12 @@ Login access to the server is done via ssh.  The server is configured to only al
 The basic process is
 
 * Make sure that ssh is installed on your system.  [Bitvise](https://www.bitvise.com/ssh-client-download) is a good Windows client.  Mac OS X and Linux systems should have the ssh command available by default.
-* Generate a keyfile for access.  This means generating a private key and a public key.  The public key should be added to `~/.ssh/authorized_keys` on the Linode server for your user account.  The private key should be kept private.
+* Generate a keyfile for access.  This means generating a private key and a public key.  Consult your ssh client's documentation for how to do this.  The public key should be added to `~/.ssh/authorized_keys` on the Linode server for your user account.  This must be performed via SFTP under the `webmaster` account, which is the only way to login via password rather than keyfile.  The private key should be kept private.
 * Once the server has your public key, you should be able to connect via ssh to the server securely.
 
 ## Logging In (FTP)
 
-FTP is only available over SSH and requires the use of keyfiles except for the `webmaster` account which can login with a password.
+FTP is only available over SSH (SFTP) and requires the use of keyfiles except for the `webmaster` account which can login with a password.
 
 ## Software Updates
 
@@ -54,7 +54,6 @@ There are several services you may want to stop or restart on the server.  These
 The Apache server provides a reverse proxy to unify multiple services behind the `cnmipss.org` domain.  Ensure that the following reverse proxy rules are included in the apache configuration
 
 ```linux-config
-
     ProxyPass /webtools http://localhost:3000
     ProxyPassReverse /webtools http://localhost:3000
 ```
@@ -104,7 +103,6 @@ The Apache configuration for the CNMI PSS District website relies on the followi
 Apache is configured to use a Let's Encrypt SSL certificate for secure communications.  All non-secure traffic should be redirected to secure traffic by the following mode_rewrite rule
 
 ```linux-config
-
     <IfModule mod_ssl.c>
         RewriteEngine on
         RewriteCond %{SERVER_NAME} =server.cnmipss.org [OR]
