@@ -1,9 +1,9 @@
 === Media Cleaner ===
-Contributors: TigrouMeow
+Contributors: TigrouMeow, amekusa
 Tags: clean, delete, file, files, images, image, media, library, upload, clean, acf
 Requires at least: 4.2
 Tested up to: 4.9.4
-Stable tag: 4.6.3
+Stable tag: 4.8.0
 
 Clean your WordPress (broken media, unused media, files). It has its own trash and recovery features. Please read the description.
 
@@ -41,6 +41,11 @@ The official FAQ is [here](https://meowapps.com/wplr-sync/faq/).
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 4.8.0 =
+* Update: Many parts of the UI were rewritten for a better experience. Buttons have a nicer logic.
+* Add: Enhanced error control. From now, when an error occurs during the scan, a popup will appear (asking to try again, or to skip the current item), and errors will be logged to the console.
+* Info: Please help this plugin survive by giving me a nice review, here: https://wordpress.org/support/plugin/meow-lightbox/reviews/?rate=5#new-post. Thank you :)
 
 = 4.6.3 =
 * Add: Added an option to only scan the thumbnails and ignore the base files.

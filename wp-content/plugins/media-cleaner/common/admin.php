@@ -11,7 +11,7 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 		public $mainfile; 	// plugin main file (media-file-renamer.php)
 		public $domain; 		// domain used for translation (media-file-renamer)
 
-		public function __construct( $prefix, $mainfile, $domain ) {
+		public function __construct( $prefix, $mainfile, $domain, $disableReview = false ) {
 
 			// Core Admin (used by all Meow Apps plugins)
 			if ( !MeowApps_Admin::$loaded ) {
@@ -36,9 +36,11 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 				if ( ( !empty( $license ) ) && !file_exists( plugin_dir_path( $this->mainfile ) . 'common/meowapps/admin.php' ) ) {
 					add_action( 'admin_notices', array( $this, 'admin_notices_licensed_free' ) );
 				}
-				$rating_date = $this->create_rating_date();
-				if ( time() > $rating_date ) {
-					add_action( 'admin_notices', array( $this, 'admin_notices_rating' ) );
+				if ( !$disableReview ) {
+					$rating_date = $this->create_rating_date();
+					if ( time() > $rating_date ) {
+						add_action( 'admin_notices', array( $this, 'admin_notices_rating' ) );
+					}
 				}
 			}
 		}
