@@ -174,9 +174,9 @@ function cnmi_header_dropdown($nav_category) {
     ));
     if ($pages->have_posts()) {
         echo '<noscript><div class="noscript-dropdown"></noscript>';
-        echo '<li role="menuitem" class="dropdown">
+        echo '<li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' . $nav_category . '<span class="caret"></span></a>
-    <ul role="menu" class="dropdown-menu">';
+    <ul role="menu" class="dropdown-menu" aria-label="' . $nav_category . ' pages">';
         while($pages->have_posts()) {
             $pages->the_post();
             echo '<li role="menuitem"><a href="' .  get_the_permalink() . '">' . get_the_title() . '</a></li>';

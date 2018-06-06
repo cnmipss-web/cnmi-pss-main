@@ -91,6 +91,7 @@ $current_office = "";
                     <div class=" collapse in"
                         id="<?php echo $current_office ?>-table">
                         <table class="directory-table">
+                            <caption class="sr-only"><?php the_field('office'); ?> contact information</caption>
                             <thead>
                                 <tr class="directory-table__header-row">
                                     <th scope="col">Name</th>

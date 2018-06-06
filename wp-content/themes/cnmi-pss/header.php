@@ -51,7 +51,7 @@
           </div>
         </div><!-- .site-branding -->
 
-        <nav id="site-navigation" class="main-navigation navbar" role="navigation">
+        <nav id="site-navigation" class="main-navigation navbar">
           <div class="container-fluid">
             <div class="navbar-header">
               <?php cnmi_search_form('nav'); ?>
@@ -61,15 +61,15 @@
                 data-toggle="collapse"
                 data-target="#menu-main"
                 aria-controls="menu-main"
-                aria-expanded="false" >
-                <span class="screen-reader-text">Toggle navigation</span>
+                aria-expanded="true"
+                aria-label="Toggle Navigation Menu">
                 <i class="fa fa-bars" aria-hidden="true"></i>
               </button>
 
             </div>
-            <div class="collapse navbar-collapse in" id="menu-main" aria-expanded="true" >
-              <ul role="menu" class="nav navbar-nav nav-menu">
-                <li role="menuitem">
+            <div class="collapse navbar-collapse in" id="menu-main">
+              <ul class="nav navbar-nav" role="navigation">
+                <li>
                     <a href="/news" > PSS News </a>
                 </li>
                 <?php cnmi_header_dropdown('Students & Parents'); ?>
@@ -88,5 +88,12 @@
           </div>
         </nav><!-- #site-navigation -->
       </header><!-- #masthead -->
+
+      <script>
+        jQuery.when(jQuery.ready).then(function() {
+            // Bugfix for Bootstrap3 bug that keeps marking list as collapsed even when its not.
+            jQuery('ul.nav.navbar-nav').attr('aria-expanded', null);
+        });
+      </script>
 
       <div id="content" class="site-content">
