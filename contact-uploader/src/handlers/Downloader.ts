@@ -1,18 +1,20 @@
 import * as fs from "fs";
 
-import axios from "axios";
+// import axios from "axios";
 import { google } from "googleapis";
-import * as readline from "readline";
+// import * as readline from "readline";
 import csvStringify from "csv-stringify/lib/sync";
+import Configuration from "./Configuration";
+import { JWT } from "google-auth-library";
 
 export default class Downloader {
-    private config;
-    private jwt;
+    private config: Configuration;
+    private jwt: Promise<JWT>;
     private fileId: string;
     private scopes: string[];
-    private auth;
+    // private auth;
     private TOKEN_PATH: string = "credentials.json";
-    private token;
+    // private token;
 
     constructor(config) {
         this.config = config;
@@ -31,7 +33,7 @@ export default class Downloader {
         } else {
             if (this.config.personnel) 
                 personnel = await this.getPersonnel();
-            if (this.config.office) 
+            if (this.config.offices) 
                 offices = await this.getOffices();
             if (this.config.schools) 
                 schools = await this.getSchools();
@@ -108,17 +110,15 @@ export default class Downloader {
         });
     }
 
-    private async authorize() {
+    private async authorize(): Promise<JWT> {
         const credentials = await this.getStoredCredentials();
         let jwtClient = new google.auth.JWT({
             email: credentials.client_email,
             key: credentials.private_key,
-            scopes: [
-                'https://www.googleapis.com/auth/spreadsheets',
-            ]
+            scopes: this.scopes
         });
         
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: (jwt: JWT) => void, reject) => {
             jwtClient.authorize(function (err, tokens) {
                 if (err) {
                     reject(err);

@@ -1,4 +1,4 @@
-import parse from "csv-parse";
+import * as parse from "csv-parse";
 
 export default class CSVParser {
     private file: string;
