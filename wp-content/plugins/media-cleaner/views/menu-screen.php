@@ -126,7 +126,7 @@
 
 	<p>
 		<?php
-
+			$method = "";
 			$table_scan = $wpdb->prefix . "mclean_scan";
 			$table_refs = $wpdb->prefix . "mclean_refs";
 			if ( $wpdb->get_var("SHOW TABLES LIKE '$table_scan'") != $table_scan ||
