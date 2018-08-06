@@ -20,15 +20,15 @@ Table of Contents
     content_management/index.rst
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Accessibility
-
-   accessibility/index.rst
-
-.. toctree::
     :maxdepth: 2
     :caption: Automated Testing
 
-    automated_testing/cnmipssorg.md 
+    automated_testing/testing.md 
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Vendor Accounts
+
+   vendor_accounts/vendors.md
    
  
