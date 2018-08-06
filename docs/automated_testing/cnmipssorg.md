@@ -45,7 +45,7 @@ The Selenium-driven tests are located in the `test/cnmipss_tests/` directory of 
 
 ## Scrapy Crawler
 
-Scrapy is used to monitor the CNMI PSS District Website for broken links and images.  The scrapy crawlers are located in the `test/cnmipss_tests/crawler` directory of the source repository.  These crawlers can be run manually with the commands `scrapy crawl images` and `scrapy crawl links`.  Currently the Linode server is configured to run these crawlers weekly as a cron job prior to running the selenium tests.
+Scrapy is used to monitor the CNMI PSS District Website for broken links and images.  The scrapy crawlers are located in the `test/cnmipss_tests/crawler` directory of the cnmipss-main source repository.  These crawlers can be run manually with the commands `scrapy crawl images` and `scrapy crawl links`.  Currently the Linode server is configured to run these crawlers weekly as a cron job prior to running the selenium tests.
 
 ## axe-crawler Accessibility Testing
 

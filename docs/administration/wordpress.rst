@@ -16,7 +16,7 @@ The main CNMI PSS District Website located at https://cnmipss.org runs on WordPr
 Login
 --------------
 
-Authorized users can login to WordPress at https://cnmipss.org/wp-login.  Users will be redirected to login using their CNMI PSS Google Email account.  Only users who have been granted access by an admin are able to login.
+Authorized users can login to WordPress at https://cnmipss.org/wp-login.  Users will be redirected to login using their CNMI PSS Google Email account.  Only users who have been granted access by an admin are able to login.  The webmaster@cnmipss.org email account is the primary administrator account, however others may be created.
 
 User Accounts
 --------------

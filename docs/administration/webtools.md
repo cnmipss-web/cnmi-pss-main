@@ -2,7 +2,7 @@
 
 The CNMI PSS Webtools application provides a web application interface for various CNMI PSS Offices to manage content for the CNMI PSS District Website that is not easily managed using the WordPress CMS.
 
-The Webtools application can be accessed at [https://cnmipss.org/webtools](https://cnmipss.org/webtools).
+The Webtools application can be accessed at [https://cnmipss.org/webtools](https://cnmipss.org/webtools).  Login is performed using an authorized cnmipss.org email account.  The webmaster@cnmipss.org account is the admin account for the Webtools Application.
 
 ## Application Administration
 

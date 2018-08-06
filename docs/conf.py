@@ -50,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'CNMI PSS District Website Documentation'
-copyright = '2018, Tyler Collins'
+copyright = '2018, CNMI PSS'
 author = 'Tyler Collins'
 
 # The version info for the project you're documenting, acts as replacement for

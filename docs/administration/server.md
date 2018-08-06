@@ -1,10 +1,10 @@
 # Linode Server Administration
 
-The CNMI PSS District Website is hosted on an Ubuntu Linux server provided by [Linode](http://linode.com).  This server runs a variety of applications including an HTTTP web servers and RDBMSs to provide content to users visiting the CNMI PSS District Website.
+The CNMI PSS District Website is hosted on an Ubuntu Linux server provided by [Linode](http://linode.com).  This server runs a variety of applications including an HTTP web servers and RDBMSs to provide content to users visiting the CNMI PSS District Website.
 
 ## Logging In (SSH)
 
-Login access to the server is done via ssh.  The server is configured to only allow SSH via keyfile (except for the webmaster account, which can login by password) and to ban any user who repeatedly fails to login correctly.  In order to give an account access to the server you will have to transfer a copy of your keyfile to the server.
+Login access to the server is done via ssh.  The server is configured to only allow SSH via keyfile and to ban any user who repeatedly fails to login correctly repeatedly.  In order to give an account access to the server you will have to transfer a copy of your keyfile to the server.  The webmaster account is already configured with a keyfile.  The client copy of the keyfile is stored in the KeePassX database.
 
 The basic process is
 
@@ -14,7 +14,7 @@ The basic process is
 
 ## Logging In (FTP)
 
-FTP is only available over SSH (SFTP) and requires the use of keyfiles except for the `webmaster` account which can login with a password.
+FTP is only available over SSH (SFTP) and requires the use of keyfiles.
 
 ## Software Updates
 
@@ -150,16 +150,18 @@ Replace `20180101` with the current YEAR MONTH DAY to identify the backup file t
 
 Postgres is used as the RDBMS for the Webtools application.  It has its own set of user accounts and passwords separate from the Linode server's accounts and passwords.  Check the KeePassX file for accounts and passwords.
 
-Be extremely careful modifying this DB is production.  Certain features depend on external user input that cannot be recreated if lost.  Be sure to store a database backup before attempting any modifications.
+Be extremely careful modifying this DB in production.  Certain features of the Webtools application depend on external user input that cannot be recreated if lost.  This includes records of vendors who have requested information for RFPs and IFBs.  Be sure to store a database backup before attempting any modifications.
 
 ### Backups
+
+Backups for the Postgres database are stored in the `/var/www/bin/backup/` directory on the Linode server.
 
 #### Create
 
 To create a database backup run the following commands
 
 ```bash
-sudo -u cnmipss_webtools pg_dump cnmipss_webtools > ~/cnmipss_webtools-20180101.sql
+sudo -u cnmipss_webtools pg_dump cnmipss_webtools > /var/www/bin/backup/cnmipss_webtools-20180101.sql
 ```
 
 Replace `20180101` with the current YEAR MONTH DAY to identify the backup file that will be created.  You will be prompted to enter your sudo password.
@@ -172,3 +174,5 @@ To restore a database backup run the following command
     sudo -u cnmipss_webtools dropdb cnmipss_webtools
     sudo -u cnmipss_webtools pg_restore -C -d postrgres cnmipss_webtools-20180101.sql
 ```
+
+Make sure you have backed up the existing database BEFORE running this command, even if it is damaged.
