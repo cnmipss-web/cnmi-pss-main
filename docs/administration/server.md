@@ -36,7 +36,6 @@ The server can be restarted from [Linode's management interface](https://manager
 There are several services you may want to stop or restart on the server.  These can be simply started/stopped/restarted by running the appropriate command from the following options
 
 ```bash
-
     sudo service apache2 start/stop/restart
     sudo service mysql start/stop/restart
     sudo service webtools start/stop/restart

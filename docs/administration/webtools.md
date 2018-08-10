@@ -6,9 +6,11 @@ The Webtools application can be accessed at [https://cnmipss.org/webtools](https
 
 ## Application Administration
 
+The webmaster@cnmipss.org account is the only account with administrator access to the Webtools application.
+
 ### Managing Users
 
-The primary admistrative task in the application is managing user access to the various roles the application.  This can be done by selecting the `Manage Users` role where you can invite new users, remove users, and edit the roles assigned to existing users.
+The primary admistrative task in the application is managing user access to the various roles of the application.  This can be done by selecting the `Manage Users` role where you can invite new users, remove users, and edit the roles assigned to existing users.
 
 ## System Administration
 
@@ -49,7 +51,7 @@ The Webtools service file is `/etc/systemd/system/webtools.service` and should c
     Alias=webtools.service
 ```
 
-where the `*********` entries are secure information to be provided in production only.  It is important that the permissions of the `webtools.service` file be set to `400` in order to protect the secure information there from unauthorized access.
+where the `*********` entries are secure information to be provided in production only.  It is important that the Linux filesystem permissions of the `webtools.service` file be set to `400` in order to protect the secure information there from unauthorized access.
 
 The executable file which launches the Webtools server, ``/usr/local/bin/webtools-server``, is a shell script which initiates the JVM and loads the jar files installed in /var/www/bin via FTP.  This shell script is:
 
@@ -107,7 +109,7 @@ The executable file which launches the Webtools server, ``/usr/local/bin/webtool
 
 ### Deploying Updates
 
-To deploy an update of the CNMI PSS Webtools Application requires the use of FTP to transfer the two `jar` files that make up the application.  The `jar` files are created using `leiningen` to build the Clojure source code:
+To deploy an update of the CNMI PSS Webtools Application requires the use of FTP to transfer the two `jar` files that make up the application.  The `jar` files are created using [leiningen](https://leiningen.org/) to build the Clojure source code:
 
 * Run `lein clean` in the local repository to clean out previous builds of the application.
 * Run `lein uberjar` to build the jar files.
