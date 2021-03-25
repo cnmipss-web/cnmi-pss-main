@@ -41,7 +41,7 @@ pytest==3.2.5
 pytest-notifier==1.0.1
 pytest-tap==2.1
 pytz==2017.3
-PyYAML==3.12
+PyYAML==5.4
 queuelib==1.4.2
 requests==2.18.4
 Scrapy==1.4.0
